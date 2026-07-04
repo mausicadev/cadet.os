@@ -1,0 +1,2 @@
+# Ignore local script artifacts that should not be committed
+main.py

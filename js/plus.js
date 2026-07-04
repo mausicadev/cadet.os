@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".container");
-  
-    // Define a grid to avoid overlap
+
     const gridSize = 40; // Pixels between pluses
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
@@ -45,6 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   
     // Create pluses at random intervals
-    setInterval(createPlus, 40); // Faster interval for more pluses
+    setInterval(createPlus, 40);
   });
 
