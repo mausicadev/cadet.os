@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="css/body.css" />
+    <link rel="stylesheet" href="css/banners.css" />
+    <link rel="stylesheet" href="css/rectangles.css" />
+    <link rel="stylesheet" href="css/circles.css" />
+
+    <script src="js/d3.v7.min.js"></script>
+    <script src="js/siriwave.umd.js"></script>
+    <script src="js/plus.js"></script>
+
+    <script src="js/api/date.js"></script>
+    <script src="js/api/urad.js"></script>
+    <script src="js/controller.js"></script>
+
+    <script src="js/circles/c0.js"></script>
+    <script src="js/circles/c1.js"></script>
+    <script src="js/circles/c2.js"></script>
+    <script src="js/circles/c3.js"></script>
+    <script src="js/circles/c4.js"></script>
+    <script src="js/circles/c5.js"></script>
+    <script src="js/circles/c6.js"></script>
+    <script src="js/circles/c7.js"></script>
+    <script src="js/circles/c8.js"></script>
+    <script src="js/circles/c9.js"></script>
+    <script src="js/circles/c10.js"></script>
+    <script src="js/circles/c11.js"></script>
+    <script src="js/circles/c12.js"></script>
+    <script src="js/circles/c13.js"></script>
+    <script src="js/circles/c14.js"></script>
+    <script src="js/circles/c15.js"></script>
+    <script src="js/circles/c16.js"></script>
+    <script src="js/circles/c17.js"></script>
+    <script src="js/circles/c18.js"></script>
+
+    <link rel="icon" href="favicon.png" />
+    <title>URad Sensors</title>
+  </head>
+
+  <body>
+    <!-- Background -->
+    <div class="container"></div>
+
+    <!-- Middle Section -->
+    <!-- ORANGE = rgb(252, 104, 6) -->
+    <!-- CYAN = rgb(252, 104, 6) -->
+
+    <div class="ccontainer">
+      <div class="center-container">
+        <div class="overlay-text">
+          <div class="main">
+            <span class="number">199</span>
+            <span class="unit">ppm</span>
+          </div>
+        </div>
+      </div>
+      <div id="c0"></div>
+      <div id="c1"></div>
+      <div id="c2"></div>
+      <div id="c3"></div>
+      <div id="c4"></div>
+      <div id="c5"></div>
+      <div id="c6"></div>
+      <div id="c7"></div>
+      <div id="c8"></div>
+      <div id="c9"></div>
+      <div id="c10"></div>
+      <div id="c11"></div>
+      <div id="c12"></div>
+      <div id="c13"></div>
+      <div id="c14"></div>
+      <div id="c15"></div>
+      <div id="c16"></div>
+      <div id="c17"></div>
+      <div id="c18"></div>
+    </div>
+
+    <!-- Rectangles and Info Section -->
+    <div class="rrectangles">
+      <!-- CH2O Section -->
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="rrectangle" id="rrectangle1">
+            <img
+              src="https://img.icons8.com/ios/100/gas-industry.png"
+              alt="Icon 1"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">CH2O</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">9ppm</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">20ppm</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.0ppm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">39.3%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOISE Section -->
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="rrectangle" id="rrectangle2">
+            <img
+              src="https://img.icons8.com/ios-glyphs/30/audio-wave--v1.png"
+              alt="Icon 2"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">NOISE</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">34db</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">90db</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">20db</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">72.7%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HUMIDITY Section -->
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="rrectangle" id="rrectangle3">
+            <img
+              src="https://img.icons8.com/ios/100/hygrometer.png"
+              alt="Icon 3"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">HUMIDITY</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">71.5%</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">100%</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">73.1%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESSURE Section -->
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="rrectangle" id="rrectangle4">
+            <img
+              src="https://img.icons8.com/ios/100/atmospheric-pressure.png"
+              alt="Icon 4"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">PRESSURE</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">1.0k Pa</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">1.1k Pa</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.9k Pa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">53.4%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lrectangles">
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="lrectangle" id="lrectangle1">
+            <img
+              src="https://img.icons8.com/ios/50/greenhouse-effect.png"
+              alt="Icon 1"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">VOC</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">176k</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">300k</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">10k</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">45.1%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="lrectangle" id="lrectangle2">
+            <img
+              src="https://img.icons8.com/ios/50/particles.png"
+              alt="Icon 2"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">PM10</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">22 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">100 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.0 g/m²</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar" data-progress="70">
+          <div class="progress">
+            <span class="progress-value-left">32.8%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="lrectangle" id="lrectangle3">
+            <img
+              src="https://img.icons8.com/ios/50/particulate-matter-10.png"
+              alt="Icon 3"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">PM2.5</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">20 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">100 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.0 g/m²</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">87.9%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-info-group">
+        <div class="grid-info-pair">
+          <div class="lrectangle" id="lrectangle4">
+            <img
+              src="https://img.icons8.com/ios/50/microorganisms.png"
+              alt="Icon 4"
+              class="icon"
+            />
+          </div>
+          <div class="right-square">
+            <div class="title">PM1</div>
+            <div class="data">
+              <div class="row">
+                <span class="label">CURRENT</span>
+                <span class="value">16 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MAX</span>
+                <span class="value">100.0 g/m²</span>
+              </div>
+              <div class="row">
+                <span class="label">MIN</span>
+                <span class="value">0.0 g/m²</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress">
+            <span class="progress-value-left">13.4%</span>
+            <span class="progress-value-right"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Banner -->
+    <div class="top-banner">
+      <img src="assets/svg/banner.svg" alt="Top Banner Shape" class="svg-top" />
+      <div class="date-info">
+        <div class="month-year">
+          <h1 id="month"></h1>
+          <h3 id="year"></h3>
+        </div>
+        <div class="day">
+          <h2 id="day"></h2>
+        </div>
+      </div>
+
+      <div class="right-text">
+        <p>TASK FOR TODAY</p>
+        <p>FINISH THE PENTAGON</p>
+        <p>BUILD ANOTHER PC</p>
+        <p>INSTALL WINDOWS</p>
+        <p>REVIEW THE DRONE</p>
+        <p>POST THE VIDEO</p>
+      </div>
+    </div>
+
+    <!-- Bottom Banner -->
+    <div class="bottom-banner">
+      <img
+        src="assets/svg/banner.svg"
+        alt="Bottom Banner Shape"
+        class="svg-bottom"
+      />
+      <div class="side-by-side-wrapper">
+        <div id="container-9"></div>
+        <div id="container-8"></div>
+      </div>
+      <img
+        src="https://img.icons8.com/ios-filled/100/nuclear.png"
+        alt="nuclear"
+        class="rad"
+      />
+      <div class="rad-info">
+        <div>
+          <h3>uSv/h</h3>
+          <h1>0.56</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="circle-container-right">
+      <div class="text-wrap-right">
+        <span style="--angle: -35deg; color: rgb(252, 104, 6)">PENTAGON</span>
+        <span style="--angle: -32deg">BUNKER TEMP</span>
+        <span style="--angle: -26deg; font-size: 2.2rem">15 'C</span>
+
+        <span style="--angle: -18deg; font-size: 0.65rem">Humidity: 74x</span>
+        <span style="--angle: -15.5deg; font-size: 0.65rem"
+          >Feels Like: 13C</span
+        >
+        <span style="--angle: -13deg; font-size: 0.65rem"
+          >Precipitation: 0x</span
+        >
+        <span style="--angle: -10.5deg; font-size: 0.65rem">Wind: 20 KMH</span>
+        <span style="--angle: -8deg; font-size: 0.65rem"
+          >Pressure: 760 MMHG</span
+        >
+        <span style="--angle: -5.5deg; font-size: 0.65rem">Sunrise: 06:10</span>
+        <span style="--angle: -3deg; font-size: 0.65rem">Sunset: 18:58</span>
+
+        <span style="--angle: 2deg; font-size: 0.75rem; color: rgb(252, 104, 6)"
+          >TONIGHT</span
+        >
+        <span style="--angle: 5deg; font-size: 0.7rem">8'</span>
+        <span style="--angle: 7.5deg; font-size: 0.7rem">CLEAR</span>
+
+        <span
+          style="--angle: 10.5deg; font-size: 0.75rem; color: rgb(252, 104, 6)"
+          >TOMORROW</span
+        >
+        <span style="--angle: 13.5deg; font-size: 0.7rem">JANUARY 4 2025</span>
+        <span style="--angle: 16deg; font-size: 0.7rem">12'</span>
+        <span style="--angle: 18.5deg; font-size: 0.7rem">SUNNY</span>
+
+        <span
+          style="--angle: 21.5deg; font-size: 0.75rem; color: rgb(252, 104, 6)"
+          >MONDAY</span
+        >
+        <span style="--angle: 24.5deg; font-size: 0.7rem">JANUARY 5 2025</span>
+        <span style="--angle: 27deg; font-size: 0.7rem">9'</span>
+        <span style="--angle: 29.5deg; font-size: 0.7rem">SUNNY</span>
+      </div>
+    </div>
+
+    <div class="circle-container-left">
+      <div class="text-wrap-left">
+        <span style="--angle: 25deg; color: rgb(252, 104, 6)"
+          >TIMISOARA, RO</span
+        >
+        <span style="--angle: 22deg">OUTSIDE TEMP</span>
+        <span style="--angle: 16deg; font-size: 2.2rem">6 'C</span>
+
+        <span style="--angle: 9deg; font-size: 0.75rem; color: rgb(252, 104, 6)"
+          >PASSIONS</span
+        >
+        <span style="--angle: 5.5deg; font-size: 0.65rem">CAR LOVER</span>
+        <span style="--angle: 3deg; font-size: 0.65rem">PC BUILDER</span>
+        <span style="--angle: 0.5deg; font-size: 0.65rem">GAMER</span>
+        <span style="--angle: -2deg; font-size: 0.65rem">BUNKER BUILDER</span>
+        <span style="--angle: -4.5deg; font-size: 0.65rem">BIKE LOVER</span>
+        <span style="--angle: -7deg; font-size: 0.65rem">ENGINEER?</span>
+      </div>
+    </div>
+
+    <script>
+      var SW9 = new SiriWave({
+        style: "ios9",
+        container: document.getElementById("container-9"),
+        speed: 0.05,
+        amplitude: 0.7,
+      });
+
+      var SW9 = new SiriWave({
+        style: "ios9",
+        container: document.getElementById("container-8"),
+        speed: 0.05,
+        amplitude: 0.7,
+      });
+    </script>
+  </body>
+</html>
