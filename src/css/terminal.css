@@ -1,0 +1,48 @@
+.terminal-container {
+  width: 600px;
+  height: 400px;
+  background-color: transparent;
+  color: #68fff0;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-sizing: border-box;
+  text-shadow: 0 0 5px rgba(104, 255, 240, 0.5);
+}
+
+.terminal-output {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.terminal-line {
+  margin: 0.25rem 0;
+  line-height: 1.5;
+  font-size: 1.2rem;
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.prompt {
+  margin-right: 0.5rem;
+}
+
+.terminal-input {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: #68fff0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  outline: none;
+  text-shadow: 0 0 5px rgba(104, 255, 240, 0.5);
+}

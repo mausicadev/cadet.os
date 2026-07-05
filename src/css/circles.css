@@ -1,0 +1,275 @@
+.ccontainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 1000px;
+  z-index: 1;
+}
+
+#c0 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+}
+
+#c1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r2 5s infinite linear;
+}
+
+#c4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-66.5deg);
+}
+
+#c5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c6 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c7 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c8 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c9 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c10 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c11 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r2 6s infinite ease;
+}
+
+#c12 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r3 4s infinite ease;
+}
+
+#c13 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r4 2s infinite ease;
+}
+
+#c14 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r4 1.5s infinite ease;
+}
+
+#c15 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: r5 2s infinite ease-in-out;
+}
+
+#c16 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c17 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#c18 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes r1 {
+  0% {
+    transform: rotate(10deg);
+  }
+  20% {
+    transform: rotate(25deg); /* Smooth clockwise rotation */
+  }
+  40% {
+    transform: rotate(-15deg); /* Gradual counterclockwise */
+  }
+  60% {
+    transform: rotate(20deg); /* Smooth clockwise again */
+  }
+  80% {
+    transform: rotate(-10deg); /* Gradual counterclockwise */
+  }
+  100% {
+    transform: rotate(10deg); /* Matches the start for smooth looping */
+  }
+}
+
+@keyframes r2 {
+  0% {
+    transform: rotate(-85deg);
+  }
+  20% {
+    transform: rotate(-70deg); /* Smooth clockwise rotation */
+  }
+  40% {
+    transform: rotate(-100deg); /* Gradual counterclockwise */
+  }
+  60% {
+    transform: rotate(-75deg); /* Smooth clockwise again */
+  }
+  80% {
+    transform: rotate(-95deg); /* Gradual counterclockwise */
+  }
+  100% {
+    transform: rotate(-85deg); /* Matches the start for smooth looping */
+  }
+}
+
+  @keyframes r3 {
+    0% {
+      transform: rotate(-40deg);
+    }
+    20% {
+      transform: rotate(-45deg); /* Smooth clockwise rotation */
+    }
+    40% {
+      transform: rotate(-65deg); /* Gradual counterclockwise */
+    }
+    60% {
+      transform: rotate(-40deg); /* Smooth clockwise again */
+    }
+    80% {
+      transform: rotate(-60deg); /* Gradual counterclockwise */
+    }
+    100% {
+      transform: rotate(-40deg); /* Matches the start for smooth looping */
+    }
+}
+
+  @keyframes r4 {
+    0% {
+      transform: rotate(20deg);
+    }
+    20% {
+      transform: rotate(23deg); /* Smooth clockwise rotation */
+    }
+    40% {
+      transform: rotate(21deg); /* Gradual counterclockwise */
+    }
+    60% {
+      transform: rotate(27deg); /* Smooth clockwise again */
+    }
+    80% {
+      transform: rotate(17deg); /* Gradual counterclockwise */
+    }
+    100% {
+      transform: rotate(20deg); /* Matches the start for smooth looping */
+    }
+}
+
+  @keyframes r5 {
+    0% {
+      transform: rotate(26deg);
+    }
+    20% {
+      transform: rotate(20deg); /* Smooth clockwise rotation */
+    }
+    40% {
+      transform: rotate(12deg); /* Gradual counterclockwise */
+    }
+    60% {
+      transform: rotate(25deg); /* Smooth clockwise again */
+    }
+    80% {
+      transform: rotate(13deg); /* Gradual counterclockwise */
+    }
+    100% {
+      transform: rotate(20deg); /* Matches the start for smooth looping */
+    }
+}
+
+

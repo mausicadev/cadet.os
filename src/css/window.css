@@ -1,0 +1,115 @@
+.holo-window {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(104, 255, 240, 0.5);
+  box-shadow: 0 0 15px rgba(104, 255, 240, 0.2), inset 0 0 20px rgba(104, 255, 240, 0.1);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.holo-window::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(104, 255, 240, 0.05) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.holo-window.opening {
+  animation: holo-open 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+.holo-window.closing {
+  animation: holo-close 0.4s cubic-bezier(0.8, 0, 0.9, 0.1) forwards;
+}
+
+@keyframes holo-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    filter: brightness(2) contrast(1.5) blur(4px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.5) contrast(1.2) blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: brightness(1) contrast(1) blur(0);
+  }
+}
+
+@keyframes holo-close {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+    filter: blur(5px);
+  }
+}
+
+.holo-window-header {
+  height: 30px;
+  background: rgba(104, 255, 240, 0.15);
+  border-bottom: 1px solid rgba(104, 255, 240, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  cursor: grab;
+  color: #68fff0;
+  font-family: cyberpunky, 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+.holo-window-header:active {
+  cursor: grabbing;
+}
+
+.holo-close {
+  cursor: pointer;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.holo-close:hover {
+  color: #fff;
+  text-shadow: 0 0 10px #fff;
+}
+
+.holo-window-content {
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Base OS overrides for the windowing system */
+.os-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.os-overlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none; /* Let clicks pass through to dashboard */
+}

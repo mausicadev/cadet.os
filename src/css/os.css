@@ -1,0 +1,244 @@
+/* ===== OS Wrapper ===== */
+.os-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0d0d0d;
+}
+
+/* ===== App Launcher Button ===== */
+/* Styled to match the HUD panels: beveled corners, grid bg, cyberpunky font */
+.app-launcher {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2000;
+  width: 44px;
+  height: 44px;
+  border: 1.6px solid #486866;
+  background:
+    linear-gradient(90deg, #122225 1px, transparent 1px),
+    linear-gradient(0deg, #122225 1px, transparent 1px);
+  background-color: rgba(0, 0, 0, 0.7);
+  background-size: 8px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  clip-path: polygon(
+    0 6px, 6px 0,
+    calc(100% - 6px) 0, 100% 6px,
+    100% calc(100% - 6px), calc(100% - 6px) 100%,
+    6px 100%, 0 calc(100% - 6px)
+  );
+  padding: 0;
+}
+
+.app-launcher::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 15%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(73, 255, 255, 0.1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: launcher-scan 1.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes launcher-scan {
+  0% { top: 100%; }
+  100% { top: -15%; }
+}
+
+.app-launcher:hover {
+  border-color: #68fff0;
+  box-shadow: 0 0 12px rgba(104, 255, 240, 0.3),
+              inset 0 0 8px rgba(104, 255, 240, 0.08);
+}
+
+.app-launcher.open {
+  border-color: #68fff0;
+  box-shadow: 0 0 18px rgba(104, 255, 240, 0.4),
+              inset 0 0 12px rgba(104, 255, 240, 0.1);
+}
+
+/* Launcher icon: 3x3 grid of small squares matching the HUD grid style */
+.launcher-icon {
+  display: grid;
+  grid-template-columns: repeat(3, 6px);
+  grid-template-rows: repeat(3, 6px);
+  gap: 3px;
+}
+
+.launcher-icon span {
+  width: 6px;
+  height: 6px;
+  background: #5ca9aa;
+  border: 0.5px solid #68fff0;
+  transition: all 0.2s ease;
+}
+
+.app-launcher:hover .launcher-icon span {
+  background: #68fff0;
+  box-shadow: 0 0 4px rgba(104, 255, 240, 0.6);
+}
+
+.app-launcher.open .launcher-icon span {
+  background: #68fff0;
+}
+
+/* X icon for close state */
+.launcher-close {
+  color: #68fff0;
+  font-size: 1.1rem;
+  font-family: cyberpunky, 'Courier New', Courier, monospace;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(104, 255, 240, 0.5);
+}
+
+/* ===== Launcher Menu ===== */
+.launcher-menu {
+  position: fixed;
+  bottom: 74px;
+  right: 20px;
+  z-index: 2000;
+  background:
+    linear-gradient(90deg, #122225 1px, transparent 1px),
+    linear-gradient(0deg, #122225 1px, transparent 1px);
+  background-color: rgba(5, 12, 14, 0.94);
+  background-size: 10px 10px;
+  border: 1.6px solid #486866;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(104, 255, 240, 0.1),
+              0 6px 24px rgba(0, 0, 0, 0.7);
+  padding: 0;
+  min-width: 190px;
+  overflow: hidden;
+  clip-path: polygon(
+    0 8px, 8px 0,
+    calc(100% - 8px) 0, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 0 calc(100% - 8px)
+  );
+
+  /* Slide-up entrance */
+  animation: menu-open 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+.launcher-menu.closing {
+  animation: menu-close 0.2s cubic-bezier(0.6, 0, 0.8, 0.1) forwards;
+}
+
+@keyframes menu-open {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menu-close {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+
+/* Scan-line overlay on the menu */
+.launcher-menu::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(104, 255, 240, 0.02) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Menu header */
+.launcher-menu-header {
+  padding: 10px 14px 7px;
+  font-family: cyberpunky, 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  color: #61a398;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #486866;
+  margin-bottom: 2px;
+  text-shadow: 0 0 2px rgba(104, 255, 240, 0.3);
+}
+
+/* Menu items */
+.launcher-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  font-family: cyberpunky, 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  color: #5ca9aa;
+  letter-spacing: 1.5px;
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.launcher-menu-item:hover {
+  background: rgba(104, 255, 240, 0.06);
+  color: #68fff0;
+  text-shadow: 0 0 6px rgba(104, 255, 240, 0.4);
+}
+
+.launcher-menu-item.active {
+  background: rgba(104, 255, 240, 0.08);
+  border-left: 2px solid #68fff0;
+  color: #68fff0;
+}
+
+.launcher-menu-item .menu-icon {
+  font-size: 0.85rem;
+  width: 18px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.launcher-menu-item:hover .menu-icon,
+.launcher-menu-item.active .menu-icon {
+  opacity: 1;
+}
+
+.launcher-menu-item .menu-label {
+  flex: 1;
+}
+
+.launcher-menu-item .menu-status {
+  font-size: 0.55rem;
+  color: rgba(97, 163, 152, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.launcher-menu-item.active .menu-status {
+  color: rgb(252, 104, 6);
+}
