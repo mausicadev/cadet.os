@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const outerRadius = 276; // Outer radius of the circle
     const innerRadius = outerRadius - 6; // Inner radius of the circle
     const segmentColor = "transparent"; // Transparent background for segments
-    const progressColors = ["#68fff0", "#fc6806", "#fc6806", "#68fff0"]; // Colors for progress bars
+    const progressColors = ["var(--theme-primary)", "var(--theme-secondary)", "var(--theme-secondary)", "var(--theme-primary)"]; // Colors for progress bars
     const cornerRadius = 1; // Corner radius for rounding
     const animationDuration = 1000; // Duration of the animation in ms
 

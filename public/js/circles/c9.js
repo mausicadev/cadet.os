@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const height = 1000; // Canvas height
     const outerRadius = 264; // Outer radius of the circle
     const innerRadius = outerRadius - 2; // Inner radius of the circle
-    const segmentColor = "rgba(104, 255, 240, 0.7)"; // Color for the segments
+    const segmentColor = "var(--theme-primary)"; // Color for the segments
     const cornerRadius = 5; // Corner radius for rounding
     const glowIntensity = 5; // Control the intensity of the glow
   
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       svg
         .append("path")
         .attr("d", arc)
-        .attr("fill", segmentColor)
+        .attr("fill", segmentColor).attr("fill-opacity", 0.7)
         .attr("filter", "url(#glow)"); // Apply the glow filter
     });
   });

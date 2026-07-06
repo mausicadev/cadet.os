@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("cx", endX)
           .attr("cy", endY)
           .attr("r", 3) // Radius of the connector
-          .attr("fill", "rgb(252, 104, 6)")
+          .attr("fill", "var(--theme-secondary)")
           .attr("filter", "url(#glow2)");
   
         svg
@@ -93,13 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("cx", startX)
           .attr("cy", startY)
           .attr("r", 3) // Radius of the connector
-          .attr("fill", "rgb(252, 104, 6)")
+          .attr("fill", "var(--theme-secondary)")
           .attr("filter", "url(#glow2)");
       });
     };
   
     // Draw the segments for both radii
-    drawSegments(228, 226, "rgb(252, 104, 6)"); // Outer set
-    drawSegments(218, 216, "rgb(252, 104, 6)"); // Inner set
+    drawSegments(228, 226, "var(--theme-secondary)"); // Outer set
+    drawSegments(218, 216, "var(--theme-secondary)"); // Inner set
   });
   

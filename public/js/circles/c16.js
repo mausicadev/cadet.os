@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const height = 1000; // Canvas height
   const outerRadius = 267; // Outer radius of the circle
   const innerRadius = outerRadius - 2; // Inner radius of the circle
-  const segmentColor = "#265152"; // Color for the segments
+  const segmentColor = "var(--theme-primary-bg)"; // Color for the segments
   const cornerRadius = 1; // Corner radius for rounding
 
   // Segment configuration (start angle, end angle in degrees)

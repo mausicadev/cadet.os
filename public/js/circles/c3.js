@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const height = 1000;
   const outerRadius = 350;
   const innerRadius = outerRadius - 3;
-  const segmentColor = "rgb(104, 255, 240)";
+  const segmentColor = "var(--theme-primary)";
   const capLength = 20;
   const capOffset = 10;
-  const capColor = "rgb(104, 255, 240)";
+  const capColor = "var(--theme-primary)";
   const gapAngle = 0.17;
 
   const segmentSizes = [130, 100, 30, 30, 30, 30];

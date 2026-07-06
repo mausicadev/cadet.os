@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const width = 1000, height = 1000;
     const innerOuterRadius = 270, outerInnerRadius = 280;
     const lineLengthExtension = 2.2, lineLengthReduction = 2.2;
-    const segmentColor = "#265152", lineColor = "rgb(104, 255, 240)";
+    const segmentColor = "var(--theme-primary-bg)", lineColor = "var(--theme-primary)";
     const gapAngle = 0.05, inclinationAngle = 0.06;
     const startAngleOffset1 = 1.517, startAngleOffset2 = 1.567, endAngleFactor = 0.357;
     const glowIntensity = 1; // Glow intensity for connectors

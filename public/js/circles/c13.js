@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const height = 1000;
   const outerRadius = 325;
   const innerRadius = outerRadius - 20;
-  const segmentColor = "rgba(104, 255, 240, 0.7)";
+  const segmentColor = "var(--theme-primary)";
   const gapAngle = 0.17; // Gap between segments in radians
 
   const segmentSizes = [30]; // Segment sizes in degrees
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     svg
       .append("path")
       .attr("d", arc)
-      .attr("fill", segmentColor);
+      .attr("fill", segmentColor).attr("fill-opacity", 0.7);
 
     // Opposite segment (diagonal)
     const startAngleOpposite = startAngle + Math.PI; // 180 degrees in radians
@@ -48,6 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     svg
       .append("path")
       .attr("d", arcOpposite)
-      .attr("fill", segmentColor);
+      .attr("fill", segmentColor).attr("fill-opacity", 0.7);
   });
 });

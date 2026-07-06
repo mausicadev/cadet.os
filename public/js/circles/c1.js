@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const padAngle = 0.05; // Spacing between segments
     // Colors
     const backgroundColor = "rgba(0, 0, 0, 0)"; // Cyan, semi-transparent
-    const borderColor = "#5ca9aa"; // Bright cyan for borders
-    const segmentColors = ["rgba(21, 63, 68, 0.4)"]; // Teal for segments
+    const borderColor = "var(--theme-primary)"; // Bright cyan for borders
+    const segmentColors = ["var(--theme-primary-bg)"]; // Teal for segments
     const numSegments = 24; // Number of segments
     const segmentAngle = (2 * Math.PI) / numSegments; // Angle for each segment
   
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .cornerRadius(cornerRadius)
         )
         .attr("fill", segmentColors[i % segmentColors.length])
-        .attr("stroke", borderColor)
+        .attr("stroke", borderColor).attr("stroke-opacity", 0.7)
         .attr("stroke-width", 2);
     }
   });

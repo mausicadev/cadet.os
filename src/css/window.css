@@ -10,6 +10,8 @@
   z-index: 10;
   pointer-events: auto;
   overflow: hidden;
+  /* Smooth macOS style slide-out animation transitions */
+  transition: transform 0.5s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .holo-window::before {
@@ -102,6 +104,11 @@
   width: 100vw;
   height: 100vh;
   z-index: 1;
+  transition: filter 0.6s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.os-background.blurred {
+  filter: blur(4px) brightness(0.85); /* slight blur and dimming so window text is easy to read */
 }
 
 .os-overlays {
@@ -113,3 +120,283 @@
   z-index: 5;
   pointer-events: none; /* Let clicks pass through to dashboard */
 }
+
+/* Focused Window Glow Style */
+.holo-window.focused {
+  border-color: rgba(104, 255, 240, 0.85);
+  box-shadow: 0 0 20px rgba(104, 255, 240, 0.35), inset 0 0 25px rgba(104, 255, 240, 0.15);
+}
+
+/* Slid Out (Minimized / Show Desktop) Window States */
+.holo-window.slid-out {
+  opacity: 0.35;
+  cursor: pointer !important;
+  border-color: rgba(252, 104, 6, 0.4) !important;
+  box-shadow: 0 0 12px rgba(252, 104, 6, 0.2), inset 0 0 10px rgba(252, 104, 6, 0.15) !important;
+  pointer-events: auto;
+}
+
+.holo-window.slid-out:hover {
+  opacity: 0.85;
+  border-color: rgb(252, 104, 6) !important;
+  box-shadow: 0 0 22px rgba(252, 104, 6, 0.6), inset 0 0 15px rgba(252, 104, 6, 0.3) !important;
+}
+
+.holo-window.slid-out .holo-window-header {
+  cursor: pointer !important;
+  background: rgba(252, 104, 6, 0.15) !important;
+  border-bottom-color: rgba(252, 104, 6, 0.3) !important;
+  color: rgb(252, 104, 6) !important;
+}
+
+/* Pulsing visual cue overlay for slid-out state */
+.slid-out-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 2px solid rgb(252, 104, 6);
+  pointer-events: none;
+  z-index: 100;
+  animation: pulse-border 1.5s infinite alternate;
+}
+
+@keyframes pulse-border {
+  0% {
+    opacity: 0.2;
+    box-shadow: inset 0 0 5px rgba(252, 104, 6, 0.2);
+  }
+  100% {
+    opacity: 0.9;
+    box-shadow: inset 0 0 15px rgba(252, 104, 6, 0.5);
+  }
+}
+
+/* ===== HACKER GRID LAYOUT STYLE ===== */
+.os-grid-layout {
+  position: absolute;
+  top: 20px; /* Match left/right margin of 20px */
+  bottom: 120px; /* Above bottom split dock */
+  left: 20px;
+  right: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Resize Handle Style */
+.holo-resize-handle {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 12px;
+  height: 12px;
+  cursor: se-resize;
+  background: var(--theme-primary, #68fff0);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.holo-resize-handle:hover {
+  opacity: 1;
+  background: var(--theme-secondary, rgb(252, 104, 6));
+}
+
+/* In grid mode, active windows inside the grid cells stretch to fill */
+.os-grid-layout .holo-window {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+
+/* Make sure container widths/heights stretch in grid mode */
+.os-grid-layout .terminal-container,
+.os-grid-layout .metrics-container,
+.os-grid-layout .file-manager-container,
+.os-grid-layout .task-manager-container,
+.os-grid-layout .cyber-editor-container,
+.os-grid-layout .editor-empty-state,
+.os-grid-layout .settings-container,
+.os-grid-layout .notes-container,
+.os-grid-layout .radar-container {
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Grid Placeholder Cards (Offline Channel state) */
+.grid-placeholder {
+  border: 1px dashed rgba(104, 255, 240, 0.25);
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 15px;
+  color: rgba(104, 255, 240, 0.4);
+  font-family: cyberpunky, 'Courier New', Courier, monospace;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.grid-placeholder::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(104, 255, 240, 0.02) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.grid-placeholder:hover {
+  border-color: rgba(104, 255, 240, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(104, 255, 240, 0.85);
+  box-shadow: 0 0 10px rgba(104, 255, 240, 0.1);
+}
+
+.placeholder-status {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.placeholder-blink {
+  width: 6px;
+  height: 6px;
+  background-color: rgb(252, 104, 6);
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgb(252, 104, 6);
+  animation: placeholder-blink-anim 1s infinite alternate;
+}
+
+@keyframes placeholder-blink-anim {
+  0% { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+.placeholder-title {
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.placeholder-btn {
+  background: transparent;
+  border: 1px solid rgba(104, 255, 240, 0.3);
+  color: #68fff0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  clip-path: polygon(
+    0 4px, 4px 0,
+    calc(100% - 4px) 0, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 0 calc(100% - 4px)
+  );
+}
+
+.placeholder-btn:hover {
+  background: rgba(104, 255, 240, 0.15);
+  border-color: #68fff0;
+  box-shadow: 0 0 8px rgba(104, 255, 240, 0.4);
+}
+
+/* Global Theme Overrides for standard panels */
+:root {
+  --theme-primary: #68fff0;
+  --theme-secondary: rgb(252, 104, 6);
+  --theme-glow: rgba(104, 255, 240, 0.4);
+  --theme-border: rgba(104, 255, 240, 0.3);
+  --theme-primary-bg: rgba(104, 255, 240, 0.15);
+}
+
+/* Override existing components to adapt to the selected theme */
+.holo-window {
+  border-color: var(--theme-border) !important;
+  box-shadow: 0 0 15px var(--theme-glow), inset 0 0 20px rgba(104, 255, 240, 0.1) !important;
+}
+.holo-window.focused {
+  border-color: var(--theme-primary) !important;
+  box-shadow: 0 0 20px var(--theme-glow), inset 0 0 25px rgba(104, 255, 240, 0.15) !important;
+}
+.holo-window-header {
+  background: var(--theme-primary-bg) !important;
+  border-bottom-color: var(--theme-border) !important;
+  color: var(--theme-primary) !important;
+}
+.holo-close {
+  color: var(--theme-primary) !important;
+}
+.terminal-container, .cyber-editor-container, .file-manager-container, .metrics-container, .task-manager-container {
+  color: var(--theme-primary) !important;
+  text-shadow: 0 0 5px var(--theme-glow) !important;
+}
+.dock-item {
+  border-color: var(--theme-border) !important;
+}
+.dock-indicator-container .dot.open.active {
+  background-color: var(--theme-primary) !important;
+  box-shadow: 0 0 8px var(--theme-primary) !important;
+}
+.dock-indicator-container .dot.open {
+  background-color: var(--theme-secondary) !important;
+  box-shadow: 0 0 6px var(--theme-secondary) !important;
+}
+.segment-btn, .fm-search-input, .fm-action-btn, .explorer-btn {
+  color: var(--theme-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+.fm-search-input {
+  background-color: rgba(0,0,0,0.4) !important;
+}
+.sidebar-title, .preview-row .prev-label {
+  color: var(--theme-secondary) !important;
+}
+.glow-cyan {
+  color: var(--theme-primary) !important;
+  text-shadow: 0 0 8px var(--theme-glow) !important;
+}
+.glow-orange {
+  color: var(--theme-secondary) !important;
+  text-shadow: 0 0 8px var(--theme-glow) !important;
+}
+.top-banner .right-text, .top-banner h1, .bottom-banner h1 {
+  color: var(--theme-primary) !important;
+  text-shadow: 0 0 2px var(--theme-primary) !important;
+}
+.top-banner h2, .bottom-banner h3 {
+  color: var(--theme-secondary) !important;
+  text-shadow: 0 0 2px var(--theme-secondary) !important;
+}
+.circle-container-left span, .circle-container-right span {
+  color: var(--theme-primary) !important;
+}
+.center-container .overlay-text {
+  color: var(--theme-primary) !important;
+  text-shadow: 0 0 2px var(--theme-primary) !important;
+}
+
+
+

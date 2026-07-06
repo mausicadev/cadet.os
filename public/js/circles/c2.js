@@ -1,3 +1,24 @@
+const parseRGB = (colorStr, defaultRGB) => {
+    if (!colorStr) return defaultRGB;
+    let match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+      return [parseInt(match[1]), parseInt(match[2]), parseInt(match[3])];
+    }
+    if (colorStr.startsWith("#")) {
+      let hex = colorStr.slice(1);
+      if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+      }
+      if (hex.length === 6) {
+        return [
+          parseInt(hex.slice(0, 2), 16),
+          parseInt(hex.slice(2, 4), 16),
+          parseInt(hex.slice(4, 6), 16)
+        ];
+      }
+    }
+    return defaultRGB;
+  };
 let startMorphing = false;
 let isInFastSpin = false;
 let isIdleRotationActive = true;
@@ -114,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .attr("height", 400);
 
   filter.append("feGaussianBlur").attr("stdDeviation", 10).attr("result", "coloredBlur");
-  filter.append("feFlood").attr("flood-color", "rgb(104, 255, 240)").attr("flood-opacity", 1).attr("result", "glowInner");
+  filter.append("feFlood").attr("flood-color", "var(--theme-primary)").attr("flood-opacity", 1).attr("result", "glowInner");
   filter.append("feComposite").attr("in", "glowInner").attr("in2", "coloredBlur").attr("operator", "in").attr("result", "glowInner");
   filter.append("feMerge").selectAll("feMergeNode").data(["glowInner", "SourceGraphic"]).enter().append("feMergeNode").attr("in", (d) => d);
 
@@ -139,9 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const x4 = Math.cos(endAngle) * innerRadius;
       const y4 = Math.sin(endAngle) * innerRadius;
 
-      const r = Math.round(104 + (252 - 104) * (pB / 100));
-      const g = Math.round(255 + (104 - 255) * (pB / 100));
-      const b = Math.round(240 + (6 - 240) * (pB / 100));
+      const computedStyle = getComputedStyle(document.documentElement);
+      const themePrimary = computedStyle.getPropertyValue("--theme-primary").trim() || "#68fff0";
+      const themeSecondary = computedStyle.getPropertyValue("--theme-secondary").trim() || "rgb(252, 104, 6)";
+      const startRGB = parseRGB(themePrimary, [104, 255, 240]);
+      const endRGB = parseRGB(themeSecondary, [252, 104, 6]);
+      const r = Math.round(startRGB[0] + (endRGB[0] - startRGB[0]) * (pB / 100));
+      const g = Math.round(startRGB[1] + (endRGB[1] - startRGB[1]) * (pB / 100));
+      const b = Math.round(startRGB[2] + (endRGB[2] - startRGB[2]) * (pB / 100));
 
       svg.append("polygon")
         .attr("points", `${x1},${y1} ${x2},${y2} ${x3},${y3} ${x4},${y4}`)

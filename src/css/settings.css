@@ -1,0 +1,168 @@
+.settings-container {
+  width: 550px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  color: var(--theme-primary, #68fff0);
+  font-family: 'Courier New', Courier, monospace;
+  padding: 12px;
+  box-sizing: border-box;
+  gap: 12px;
+  overflow-y: auto;
+  text-shadow: 0 0 5px var(--theme-glow, rgba(104, 255, 240, 0.4));
+}
+
+.settings-container::-webkit-scrollbar {
+  width: 5px;
+}
+.settings-container::-webkit-scrollbar-thumb {
+  background: var(--theme-border, rgba(104, 255, 240, 0.3));
+}
+
+.settings-header {
+  border-bottom: 1.6px solid var(--theme-border, rgba(104, 255, 240, 0.3));
+  padding-bottom: 6px;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: var(--theme-primary, #68fff0);
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1;
+}
+
+.settings-group {
+  border: 1px solid var(--theme-border, rgba(104, 255, 240, 0.2));
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-group-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--theme-secondary, rgb(252, 104, 6));
+  border-bottom: 1px dashed var(--theme-border, rgba(104, 255, 240, 0.15));
+  padding-bottom: 4px;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  min-height: 24px;
+}
+
+.settings-label {
+  color: rgba(104, 255, 240, 0.85);
+  font-weight: 500;
+}
+
+/* Cyber Slider */
+.cyber-slider {
+  -webkit-appearance: none;
+  width: 140px;
+  height: 6px;
+  background: rgba(104, 255, 240, 0.1);
+  border: 1px solid var(--theme-border, rgba(104, 255, 240, 0.3));
+  outline: none;
+  transition: all 0.2s;
+}
+
+.cyber-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--theme-primary, #68fff0);
+  border: 1px solid #000;
+  box-shadow: 0 0 5px var(--theme-primary, #68fff0);
+  cursor: pointer;
+}
+
+/* Cyber Toggle */
+.cyber-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cyber-toggle {
+  width: 40px;
+  height: 18px;
+  border: 1px solid var(--theme-border, rgba(104, 255, 240, 0.4));
+  background: rgba(0, 0, 0, 0.5);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.cyber-toggle.active {
+  background: var(--theme-primary-bg, rgba(104, 255, 240, 0.15));
+  border-color: var(--theme-primary, #68fff0);
+  box-shadow: 0 0 8px var(--theme-glow, rgba(104, 255, 240, 0.3));
+}
+
+.cyber-toggle-knob {
+  width: 14px;
+  height: 14px;
+  background: var(--theme-border, rgba(104, 255, 240, 0.5));
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  transition: all 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.cyber-toggle.active .cyber-toggle-knob {
+  background: var(--theme-primary, #68fff0);
+  box-shadow: 0 0 5px var(--theme-primary, #68fff0);
+  left: 23px;
+}
+
+/* Theme presets container */
+.theme-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-preset-btn {
+  background: transparent;
+  border: 1px solid var(--theme-border, rgba(104, 255, 240, 0.3));
+  color: var(--theme-primary, #68fff0);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-preset-btn:hover {
+  background: rgba(104, 255, 240, 0.1);
+}
+
+.theme-preset-btn.active {
+  border-color: var(--theme-primary, #68fff0);
+  background: var(--theme-primary-bg, rgba(104, 255, 240, 0.15));
+  box-shadow: 0 0 8px var(--theme-glow, rgba(104, 255, 240, 0.3));
+}
+
+.theme-preset-btn.preset-cyan { color: #68fff0; border-color: rgba(104, 255, 240, 0.4); }
+.theme-preset-btn.preset-cyan.active { background: rgba(104, 255, 240, 0.15); border-color: #68fff0; }
+
+.theme-preset-btn.preset-orange { color: rgb(252, 104, 6); border-color: rgba(252, 104, 6, 0.4); }
+.theme-preset-btn.preset-orange.active { background: rgba(252, 104, 6, 0.15); border-color: rgb(252, 104, 6); }
+
+.theme-preset-btn.preset-green { color: #39ff14; border-color: rgba(57, 255, 20, 0.4); }
+.theme-preset-btn.preset-green.active { background: rgba(57, 255, 20, 0.15); border-color: #39ff14; }
+
+.theme-preset-btn.preset-red { color: #ff073a; border-color: rgba(255, 7, 58, 0.4); }
+.theme-preset-btn.preset-red.active { background: rgba(255, 7, 58, 0.15); border-color: #ff073a; }
