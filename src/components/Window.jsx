@@ -35,6 +35,17 @@ export default function Window({
   
   const windowRef = useRef(null);
 
+  // Keep default base sizes for initial sizing only; allow free-aspect resizing like native OS windows
+  const defaultBaseSize = {
+    terminal: { width: 600, height: 400 },
+    files: { width: 700, height: 420 },
+    metrics: { width: 600, height: 400 },
+    tasks: { width: 550, height: 400 },
+    editor: { width: 550, height: 350 },
+    settings: { width: 550, height: 350 },
+    notes: { width: 600, height: 380 }
+  };
+
   // Clear the opening keyframe animation once it completes to prevent it from locking the transform
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,8 +71,8 @@ export default function Window({
       const dw = e.clientX - resizeStart.x;
       const dh = e.clientY - resizeStart.y;
       setSize({
-        width: Math.max(300, resizeStart.w + dw),
-        height: Math.max(200, resizeStart.h + dh)
+        width: Math.max(300, Math.round(resizeStart.w + dw)),
+        height: Math.max(200, Math.round(resizeStart.h + dh))
       });
     }
   };
@@ -205,6 +216,8 @@ export default function Window({
     zIndex: zIndex || 10,
     transform: slideTransform,
   };
+
+  // We no longer scale the inner content - let it reflow/scroll naturally like native windows
 
   return (
     <div
