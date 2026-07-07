@@ -1,6 +1,8 @@
-let currentBackground = null;
+if (!window.__cadet_controller_loaded) {
+  window.__cadet_controller_loaded = true;
+  let currentBackground = null;
 
-function setBlueBackgroundOnRefresh() {
+  function setBlueBackgroundOnRefresh() {
   const container = document.querySelector(".container");
   if (container) {
     if (currentBackground) {
@@ -113,4 +115,5 @@ function changeProgressBarColors(newBarColor, newProgressColor, progressElement)
   progressBarElement.style.backgroundColor = newBarColor;
 }
 
-document.addEventListener("DOMContentLoaded", setBlueBackgroundOnRefresh);
+  document.addEventListener("DOMContentLoaded", setBlueBackgroundOnRefresh);
+}

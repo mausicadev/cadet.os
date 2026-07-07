@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Dashboard from './components/Dashboard';
 import Terminal from './components/Terminal';
 import TaskManager from './components/TaskManager';
@@ -53,7 +53,10 @@ const INITIAL_FILESYSTEM = {
       name: 'usr',
       type: 'folder',
       children: [
-        { id: 'notes', name: 'notes.txt', type: 'file', size: '450 B', mime: 'TEXT', content: 'TASKS TO DO IN THE BUNKER:\n1. Re-route radar sweep angles for better coverage.\n2. Fix coolant pipe valve #3 (minor drip).\n3. Install thermal override script in the main server loop.\n4. Clean the air intake filters.\n5. Post a new video updates.' }
+        { id: 'notes', name: 'notes.txt', type: 'file', size: '450 B', mime: 'TEXT', content: 'TASKS TO DO IN THE BUNKER:\n1. Re-route radar sweep angles for better coverage.\n2. Fix coolant pipe valve #3 (minor drip).\n3. Install thermal override script in the main server loop.\n4. Clean the air intake filters.\n5. Post a new video updates.' },
+        { id: 'devlog_draft', name: 'devlog_draft.txt', type: 'file', size: '500 B', mime: 'TEXT', content: `Finally got the live uRadMonitor API support done! The dashboard now actually updates with real CO2, VOC, Noise, and PM data. If you're running custom sensors, I also put together a customizable JSON template you can use to import whatever telemetry you want. 
+
+Honestly, coding the custom window system from scratch and sorting out the settings page scrollbars was a massive pain, but it's finally running cleanly. Also, disabled the grid layout by default so the system starts up in a clean floating window desktop instead of stretching everything at once.` }
       ]
     }
   ]
@@ -144,7 +147,39 @@ const APPS = [
   }
 ];
 
-function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, onSaveFile, ...props }) {
+const STORAGE_KEY = 'cadet-os-config-v1';
+
+const getStoredConfig = () => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.warn('Unable to read saved app config.', error);
+    return null;
+  }
+};
+
+const getDefaultGridPlacements = () => ({
+  files: { row: 1, col: 1, colspan: 2, rowspan: 1 },
+  editor: { row: 2, col: 1, colspan: 2, rowspan: 1 },
+  terminal: { row: 1, col: 3, colspan: 1, rowspan: 1 },
+  metrics: { row: 1, col: 4, colspan: 1, rowspan: 1 },
+  tasks: { row: 2, col: 3, colspan: 1, rowspan: 1 },
+  notes: { row: 2, col: 4, colspan: 1, rowspan: 1 }
+});
+
+const getDefaultWindowLayouts = () => ({
+  terminal: { position: { x: 80, y: 80 }, size: { width: 600, height: 400 } },
+  tasks: { position: { x: 500, y: 80 }, size: { width: 550, height: 400 } },
+  files: { position: { x: 220, y: 220 }, size: { width: 700, height: 420 } },
+  metrics: { position: { x: 620, y: 250 }, size: { width: 600, height: 400 } },
+  editor: { position: { x: 340, y: 160 }, size: { width: 550, height: 350 } },
+  settings: { position: { x: 120, y: 120 }, size: { width: 650, height: 550 } },
+  notes: { position: { x: 80, y: 500 }, size: { width: 600, height: 380 } }
+});
+
+function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, onSaveFile, sensorData, ...props }) {
   switch (id) {
     case 'terminal': return <Terminal {...props} />;
     case 'tasks': return <TaskManager {...props} />;
@@ -169,6 +204,7 @@ function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, on
     case 'settings':
       return (
         <Settings 
+          sensorData={sensorData}
           {...props}
         />
       );
@@ -186,37 +222,39 @@ function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, on
 }
 
 function App() {
+  const storedConfig = getStoredConfig();
+
   // Lifted filesystem state
   const [fileSystem, setFileSystem] = useState(INITIAL_FILESYSTEM);
   const [editingFile, setEditingFile] = useState(null);
 
-  // On startup: 6 grid windows should be showed in grid (Settings closed, Radar removed)
+  // On startup: only open the terminal window to prevent screen clutter; other windows can be connected on demand
   const [openApps, setOpenApps] = useState([
-    'terminal', 'files', 'tasks', 'notes', 'metrics', 'editor'
+    'terminal'
   ]);
   const [minimizedApps, setMinimizedApps] = useState([]);
   const [focusStack, setFocusStack] = useState([
-    'terminal', 'files', 'tasks', 'notes', 'metrics', 'editor'
+    'terminal'
   ]);
   const [showDesktopActive, setShowDesktopActive] = useState(false);
 
   // Default Grid Placements (4x2 screen grid coordinates)
   // Left half: Columns 1-2. Right half: Columns 3-4.
-  const [gridPlacements, setGridPlacements] = useState({
-    files: { row: 1, col: 1, colspan: 2, rowspan: 1 },
-    editor: { row: 2, col: 1, colspan: 2, rowspan: 1 },
-    terminal: { row: 1, col: 3, colspan: 1, rowspan: 1 },
-    metrics: { row: 1, col: 4, colspan: 1, rowspan: 1 },
-    tasks: { row: 2, col: 3, colspan: 1, rowspan: 1 },
-    notes: { row: 2, col: 4, colspan: 1, rowspan: 1 }
-  });
+  const [gridPlacements, setGridPlacements] = useState(() => storedConfig?.gridPlacements || getDefaultGridPlacements());
 
   // Settings State
-  const [gridLayoutActive, setGridLayoutActive] = useState(true);
-  const [themePreset, setThemePreset] = useState('cyan');
-  const [scanlineOpacity, setScanlineOpacity] = useState(15);
-  const [dashboardBlur, setDashboardBlur] = useState(4);
-  const [soundActive, setSoundActive] = useState(true);
+  const [gridLayoutActive, setGridLayoutActive] = useState(() => storedConfig?.gridLayoutActive ?? false);
+  const [themePreset, setThemePreset] = useState(() => storedConfig?.themePreset || 'cyan');
+  const [scanlineOpacity, setScanlineOpacity] = useState(() => storedConfig?.scanlineOpacity ?? 15);
+  const [dashboardBlur, setDashboardBlur] = useState(() => storedConfig?.dashboardBlur ?? 4);
+  const [soundActive, setSoundActive] = useState(() => storedConfig?.soundActive ?? true);
+  const [sensorApiUrl, setSensorApiUrl] = useState(() => storedConfig?.sensorApiUrl || 'https://data.uradmonitor.com/api/v1/devices');
+  const [sensorHeadersText, setSensorHeadersText] = useState(() => storedConfig?.sensorHeadersText || '{}');
+  const [windowLayouts, setWindowLayouts] = useState(() => storedConfig?.windowLayouts || getDefaultWindowLayouts());
+  const [sensorData, setSensorData] = useState([]);
+  const [sensorFetchStatus, setSensorFetchStatus] = useState('Waiting for URL');
+  const [sensorFetchError, setSensorFetchError] = useState('');
+  const [sensorRefreshIntervalSeconds, setSensorRefreshIntervalSeconds] = useState(() => storedConfig?.sensorRefreshIntervalSeconds ?? 10);
 
   // Dynamically apply theme variables to the document root
   useEffect(() => {
@@ -253,6 +291,118 @@ function App() {
     root.style.setProperty('--theme-border', border);
     root.style.setProperty('--theme-primary-bg', bg);
   }, [themePreset]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const configToPersist = {
+      gridLayoutActive,
+      themePreset,
+      scanlineOpacity,
+      dashboardBlur,
+      soundActive,
+      gridPlacements,
+      sensorApiUrl,
+      sensorHeadersText,
+      sensorRefreshIntervalSeconds,
+      windowLayouts
+    };
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(configToPersist));
+  }, [gridLayoutActive, themePreset, scanlineOpacity, dashboardBlur, soundActive, gridPlacements, sensorApiUrl, sensorHeadersText, windowLayouts]);
+
+  const loadSensorData = useCallback(async () => {
+    if (!sensorApiUrl) {
+      setSensorData([]);
+      setSensorFetchStatus('Ready');
+      setSensorFetchError('');
+      return;
+    }
+
+    try {
+      setSensorFetchError('');
+
+      let headers = {};
+      try {
+        const parsed = JSON.parse(sensorHeadersText || '{}');
+        if (parsed && typeof parsed === 'object') {
+          headers = parsed;
+        }
+      } catch {
+        headers = {};
+      }
+
+      const fetchOptions = {
+        method: 'GET',
+        headers: Object.keys(headers).length > 0 ? headers : undefined
+      };
+
+      const response = await fetch(sensorApiUrl, fetchOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      const normalized = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray(payload?.devices)
+            ? payload.devices
+            : Array.isArray(payload?.records)
+              ? payload.records
+              : Array.isArray(payload?.result)
+                ? payload.result
+                : Array.isArray(payload?.record)
+                  ? payload.record
+                  : Array.isArray(payload?.data?.devices)
+                    ? payload.data.devices
+                    : (payload && typeof payload === 'object' && (payload.last_temperature !== undefined || payload.last_co2 !== undefined || payload.id !== undefined))
+                      ? [payload]
+                      : [];
+
+      if (Array.isArray(normalized) && normalized.length > 0) {
+        setSensorData(normalized);
+        setSensorFetchStatus(`Loaded ${normalized.length} device${normalized.length === 1 ? '' : 's'}`);
+        setSensorFetchError('');
+      } else if (Array.isArray(normalized)) {
+        setSensorData([]);
+        setSensorFetchStatus('Loaded 0 devices');
+        setSensorFetchError('No sensor data available');
+      } else {
+        throw new Error('Response is not an array or expected structure');
+      }
+    } catch (error) {
+      setSensorData([]);
+      setSensorFetchStatus('Ready');
+      setSensorFetchError(error?.message || 'Unable to fetch');
+    }
+  }, [sensorApiUrl, sensorHeadersText]);
+
+  useEffect(() => {
+    if (!sensorApiUrl) {
+      setSensorData([]);
+      setSensorFetchStatus('Ready');
+      setSensorFetchError('');
+      return;
+    }
+
+    let cancelled = false;
+    const intervalMs = Math.max(5000, sensorRefreshIntervalSeconds * 1000);
+
+    const poll = async () => {
+      if (cancelled) return;
+      await loadSensorData();
+    };
+
+    loadSensorData();
+    const intervalId = setInterval(poll, intervalMs);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
+  }, [sensorApiUrl, loadSensorData, sensorRefreshIntervalSeconds]);
 
   const activeAppId = focusStack.length > 0 ? focusStack[focusStack.length - 1] : null;
 
@@ -481,6 +631,9 @@ function App() {
             title={app.label}
             onClose={() => closeApp(app.id)}
             defaultPos={app.defaultPos}
+            position={windowLayouts[app.id]?.position}
+            size={windowLayouts[app.id]?.size}
+            onLayoutChange={(layout) => setWindowLayouts(prev => ({ ...prev, [app.id]: { ...prev[app.id], ...layout } }))}
             focused={isFocused}
             zIndex={zIndex}
             slidOut={false}
@@ -508,6 +661,19 @@ function App() {
               setSoundActive={setSoundActive}
               gridPlacements={gridPlacements}
               setGridPlacements={setGridPlacements}
+              sensorApiUrl={sensorApiUrl}
+              setSensorApiUrl={setSensorApiUrl}
+              sensorHeadersText={sensorHeadersText}
+              setSensorHeadersText={setSensorHeadersText}
+              sensorRefreshIntervalSeconds={sensorRefreshIntervalSeconds}
+              setSensorRefreshIntervalSeconds={setSensorRefreshIntervalSeconds}
+              windowLayouts={windowLayouts}
+              setWindowLayouts={setWindowLayouts}
+              sensorData={sensorData}
+              setSensorData={setSensorData}
+              sensorFetchStatus={sensorFetchStatus}
+              sensorFetchError={sensorFetchError}
+              fetchSensorData={loadSensorData}
             />
           </Window>
         </div>
@@ -535,7 +701,7 @@ function App() {
         className={`os-background ${hasVisibleWindows ? 'blurred' : ''}`}
         style={hasVisibleWindows ? { filter: `blur(${dashboardBlur}px) brightness(0.85)` } : {}}
       >
-        <Dashboard />
+        <Dashboard sensorData={sensorData} />
       </div>
 
       {/* Cyber Screen Scanline Overlay */}
@@ -568,6 +734,9 @@ function App() {
                 title={app.label}
                 onClose={() => closeApp(app.id)}
                 defaultPos={app.defaultPos}
+                position={windowLayouts[app.id]?.position}
+                size={windowLayouts[app.id]?.size}
+                onLayoutChange={(layout) => setWindowLayouts(prev => ({ ...prev, [app.id]: { ...prev[app.id], ...layout } }))}
                 focused={isFocused}
                 zIndex={zIndex}
                 slidOut={isMinimized}
@@ -595,6 +764,19 @@ function App() {
                   setSoundActive={setSoundActive}
                   gridPlacements={gridPlacements}
                   setGridPlacements={setGridPlacements}
+                  sensorApiUrl={sensorApiUrl}
+                  setSensorApiUrl={setSensorApiUrl}
+                  sensorHeadersText={sensorHeadersText}
+                  setSensorHeadersText={setSensorHeadersText}
+                  sensorRefreshIntervalSeconds={sensorRefreshIntervalSeconds}
+                  setSensorRefreshIntervalSeconds={setSensorRefreshIntervalSeconds}
+                  windowLayouts={windowLayouts}
+                  setWindowLayouts={setWindowLayouts}
+                  sensorData={sensorData}
+                  setSensorData={setSensorData}
+                  sensorFetchStatus={sensorFetchStatus}
+                  sensorFetchError={sensorFetchError}
+                  fetchSensorData={loadSensorData}
                 />
               </Window>
             );
@@ -610,6 +792,9 @@ function App() {
           title="SETTINGS"
           onClose={() => closeApp('settings')}
           defaultPos={{ x: 120, y: 120 }}
+          position={windowLayouts.settings?.position}
+          size={windowLayouts.settings?.size}
+          onLayoutChange={(layout) => setWindowLayouts(prev => ({ ...prev, settings: { ...prev.settings, ...layout } }))}
           focused={activeAppId === 'settings'}
           zIndex={500}
           slidOut={false}
@@ -637,6 +822,19 @@ function App() {
             setSoundActive={setSoundActive}
             gridPlacements={gridPlacements}
             setGridPlacements={setGridPlacements}
+            sensorApiUrl={sensorApiUrl}
+            setSensorApiUrl={setSensorApiUrl}
+            sensorHeadersText={sensorHeadersText}
+            setSensorHeadersText={setSensorHeadersText}
+            sensorRefreshIntervalSeconds={sensorRefreshIntervalSeconds}
+            setSensorRefreshIntervalSeconds={setSensorRefreshIntervalSeconds}
+            windowLayouts={windowLayouts}
+            setWindowLayouts={setWindowLayouts}
+            sensorData={sensorData}
+            setSensorData={setSensorData}
+            sensorFetchStatus={sensorFetchStatus}
+            sensorFetchError={sensorFetchError}
+            fetchSensorData={loadSensorData}
           />
         </Window>
       )}

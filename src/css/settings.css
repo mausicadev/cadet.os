@@ -166,3 +166,21 @@
 
 .theme-preset-btn.preset-red { color: #ff073a; border-color: rgba(255, 7, 58, 0.4); }
 .theme-preset-btn.preset-red.active { background: rgba(255, 7, 58, 0.15); border-color: #ff073a; }
+
+/* Hide all scrollbars within the settings panel while preserving scrollability */
+.settings-container,
+.settings-container *,
+.settings-grid,
+.settings-grid * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.settings-container::-webkit-scrollbar,
+.settings-container *::-webkit-scrollbar,
+.settings-grid::-webkit-scrollbar,
+.settings-grid *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}

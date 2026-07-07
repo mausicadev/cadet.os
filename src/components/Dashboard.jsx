@@ -4,7 +4,69 @@ import "../css/banners.css";
 import "../css/rectangles.css";
 import "../css/circles.css";
 
-export default function Dashboard() {
+export default function Dashboard({ sensorData = [] }) {
+  const formatValue = (value, digits = 0, suffix = '') => {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return `0${suffix}`;
+    if (digits > 0) return `${number.toFixed(digits)}${suffix}`;
+    if (Math.abs(number) > 999) return `${(number / 1000).toFixed(1)}k${suffix}`;
+    return `${Math.round(number)}${suffix}`;
+  };
+
+  const toNumber = (value) => {
+    const number = Number(value);
+    return Number.isFinite(number) ? number : 0;
+  };
+
+  const hasSensorData = Array.isArray(sensorData) && sensorData.length > 0;
+
+  const insideSensor = hasSensorData
+    ? sensorData.find(device => device.last_co2 != null || device.last_ch2o != null || device.last_voc != null || device.last_humidity != null || device.last_pm25 != null || device.last_noise != null)
+    : undefined;
+  const outsideSensor = hasSensorData
+    ? sensorData.find(device => device !== insideSensor && (device.last_cpm != null || device.factor != null))
+    : undefined;
+
+  const primarySensor = insideSensor || sensorData[0] || {};
+  const secondarySensor = outsideSensor || sensorData.find(device => device !== primarySensor) || primarySensor || {};
+
+  const co2Value = toNumber(primarySensor.last_co2 || primarySensor.last_co2_raw || 0);
+  const ch2oValue = toNumber(primarySensor.last_ch2o || 0);
+  const noiseValue = toNumber(primarySensor.last_noise || 0);
+  const humidityValue = toNumber(primarySensor.last_humidity || 0);
+  const pressureValue = toNumber(primarySensor.last_pressure ? primarySensor.last_pressure / 100 : 0);
+  const vocValue = toNumber(primarySensor.last_voc || 0);
+  const pm10Value = toNumber(primarySensor.last_pm10 || 0);
+  const pm25Value = toNumber(primarySensor.last_pm25 || 0);
+  const pm1Value = toNumber(primarySensor.last_pm1 || 0);
+  const temperatureInsideValue = toNumber(primarySensor.last_temperature || 0);
+  const temperatureOutsideValue = toNumber(secondarySensor.last_temperature || 0);
+  const cpmValue = toNumber(secondarySensor.last_cpm || 0);
+  const radiationValue = cpmValue && secondarySensor.factor ? cpmValue * toNumber(secondarySensor.factor) : 0;
+
+  const insideTemperatureText = `${formatValue(temperatureInsideValue, 1)} 'C`;
+  const outsideTemperatureText = `${formatValue(temperatureOutsideValue, 1)} 'C`;
+  const humidityText = `${formatValue(humidityValue, 1)}%`;
+  const noiseText = `${formatValue(noiseValue, 1)} dB`;
+  const vocText = `${formatValue(vocValue)}`;
+  const ch2oText = `${formatValue(ch2oValue)} ppb`;
+  const pressureText = `${formatValue(pressureValue, 2)} Pa`;
+  const pm1Text = `${formatValue(pm1Value)} µg/m³`;
+  const pm25Text = `${formatValue(pm25Value)} µg/m³`;
+  const pm10Text = `${formatValue(pm10Value)} µg/m³`;
+  const radiationText = `${formatValue(radiationValue, 2)} uSv/h`;
+  const cpmText = `${formatValue(cpmValue)} cpm`;
+  const detectorText = secondarySensor.detector || primarySensor.detector || 'Unknown';
+  const cityText = (secondarySensor.city || primarySensor.city || 'Timişoara').toUpperCase();
+  const countryText = (secondarySensor.country || primarySensor.country || 'RO').toUpperCase();
+  const locationText = `${cityText}, ${countryText}`;
+
+  useEffect(() => {
+    if (Array.isArray(sensorData) && sensorData.length > 0) {
+      window.__sensorData = sensorData;
+    }
+  }, [sensorData]);
+
   useEffect(() => {
     // Guard: don't re-initialize if circles already drawn (React Strict Mode)
     const c0 = document.getElementById('c0');
@@ -19,7 +81,6 @@ export default function Dashboard() {
     const scriptSrcs = [
       '/js/plus.js',
       '/js/api/date.js',
-      '/js/api/urad.js',
       '/js/controller.js',
       ...Array.from({ length: 19 }, (_, i) => `/js/circles/c${i}.js`),
     ];
@@ -42,11 +103,19 @@ export default function Dashboard() {
       }
     };
 
+    if (window.__cadet_scripts_initialised) {
+      return;
+    }
+
+    if (window.__cadet_scripts_loading) {
+      return;
+    }
+
+    window.__cadet_scripts_loading = true;
+
     scriptSrcs.forEach(src => {
-      // Skip if a script tag with same src already exists on the page
       const existing = document.querySelector(`script[src="${src}"]`);
       if (existing) {
-        // Consider it loaded to avoid blocking
         onScriptReady();
         return;
       }
@@ -82,48 +151,48 @@ export default function Dashboard() {
       }
     }
     return () => {
-      // Clean up scripts we added to avoid duplication on StrictMode re-mounts
-      scriptElements.forEach(s => s && s.parentNode && s.parentNode.removeChild(s));
+      // Keep injected scripts in the DOM to avoid duplicate global declarations
+      // during React StrictMode mount/unmount cycles.
     };
   }, []);
 
-  // Widget definitions to avoid copy/paste duplicates
+  // Widget definitions rendered from fetched sensor data.
   const rightWidgets = [
     {
       id: 'rrectangle1',
       icon: 'https://img.icons8.com/ios/100/gas-industry.png',
       title: 'CH2O',
-      current: '9ppm',
+      current: `${formatValue(ch2oValue)}ppm`,
       max: '20ppm',
       min: '0.0ppm',
-      progress: '39.3%'
+      progress: `${Math.min(100, Math.max(0, (ch2oValue / 20) * 100)).toFixed(1)}%`
     },
     {
       id: 'rrectangle2',
       icon: 'https://img.icons8.com/ios-glyphs/30/audio-wave--v1.png',
       title: 'NOISE',
-      current: '34db',
+      current: `${formatValue(noiseValue)}db`,
       max: '90db',
       min: '20db',
-      progress: '72.7%'
+      progress: `${Math.min(100, Math.max(0, ((noiseValue - 20) / 70) * 100)).toFixed(1)}%`
     },
     {
       id: 'rrectangle3',
       icon: 'https://img.icons8.com/ios/100/hygrometer.png',
       title: 'HUMIDITY',
-      current: '71.5%',
+      current: `${formatValue(humidityValue, 1)}%`,
       max: '100%',
-      min: '0.0%',
-      progress: '73.1%'
+      min: '0%',
+      progress: `${Math.min(100, Math.max(0, humidityValue)).toFixed(1)}%`
     },
     {
       id: 'rrectangle4',
       icon: 'https://img.icons8.com/ios/100/atmospheric-pressure.png',
       title: 'PRESSURE',
-      current: "1.0k Pa",
-      max: '1.1k Pa',
-      min: '0.9k Pa',
-      progress: '53.4%'
+      current: `${formatValue(pressureValue, 2)} Pa`,
+      max: '1.05k Pa',
+      min: '0.90k Pa',
+      progress: `${Math.min(100, Math.max(0, ((pressureValue - 0.9) / 0.2) * 100)).toFixed(1)}%`
     }
   ];
 
@@ -132,37 +201,37 @@ export default function Dashboard() {
       id: 'lrectangle1',
       icon: 'https://img.icons8.com/ios/50/greenhouse-effect.png',
       title: 'VOC',
-      current: '176k',
-      max: '300k',
-      min: '10k',
-      progress: '45.1%'
+      current: `${formatValue(vocValue)}`,
+      max: '500k',
+      min: '1k',
+      progress: `${Math.min(100, Math.max(0, (vocValue / 500000) * 100)).toFixed(1)}%`
     },
     {
       id: 'lrectangle2',
       icon: 'https://img.icons8.com/ios/50/particles.png',
       title: 'PM10',
-      current: '22 g/m²',
-      max: '100 g/m²',
-      min: '0.0 g/m²',
-      progress: '32.8%'
+      current: `${formatValue(pm10Value)}g/m³`,
+      max: '100 g/m³',
+      min: '0 g/m³',
+      progress: `${Math.min(100, Math.max(0, (pm10Value / 100) * 100)).toFixed(1)}%`
     },
     {
       id: 'lrectangle3',
       icon: 'https://img.icons8.com/ios/50/particulate-matter-10.png',
       title: 'PM2.5',
-      current: '20 g/m²',
-      max: '100 g/m²',
-      min: '0.0 g/m²',
-      progress: '87.9%'
+      current: `${formatValue(pm25Value)}g/m³`,
+      max: '100 g/m³',
+      min: '0 g/m³',
+      progress: `${Math.min(100, Math.max(0, (pm25Value / 100) * 100)).toFixed(1)}%`
     },
     {
       id: 'lrectangle4',
       icon: 'https://img.icons8.com/ios/50/microorganisms.png',
       title: 'PM1',
-      current: '16 g/m²',
-      max: '100.0 g/m²',
-      min: '0.0 g/m²',
-      progress: '13.4%'
+      current: `${formatValue(pm1Value)}g/m³`,
+      max: '100 g/m³',
+      min: '0 g/m³',
+      progress: `${Math.min(100, Math.max(0, (pm1Value / 100) * 100)).toFixed(1)}%`
     }
   ];
 
@@ -180,7 +249,7 @@ export default function Dashboard() {
       <div className="center-container">
         <div className="overlay-text">
           <div className="main">
-            <span className="number">199</span>
+            <span className="number">{formatValue(co2Value)}</span>
             <span className="unit">ppm</span>
           </div>
         </div>
@@ -319,7 +388,7 @@ export default function Dashboard() {
       <div className="rad-info">
         <div>
           <h3>uSv/h</h3>
-          <h1>0.56</h1>
+          <h1>{hasSensorData ? formatValue(radiationValue, 2) : "0.56"}</h1>
         </div>
       </div>
     </div>
@@ -328,21 +397,21 @@ export default function Dashboard() {
       <div className="text-wrap-right">
         <span style={{ "--angle": "-35deg", color: "rgb(252, 104, 6)" }}>PENTAGON</span>
         <span style={{ "--angle": "-32deg" }}>BUNKER TEMP</span>
-        <span style={{ "--angle": "-26deg", fontSize: "2.2rem" }}>15 'C</span>
+        <span style={{ "--angle": "-26deg", fontSize: "2.2rem" }}>{hasSensorData ? insideTemperatureText : "15 'C"}</span>
 
-        <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>Humidity: 74x</span>
+        <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>{hasSensorData ? `Humidity: ${humidityText}` : "Humidity: 74%"}</span>
         <span style={{ "--angle": "-15.5deg", fontSize: "0.65rem" }}
-          >Feels Like: 13C</span
+          >{hasSensorData ? `Feels Like: ${formatValue(temperatureInsideValue - 2, 1)} 'C` : "Feels Like: 13C"}</span
         >
         <span style={{ "--angle": "-13deg", fontSize: "0.65rem" }}
-          >Precipitation: 0x</span
+          >{hasSensorData ? `CH2O: ${ch2oText}` : "CH2O: 0 ppb"}</span
         >
-        <span style={{ "--angle": "-10.5deg", fontSize: "0.65rem" }}>Wind: 20 KMH</span>
+        <span style={{ "--angle": "-10.5deg", fontSize: "0.65rem" }}>{hasSensorData ? `Noise: ${noiseText}` : "Noise: 20 dB"}</span>
         <span style={{ "--angle": "-8deg", fontSize: "0.65rem" }}
-          >Pressure: 760 MMHG</span
+          >{hasSensorData ? `Pressure: ${pressureText}` : "Pressure: 760 MMHG"}</span
         >
-        <span style={{ "--angle": "-5.5deg", fontSize: "0.65rem" }}>Sunrise: 06:10</span>
-        <span style={{ "--angle": "-3deg", fontSize: "0.65rem" }}>Sunset: 18:58</span>
+        <span style={{ "--angle": "-5.5deg", fontSize: "0.65rem" }}>{hasSensorData ? `PM2.5: ${pm25Text}` : "PM2.5: 0 µg/m³"}</span>
+        <span style={{ "--angle": "-3deg", fontSize: "0.65rem" }}>{hasSensorData ? `PM1: ${pm1Text}` : "PM1: 0 µg/m³"}</span>
 
         <span style={{ "--angle": "2deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
           >TONIGHT</span
@@ -371,20 +440,20 @@ export default function Dashboard() {
     <div className="circle-container-left">
       <div className="text-wrap-left">
         <span style={{ "--angle": "25deg", color: "rgb(252, 104, 6)" }}
-          >TIMISOARA, RO</span
+          >{hasSensorData && (secondarySensor.city || primarySensor.city) ? `${(secondarySensor.city || primarySensor.city).toUpperCase()}, ${(secondarySensor.country || primarySensor.country || 'RO').toUpperCase()}` : "TIMISOARA, RO"}</span
         >
         <span style={{ "--angle": "22deg" }}>OUTSIDE TEMP</span>
-        <span style={{ "--angle": "16deg", fontSize: "2.2rem" }}>6 'C</span>
+        <span style={{ "--angle": "16deg", fontSize: "2.2rem" }}>{hasSensorData ? outsideTemperatureText : "6 'C"}</span>
 
         <span style={{ "--angle": "9deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
-          >PASSIONS</span
+          >RADIATION</span
         >
-        <span style={{ "--angle": "5.5deg", fontSize: "0.65rem" }}>CAR LOVER</span>
-        <span style={{ "--angle": "3deg", fontSize: "0.65rem" }}>PC BUILDER</span>
-        <span style={{ "--angle": "0.5deg", fontSize: "0.65rem" }}>GAMER</span>
-        <span style={{ "--angle": "-2deg", fontSize: "0.65rem" }}>BUNKER BUILDER</span>
-        <span style={{ "--angle": "-4.5deg", fontSize: "0.65rem" }}>BIKE LOVER</span>
-        <span style={{ "--angle": "-7deg", fontSize: "0.65rem" }}>ENGINEER?</span>
+        <span style={{ "--angle": "5.5deg", fontSize: "0.65rem" }}>{hasSensorData ? radiationText : "0.56 uSv/h"}</span>
+        <span style={{ "--angle": "3deg", fontSize: "0.65rem" }}>{hasSensorData ? `CPM: ${cpmText}` : "CPM: 0"}</span>
+        <span style={{ "--angle": "0.5deg", fontSize: "0.65rem" }}>{hasSensorData ? `Detector: ${detectorText}` : "Detector: SBM20"}</span>
+        <span style={{ "--angle": "-2deg", fontSize: "0.65rem" }}>{hasSensorData ? `Location: ${locationText}` : "TIMISOARA, RO"}</span>
+        <span style={{ "--angle": "-4.5deg", fontSize: "0.65rem" }}>PM1: {hasSensorData ? pm1Text : '0 µg/m³'}</span>
+        <span style={{ "--angle": "-7deg", fontSize: "0.65rem" }}>PM2.5: {hasSensorData ? pm25Text : '0 µg/m³'}</span>
       </div>
     </div>
 

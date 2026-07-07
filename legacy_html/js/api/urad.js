@@ -31,7 +31,7 @@ function updateProgressBasedOnThreshold(currentValue, min, max, progressElement)
 }
 
 function fetchAndUpdateData() {
-  fetch('https://api.jsonbin.io/v3/b/678f5e33ad19ca34f8f1df74', {
+  fetch('https://api.jsonbin.io/v3/b/id', {
     method: 'GET',
     })
     .then(response => response.ok ? response.json() : Promise.reject('HTTP error'))

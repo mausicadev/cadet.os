@@ -7,6 +7,9 @@ export default function Window({
   children,
   onClose,
   defaultPos,
+  position: positionProp,
+  size: sizeProp,
+  onLayoutChange,
   focused,
   zIndex,
   slidOut,
@@ -14,14 +17,15 @@ export default function Window({
   onRestore,
   gridLayoutActive
 }) {
-  const [position, setPosition] = useState(defaultPos || { x: 50, y: 50 });
+  const [position, setPosition] = useState(() => positionProp || defaultPos || { x: 50, y: 50 });
   const [size, setSize] = useState(() => {
+    if (sizeProp) return sizeProp;
     if (id === 'terminal') return { width: 600, height: 400 };
     if (id === 'files') return { width: 700, height: 420 };
     if (id === 'metrics') return { width: 600, height: 400 };
     if (id === 'tasks') return { width: 550, height: 400 };
     if (id === 'editor') return { width: 550, height: 350 };
-    if (id === 'settings') return { width: 550, height: 350 };
+    if (id === 'settings') return { width: 650, height: 550 };
     if (id === 'notes') return { width: 600, height: 380 };
     return { width: 600, height: 400 };
   });
@@ -34,6 +38,18 @@ export default function Window({
   const [animClass, setAnimClass] = useState('opening');
   
   const windowRef = useRef(null);
+
+  useEffect(() => {
+    if (positionProp) {
+      setPosition(positionProp);
+    }
+  }, [positionProp?.x, positionProp?.y, positionProp?.right]);
+
+  useEffect(() => {
+    if (sizeProp) {
+      setSize(sizeProp);
+    }
+  }, [sizeProp?.width, sizeProp?.height]);
 
   // Keep default base sizes for initial sizing only; allow free-aspect resizing like native OS windows
   const defaultBaseSize = {
@@ -70,10 +86,12 @@ export default function Window({
     if (isResizing) {
       const dw = e.clientX - resizeStart.x;
       const dh = e.clientY - resizeStart.y;
-      setSize({
+      const nextSize = {
         width: Math.max(300, Math.round(resizeStart.w + dw)),
         height: Math.max(200, Math.round(resizeStart.h + dh))
-      });
+      };
+      setSize(nextSize);
+      onLayoutChange?.({ position, size: nextSize });
     }
   };
 
@@ -111,18 +129,16 @@ export default function Window({
 
   const handleMouseMove = (e) => {
     if (isDragging) {
-      if (position.right) {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-          right: undefined
-        });
-      } else {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y
-        });
-      }
+      const nextPosition = position.right ? {
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y,
+        right: undefined
+      } : {
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y
+      };
+      setPosition(nextPosition);
+      onLayoutChange?.({ position: nextPosition, size });
     }
   };
 

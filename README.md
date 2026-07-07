@@ -16,7 +16,7 @@
 [![React](https://img.shields.io/badge/REACT-19-61dafb?style=flat-square&logo=react)](https://react.dev)
 [![Vite](https://img.shields.io/badge/VITE-8-646cff?style=flat-square&logo=vite)](https://vite.dev)
 
-**[🔗 ENTER THE BUNKER →](https://mausicadev.github.io/cadet.os/)**
+**[🔗 ENTER THE BUNKER →](https://cadetos.vercel.app/)**
 
 </div>
 

@@ -1,13 +1,16 @@
-const thresholds = {
-  humidity: { low: 30, high: 70 },
-  ch2o: { low: 1, high: 20 },
-  voc: { low: 1, high: 500 },
-  pm10: { low: 0, high: 40 },
-  pm25: { low: 0, high: 40 },
-  pm1: { low: 0, high: 40 },
-  pressure: { low: 0.90, high: 1.05 },
-  noise: { low: 0, high: 70 }
-};
+if (!window.__cadet_urad_loaded) {
+  window.__cadet_urad_loaded = true;
+
+  const thresholds = {
+    humidity: { low: 30, high: 70 },
+    ch2o: { low: 1, high: 20 },
+    voc: { low: 1, high: 500 },
+    pm10: { low: 0, high: 40 },
+    pm25: { low: 0, high: 40 },
+    pm1: { low: 0, high: 40 },
+    pressure: { low: 0.90, high: 1.05 },
+    noise: { low: 0, high: 70 }
+  };
 
 function changeProgressBarColors(color1, color2, progressElement) {
   progressElement.style.background = color1;
@@ -31,7 +34,7 @@ function updateProgressBasedOnThreshold(currentValue, min, max, progressElement)
 }
 
 function fetchAndUpdateData() {
-  fetch('https://api.jsonbin.io/v3/b/678f5e33ad19ca34f8f1df74', {
+  fetch('https://api.jsonbin.io/v3/b/id', {
     method: 'GET',
     })
     .then(response => response.ok ? response.json() : Promise.reject('HTTP error'))
@@ -122,3 +125,4 @@ function fetchAndUpdateData() {
 
 setInterval(fetchAndUpdateData, 10000);
 fetchAndUpdateData();
+}
