@@ -59,7 +59,9 @@ export default function Settings({
   setSensorData,
   sensorFetchStatus,
   sensorFetchError,
-  fetchSensorData
+  fetchSensorData,
+  weatherApiUrl,
+  setWeatherApiUrl
 }) {
   const fileRef = useRef(null);
   const [msg, setMsg] = useState('');
@@ -322,6 +324,18 @@ export default function Settings({
               style={{ width: '100px', background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 8px', fontFamily: 'monospace', fontSize: '0.72rem' }}
             />
             <span style={{ fontSize: '0.65rem', color: 'rgba(104, 255, 240, 0.6)' }}>Auto-fetch sensor data every {sensorRefreshIntervalSeconds} seconds.</span>
+          </div>
+
+          <div className="settings-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
+            <span className="settings-label">WEATHER FORECAST URL (Open-Meteo):</span>
+            <input
+              type="text"
+              value={weatherApiUrl || ''}
+              onChange={(e) => setWeatherApiUrl && setWeatherApiUrl(e.target.value)}
+              style={{ width: '100%', background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 8px', fontFamily: 'monospace', fontSize: '0.72rem' }}
+              placeholder="https://api.open-meteo.com/v1/forecast?latitude=45.75&longitude=21.22&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto"
+            />
+            <span style={{ fontSize: '0.65rem', color: 'rgba(104, 255, 240, 0.6)' }}>Fetches daily weather for the right HUD panel. Uses Open-Meteo by default.</span>
           </div>
 
           <div className="settings-row" style={{ flexWrap: 'wrap', gap: '8px' }}>

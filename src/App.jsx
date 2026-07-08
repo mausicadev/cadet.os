@@ -9,9 +9,10 @@ import Window from './components/Window';
 import Dock from './components/Dock';
 import Settings from './components/Settings';
 import Notes from './components/Notes';
+import LaunchPage from './components/LaunchPage';
 import './css/os.css';
 
-// structura initiala de fisiere - simuleaza un OS real
+// structura initiala de fisiere
 const INITIAL_FILESYSTEM = {
   id: 'root',
   name: 'ROOT',
@@ -217,9 +218,9 @@ function App() {
 
   const [fileSystem, setFileSystem] = useState(INITIAL_FILESYSTEM);
   const [editingFile, setEditingFile] = useState(null);
-  const [openApps, setOpenApps] = useState(['terminal']);
+  const [openApps, setOpenApps] = useState([]);
   const [minimizedApps, setMinimizedApps] = useState([]);
-  const [focusStack, setFocusStack] = useState(['terminal']);
+  const [focusStack, setFocusStack] = useState([]);
   const [showDesktopActive, setShowDesktopActive] = useState(false);
   const [gridPlacements, setGridPlacements] = useState(() => saved?.gridPlacements || getDefaultGridPlacements());
   // am setat gridLayout default false ca sa nu fie haotic la inceput
@@ -235,6 +236,154 @@ function App() {
   const [sensorFetchStatus, setSensorFetchStatus] = useState('Waiting for URL');
   const [sensorFetchError, setSensorFetchError] = useState('');
   const [sensorRefreshIntervalSeconds, setSensorRefreshIntervalSeconds] = useState(() => saved?.sensorRefreshIntervalSeconds ?? 10);
+
+  const [launchOverrunActive, setLaunchOverrunActive] = useState(false);
+  const [ppmOverride, setPpmOverride] = useState(null);
+  const [currentRoute, setCurrentRoute] = useState(() => {
+    const hash = window.location.hash;
+    if (hash === '#/launch' || hash === '#launch') return 'launch';
+    const query = window.location.search;
+    if (query.includes('launch')) return 'launch';
+    return 'desktop';
+  });
+
+  const [weatherApiUrl, setWeatherApiUrl] = useState(() => saved?.weatherApiUrl || 'https://api.open-meteo.com/v1/forecast?latitude=45.7537&longitude=21.2257&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto');
+  const [weatherForecast, setWeatherForecast] = useState([
+    { period: 'TODAY', temp: '8 °C', condition: 'SUNNY' },
+    { period: 'TONIGHT', temp: '9 °C', condition: 'CLEAR' },
+    { period: 'TOMORROW', temp: '12 °C', condition: 'SUNNY' },
+    { period: 'MONDAY', temp: '10 °C', condition: 'CLOUDY' }
+  ]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#/launch' || hash === '#launch') {
+        setCurrentRoute('launch');
+      } else {
+        setCurrentRoute('desktop');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const loadWeatherData = useCallback(async () => {
+    if (!weatherApiUrl) return;
+    try {
+      const res = await fetch(weatherApiUrl);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (data && data.daily) {
+        const weatherMap = {
+          0: "SUNNY", 1: "CLEAR", 2: "PARTLY CLOUDY", 3: "CLOUDY",
+          45: "FOGGY", 48: "FOGGY", 51: "DRIZZLE", 53: "DRIZZLE", 55: "DRIZZLE",
+          61: "RAINY", 63: "RAINY", 65: "RAINY", 71: "SNOWY", 73: "SNOWY", 75: "SNOWY",
+          95: "STORM", 96: "STORM", 99: "STORM"
+        };
+        const daily = data.daily;
+        const forecast = [];
+        const getDayName = (dateStr) => {
+          const d = new Date(dateStr);
+          return d.toLocaleDateString("en-US", { weekday: "long" }).toUpperCase();
+        };
+
+        const todayMax = Math.round(daily.temperature_2m_max[0]);
+        const todayCode = daily.weather_code[0];
+        forecast.push({ period: "TODAY", temp: `${todayMax} °C`, condition: weatherMap[todayCode] || "CLEAR" });
+
+        const tonightMin = Math.round(daily.temperature_2m_min[0]);
+        const tonightCode = daily.weather_code[0];
+        forecast.push({ period: "TONIGHT", temp: `${tonightMin} °C`, condition: tonightCode === 0 ? "CLEAR" : (weatherMap[tonightCode] || "CLEAR") });
+
+        const tomorrowMax = Math.round(daily.temperature_2m_max[1]);
+        const tomorrowCode = daily.weather_code[1];
+        forecast.push({ period: "TOMORROW", temp: `${tomorrowMax} °C`, condition: weatherMap[tomorrowCode] || "CLEAR" });
+
+        const day2Name = getDayName(daily.time[2]);
+        const day2Max = Math.round(daily.temperature_2m_max[2]);
+        const day2Code = daily.weather_code[2];
+        forecast.push({ period: day2Name, temp: `${day2Max} °C`, condition: weatherMap[day2Code] || "CLEAR" });
+
+        setWeatherForecast(forecast);
+      }
+    } catch (e) {
+      console.warn("Weather error:", e);
+    }
+  }, [weatherApiUrl]);
+
+  useEffect(() => {
+    loadWeatherData();
+    const interval = setInterval(loadWeatherData, 60000);
+    return () => clearInterval(interval);
+  }, [loadWeatherData]);
+
+  const triggerLaunchSequence = () => {
+    setLaunchOverrunActive(true);
+    if (window.addOrangeBackgroundToContainer) {
+      window.addOrangeBackgroundToContainer();
+    }
+    setOpenApps([]);
+    setFocusStack([]);
+    setMinimizedApps([]);
+
+    let startVal = (sensorData && sensorData[0]) ? Number(sensorData[0].last_co2) || 450 : 450;
+    let currentVal = startVal;
+    const interval = setInterval(() => {
+      currentVal += Math.ceil((9999 - startVal) / 25);
+      if (currentVal >= 9999) {
+        currentVal = 9999;
+        clearInterval(interval);
+        setTimeout(() => {
+          setLaunchOverrunActive(false);
+          setPpmOverride(null);
+          window.location.hash = '#/launch';
+        }, 2500);
+      }
+      setPpmOverride(currentVal);
+    }, 45);
+  };
+
+  const handleReturnFromLaunch = () => {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(5, 12, 14, 0.96)';
+    overlay.style.color = 'rgb(252, 104, 6)';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '99999';
+    overlay.style.fontFamily = 'Courier New, Courier, monospace';
+    overlay.style.backdropFilter = 'blur(10px)';
+    overlay.style.border = '4px solid rgb(252, 104, 6)';
+    overlay.style.boxSizing = 'border-box';
+    overlay.style.textShadow = '0 0 10px rgba(252, 104, 6, 0.8)';
+    
+    overlay.innerHTML = `
+      <div style="text-align: center; max-width: 600px; padding: 20px; border: 2px dashed rgb(252, 104, 6);">
+        <h1 style="font-size: 2.2rem; margin-bottom: 20px; letter-spacing: 3px;">☣ SYSTEM REBOOT ☣</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 25px; line-height: 1.6; letter-spacing: 1px;">
+          LAUNCH COMPLETED. SHIELD STATUS NOMINAL.<br/>
+          RE-ESTABLISHING SECURE OS ENVIRONMENT.<br/>
+          SYNCHRONIZING TELEMETRY STACKS.
+        </p>
+        <div style="font-size: 1rem; color: #68fff0; text-shadow: 0 0 8px rgba(104, 255, 240, 0.6);">
+          RESTORE SEQUENCE RE-LOADING IN 1.5s...
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    setTimeout(() => {
+      window.location.hash = '#';
+      window.location.reload();
+    }, 1500);
+  };
 
   useEffect(() => {
     const root = document.documentElement;
@@ -285,11 +434,12 @@ function App() {
       sensorApiUrl,
       sensorHeadersText,
       sensorRefreshIntervalSeconds,
-      windowLayouts
+      windowLayouts,
+      weatherApiUrl
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-  }, [gridLayoutActive, themePreset, scanlineOpacity, dashboardBlur, soundActive, gridPlacements, sensorApiUrl, sensorHeadersText, windowLayouts]);
+  }, [gridLayoutActive, themePreset, scanlineOpacity, dashboardBlur, soundActive, gridPlacements, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
 
   const loadSensorData = useCallback(async () => {
     if (!sensorApiUrl) {
@@ -655,6 +805,9 @@ function App() {
               sensorFetchStatus={sensorFetchStatus}
               sensorFetchError={sensorFetchError}
               fetchSensorData={loadSensorData}
+              onTriggerLaunch={triggerLaunchSequence}
+              weatherApiUrl={weatherApiUrl}
+              setWeatherApiUrl={setWeatherApiUrl}
             />
           </Window>
         </div>
@@ -675,6 +828,10 @@ function App() {
     }
   };
 
+  if (currentRoute === 'launch') {
+    return <LaunchPage onReturn={handleReturnFromLaunch} />;
+  }
+
   return (
     <div className="os-wrapper">
       {/* background cu dashboard-ul */}
@@ -682,7 +839,12 @@ function App() {
         className={`os-background ${anyVisible ? 'blurred' : ''}`}
         style={anyVisible ? { filter: `blur(${dashboardBlur}px) brightness(0.85)` } : {}}
       >
-        <Dashboard sensorData={sensorData} />
+        <Dashboard 
+          sensorData={sensorData} 
+          launchOverrunActive={launchOverrunActive} 
+          weatherForecast={weatherForecast} 
+          ppmOverride={ppmOverride}
+        />
       </div>
 
       {/* efect scanline CRT */}
@@ -758,6 +920,9 @@ function App() {
                   sensorFetchStatus={sensorFetchStatus}
                   sensorFetchError={sensorFetchError}
                   fetchSensorData={loadSensorData}
+                  onTriggerLaunch={triggerLaunchSequence}
+                  weatherApiUrl={weatherApiUrl}
+                  setWeatherApiUrl={setWeatherApiUrl}
                 />
               </Window>
             );
@@ -816,6 +981,9 @@ function App() {
             sensorFetchStatus={sensorFetchStatus}
             sensorFetchError={sensorFetchError}
             fetchSensorData={loadSensorData}
+            onTriggerLaunch={triggerLaunchSequence}
+            weatherApiUrl={weatherApiUrl}
+            setWeatherApiUrl={setWeatherApiUrl}
           />
         </Window>
       )}

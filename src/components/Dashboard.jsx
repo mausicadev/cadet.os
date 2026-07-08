@@ -4,7 +4,7 @@ import "../css/banners.css";
 import "../css/rectangles.css";
 import "../css/circles.css";
 
-export default function Dashboard({ sensorData = [] }) {
+export default function Dashboard({ sensorData = [], launchOverrunActive = false, weatherForecast = [], ppmOverride = null }) {
   const formatValue = (value, digits = 0, suffix = '') => {
     const number = Number(value);
     if (!Number.isFinite(number)) return `0${suffix}`;
@@ -62,6 +62,24 @@ export default function Dashboard({ sensorData = [] }) {
   const cityText = (alt.city || main.city || 'Timişoara').toUpperCase();
   const countryText = (alt.country || main.country || 'RO').toUpperCase();
   const locText = `${cityText}, ${countryText}`;
+
+  const getForecastDate = (daysAhead) => {
+    const d = new Date();
+    d.setDate(d.getDate() + daysAhead);
+    return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }).toUpperCase();
+  };
+  
+  const forecastTonightTemp = weatherForecast[1] ? `${Math.round(parseFloat(weatherForecast[1].temp))}'` : "8'";
+  const forecastTonightCond = weatherForecast[1] ? weatherForecast[1].condition : "CLEAR";
+
+  const forecastTomorrowDate = getForecastDate(1);
+  const forecastTomorrowTemp = weatherForecast[2] ? `${Math.round(parseFloat(weatherForecast[2].temp))}'` : "12'";
+  const forecastTomorrowCond = weatherForecast[2] ? weatherForecast[2].condition : "SUNNY";
+
+  const forecastNextName = weatherForecast[3] ? weatherForecast[3].period : "MONDAY";
+  const forecastNextDate = getForecastDate(2);
+  const forecastNextTemp = weatherForecast[3] ? `${Math.round(parseFloat(weatherForecast[3].temp))}'` : "9'";
+  const forecastNextCond = weatherForecast[3] ? weatherForecast[3].condition : "SUNNY";
 
   useEffect(() => {
     if (Array.isArray(sensorData) && sensorData.length > 0) {
@@ -225,34 +243,83 @@ export default function Dashboard({ sensorData = [] }) {
 
     <div className="container"></div>
 
-    <div className="ccontainer">
-      <div className="center-container">
-        <div className="overlay-text">
-          <div className="main">
-            <span className="number">{formatValue(co2)}</span>
-            <span className="unit">ppm</span>
+    <div className="dashboard-center-scale">
+      <div className="ccontainer">
+        <div className="center-container">
+          <div className="overlay-text">
+            <div className="main">
+              <span className="number">
+                {ppmOverride !== null ? ppmOverride : formatValue(co2)}
+              </span>
+              <span className="unit">ppm</span>
+            </div>
           </div>
         </div>
+        <div id="c0"></div>
+        <div id="c1"></div>
+        <div id="c2"></div>
+        <div id="c3"></div>
+        <div id="c4"></div>
+        <div id="c5"></div>
+        <div id="c6"></div>
+        <div id="c7"></div>
+        <div id="c8"></div>
+        <div id="c9"></div>
+        <div id="c10"></div>
+        <div id="c11"></div>
+        <div id="c12"></div>
+        <div id="c13"></div>
+        <div id="c14"></div>
+        <div id="c15"></div>
+        <div id="c16"></div>
+        <div id="c17"></div>
+        <div id="c18"></div>
       </div>
-      <div id="c0"></div>
-      <div id="c1"></div>
-      <div id="c2"></div>
-      <div id="c3"></div>
-      <div id="c4"></div>
-      <div id="c5"></div>
-      <div id="c6"></div>
-      <div id="c7"></div>
-      <div id="c8"></div>
-      <div id="c9"></div>
-      <div id="c10"></div>
-      <div id="c11"></div>
-      <div id="c12"></div>
-      <div id="c13"></div>
-      <div id="c14"></div>
-      <div id="c15"></div>
-      <div id="c16"></div>
-      <div id="c17"></div>
-      <div id="c18"></div>
+
+      <div className="circle-container-right">
+        <div className="text-wrap-right">
+          <span className="orange-text" style={{ "--angle": "-35deg" }}>PENTAGON</span>
+          <span style={{ "--angle": "-32deg" }}>BUNKER TEMP</span>
+          <span style={{ "--angle": "-26deg", fontSize: "2.2rem" }}>{hasData ? tempInText : "15 'C"}</span>
+
+          <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>{`HUMIDITY: ${hasData ? humText : "74%"}`}</span>
+          <span style={{ "--angle": "-15.5deg", fontSize: "0.65rem" }}>{`FEELS LIKE: ${hasData ? `${formatValue(tempIn - 2, 1)} 'C` : "13 'C"}`}</span>
+          <span style={{ "--angle": "-13deg", fontSize: "0.65rem" }}>PRECIPITATION: 0%</span>
+          <span style={{ "--angle": "-10.5deg", fontSize: "0.65rem" }}>WIND: 28 KMH</span>
+          <span style={{ "--angle": "-8deg", fontSize: "0.65rem" }}>{`PRESSURE: ${hasData ? pressText : "760 MMHG"}`}</span>
+          <span style={{ "--angle": "-5.5deg", fontSize: "0.65rem" }}>SUNRISE: 06:18</span>
+          <span style={{ "--angle": "-3deg", fontSize: "0.65rem" }}>SUNSET: 21:50</span>
+
+          <span className="orange-text" style={{ "--angle": "2deg", fontSize: "0.75rem" }}>TONIGHT</span>
+          <span style={{ "--angle": "5deg", fontSize: "0.7rem" }}>{forecastTonightTemp}</span>
+          <span style={{ "--angle": "7.5deg", fontSize: "0.7rem" }}>{forecastTonightCond}</span>
+
+          <span className="orange-text" style={{ "--angle": "10.5deg", fontSize: "0.75rem" }}>TOMORROW</span>
+          <span style={{ "--angle": "13.5deg", fontSize: "0.65rem" }}>{forecastTomorrowDate}</span>
+          <span style={{ "--angle": "16deg", fontSize: "0.7rem" }}>{forecastTomorrowTemp}</span>
+          <span style={{ "--angle": "18.5deg", fontSize: "0.7rem" }}>{forecastTomorrowCond}</span>
+
+          <span style={{ "--angle": "21.5deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}>{forecastNextName}</span>
+          <span style={{ "--angle": "24.5deg", fontSize: "0.65rem" }}>{forecastNextDate}</span>
+          <span style={{ "--angle": "27deg", fontSize: "0.7rem" }}>{forecastNextTemp}</span>
+          <span style={{ "--angle": "29.5deg", fontSize: "0.7rem" }}>{forecastNextCond}</span>
+        </div>
+      </div>
+
+      <div className="circle-container-left">
+        <div className="text-wrap-left">
+          <span className="orange-text" style={{ "--angle": "25deg" }}
+            >{hasData && (alt.city || main.city) ? `${(alt.city || main.city).toUpperCase()}, ${(alt.country || main.country || 'RO').toUpperCase()}` : "TIMISOARA, RO"}</span
+          >
+          <span style={{ "--angle": "22deg" }}>OUTSIDE TEMP</span>
+          <span style={{ "--angle": "16deg", fontSize: "2.2rem" }}>{hasData ? tempOutText : "6 'C"}</span>
+
+          <span className="orange-text" style={{ "--angle": "9deg", fontSize: "0.75rem" }}>SUGAR ROCKET</span>
+          <span style={{ "--angle": "5deg", fontSize: "0.7rem" }}>SWEET PROPULSION</span>
+          <span style={{ "--angle": "1deg", fontSize: "0.7rem" }}>STATUS: STANDBY</span>
+          <span style={{ "--angle": "-3deg", fontSize: "0.7rem", color: "rgb(252, 104, 6)" }}>RUN "launch" CMD</span>
+        </div>
+      </div>
     </div>
 
     <div className="rrectangles">
@@ -367,70 +434,6 @@ export default function Dashboard({ sensorData = [] }) {
           <h3>uSv/h</h3>
           <h1>{hasData ? formatValue(radVal, 2) : "0.56"}</h1>
         </div>
-      </div>
-    </div>
-
-    <div className="circle-container-right">
-      <div className="text-wrap-right">
-        <span style={{ "--angle": "-35deg", color: "rgb(252, 104, 6)" }}>PENTAGON</span>
-        <span style={{ "--angle": "-32deg" }}>BUNKER TEMP</span>
-        <span style={{ "--angle": "-26deg", fontSize: "2.2rem" }}>{hasData ? tempInText : "15 'C"}</span>
-
-        <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>{hasData ? `Humidity: ${humText}` : "Humidity: 74%"}</span>
-        <span style={{ "--angle": "-15.5deg", fontSize: "0.65rem" }}
-          >{hasData ? `Feels Like: ${formatValue(tempIn - 2, 1)} 'C` : "Feels Like: 13C"}</span
-        >
-        <span style={{ "--angle": "-13deg", fontSize: "0.65rem" }}
-          >{hasData ? `CH2O: ${ch2oText}` : "CH2O: 0 ppb"}</span
-        >
-        <span style={{ "--angle": "-10.5deg", fontSize: "0.65rem" }}>{hasData ? `Noise: ${noiseText}` : "Noise: 20 dB"}</span>
-        <span style={{ "--angle": "-8deg", fontSize: "0.65rem" }}
-          >{hasData ? `Pressure: ${pressText}` : "Pressure: 760 MMHG"}</span
-        >
-        <span style={{ "--angle": "-5.5deg", fontSize: "0.65rem" }}>{hasData ? `PM2.5: ${pm25Text}` : "PM2.5: 0 µg/m³"}</span>
-        <span style={{ "--angle": "-3deg", fontSize: "0.65rem" }}>{hasData ? `PM1: ${pm1Text}` : "PM1: 0 µg/m³"}</span>
-
-        <span style={{ "--angle": "2deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
-          >TONIGHT</span
-        >
-        <span style={{ "--angle": "5deg", fontSize: "0.7rem" }}>8'</span>
-        <span style={{ "--angle": "7.5deg", fontSize: "0.7rem" }}>CLEAR</span>
-
-        <span
-          style={{ "--angle": "10.5deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
-          >TOMORROW</span
-        >
-        <span style={{ "--angle": "13.5deg", fontSize: "0.7rem" }}>JANUARY 4 2025</span>
-        <span style={{ "--angle": "16deg", fontSize: "0.7rem" }}>12'</span>
-        <span style={{ "--angle": "18.5deg", fontSize: "0.7rem" }}>SUNNY</span>
-
-        <span
-          style={{ "--angle": "21.5deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
-          >MONDAY</span
-        >
-        <span style={{ "--angle": "24.5deg", fontSize: "0.7rem" }}>JANUARY 5 2025</span>
-        <span style={{ "--angle": "27deg", fontSize: "0.7rem" }}>9'</span>
-        <span style={{ "--angle": "29.5deg", fontSize: "0.7rem" }}>SUNNY</span>
-      </div>
-    </div>
-
-    <div className="circle-container-left">
-      <div className="text-wrap-left">
-        <span style={{ "--angle": "25deg", color: "rgb(252, 104, 6)" }}
-          >{hasData && (alt.city || main.city) ? `${(alt.city || main.city).toUpperCase()}, ${(alt.country || main.country || 'RO').toUpperCase()}` : "TIMISOARA, RO"}</span
-        >
-        <span style={{ "--angle": "22deg" }}>OUTSIDE TEMP</span>
-        <span style={{ "--angle": "16deg", fontSize: "2.2rem" }}>{hasData ? tempOutText : "6 'C"}</span>
-
-        <span style={{ "--angle": "9deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}
-          >RADIATION</span
-        >
-        <span style={{ "--angle": "5.5deg", fontSize: "0.65rem" }}>{hasData ? radText : "0.56 uSv/h"}</span>
-        <span style={{ "--angle": "3deg", fontSize: "0.65rem" }}>{hasData ? `CPM: ${cpmText}` : "CPM: 0"}</span>
-        <span style={{ "--angle": "0.5deg", fontSize: "0.65rem" }}>{hasData ? `Detector: ${detText}` : "Detector: SBM20"}</span>
-        <span style={{ "--angle": "-2deg", fontSize: "0.65rem" }}>{hasData ? `Location: ${locText}` : "TIMISOARA, RO"}</span>
-        <span style={{ "--angle": "-4.5deg", fontSize: "0.65rem" }}>PM1: {hasData ? pm1Text : '0 µg/m³'}</span>
-        <span style={{ "--angle": "-7deg", fontSize: "0.65rem" }}>PM2.5: {hasData ? pm25Text : '0 µg/m³'}</span>
       </div>
     </div>
 

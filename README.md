@@ -1,5 +1,5 @@
 <div align="center">
-
+ 
 ```
  ██████╗ █████╗ ██████╗ ███████╗████████╗    ██████╗ ███████╗
 ██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝   ██╔═══██╗██╔════╝
@@ -9,7 +9,7 @@
  ╚═════╝╚═╝  ╚═╝╚═════╝ ╚══════╝   ╚═╝   ╚═╝ ╚═════╝ ╚══════╝
 ```
 
-### ☢️ un OS militar fictiv care ruleaza in browser
+### ☢️ A fictional military OS running in the browser
 
 [![Deploy](https://img.shields.io/github/actions/workflow/status/mausicadev/cadet.os/pages.yml?branch=main&style=flat-square&label=DEPLOY&color=00e5cc)](https://mausicadev.github.io/cadet.os/)
 [![License](https://img.shields.io/badge/LICENSE-Apache_2.0-orange?style=flat-square)](LICENSE)
@@ -22,15 +22,15 @@
 
 ---
 
-Practic am vrut sa fac ceva gen Fallout terminal dar in browser. E un desktop fake cu ferestre, dock, file manager, terminal, si un dashboard care arata date reale de la senzori (uRadMonitor API).
+A web-based interface mimicking a Fallout terminal. It features a mock desktop environment with movable windows, a dock, file manager, terminal, and a dashboard displaying real-time sensor data fetched from the uRadMonitor API.
 
-Am inceput cu HTML si JS vanilla, dupa am mutat totul in React ca sa fie mai usor de gestionat ferestrele si state-ul. CSS-ul e scris de mana, fara Tailwind sau alte framework-uri.
+Originally started with vanilla HTML and JS, it was later migrated to React to simplify window management and state. Styling is written completely from scratch in vanilla CSS.
 
-Nu e un backend, nu e un server, totul ruleaza client-side.
+There is no backend or server involved; everything runs entirely client-side.
 
 ---
 
-## cum pornesti
+## Getting Started
 
 ```bash
 git clone https://github.com/mausicadev/cadet.os.git
@@ -40,51 +40,49 @@ npm install
 npm run dev
 ```
 
-Deschizi `http://localhost:5173` si gata.
+Open `http://localhost:5173` and you're good to go.
 
 ---
 
-## ce am in el
+## Features
 
-- **Dashboard** cu cercuri D3.js care arata CO2, temperatura, radiatie, PM2.5, etc
-- **Terminal** simplu cu cateva comenzi (help, clear, status, reboot)
-- **File Manager** cu un filesystem fake (foldere, fisiere, preview)
-- **Task Manager** cu filtre si categorii
-- **Notes** care se salveaza in filesystem-ul virtual
-- **Editor** de text pentru fisierele din file manager
-- **Metrics Graph** pentru vizualizare date
-- **Settings** cu teme de culoare, grid layout, config senzori
+- **Dashboard**: Features D3.js circle telemetry displaying CO2, temperature, radiation, and PM data.
+- **Terminal**: Simple command-line interface supporting commands like `help`, `clear`, `status`, `reboot`, and `launch`.
+- **File Manager**: Interactive virtual filesystem supporting folders, files, and text file previews.
+- **Task Manager**: Interactive task lists with category filtering.
+- **Notes**: Text scratchpad persisting files directly into the virtual filesystem.
+- **Code Editor**: Code editor window to modify files in the file manager.
+- **Metrics Graph**: Visual graphs representing real-time telemetry.
+- **Settings**: Customize color presets, toggle grid mode, and configure custom sensor/weather URLs.
 
-Ferestrele se pot muta, redimensiona, minimiza. Am facut si un grid layout care le aranja automat.
+Windows are draggable, resizable, and minimizable, with a configurable Grid layout option.
 
 ---
 
-## shortcut-uri
+## Shortcuts
 
-| Shortcut | Ce face |
+| Shortcut | Description |
 |:---|:---|
-| `D` `D` (dublu tap) | Show Desktop (minimizeaza tot) |
+| `D` `D` (Double Tap) | Show Desktop (Minimize all active windows) |
 | `Ctrl/⌘ + D` | Show Desktop |
 
 ---
 
-## tech stack
+## Tech Stack
 
-- **React 19** — componente + state
-- **Vite 8** — dev server
-- **D3.js v7** — cercurile alea din dashboard
-- **SiriWave** — animatii de tip iOS waveform
-- **CSS vanilla** — fara framework-uri, totul manual
-- **GitHub Pages** — deploy automat pe push la main
+- **React 19** — Components and state management
+- **Vite 8** — Fast bundler & dev server
+- **D3.js v7** — Circular dashboard rendering
+- **SiriWave** — Classic iOS 9 waveform animations
+- **Vanilla CSS** — Written by hand without styling frameworks
+- **GitHub Pages** — Automated deploys on push to main branch
 
 ---
 
-## licenta
+## License
 
 [Apache 2.0](LICENSE)
 
 ---
 
-facut cu ☕ si estetica militara discutabila
-</CodeContent>
-<parameter name="toolAction">Rewriting README
+Made with ☕ and questionable military aesthetics.

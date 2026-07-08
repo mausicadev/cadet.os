@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../css/terminal.css';
 
-export default function Terminal() {
+export default function Terminal({ onTriggerLaunch }) {
   const [history, setHistory] = useState([
     "CadetOS v1.0.0",
     "Type 'help' for a list of commands."
@@ -23,7 +23,7 @@ export default function Terminal() {
       // comenzi disponibile simple
       // TODO: mai multe comenzi interesante in viitor
       if (cmd.toLowerCase() === 'help') {
-        newHistory.push("Available commands: help, clear, status, reboot");
+        newHistory.push("Available commands: help, clear, status, reboot, launch");
       } else if (cmd.toLowerCase() === 'clear') {
         setHistory([]);
         setInput('');
@@ -33,6 +33,11 @@ export default function Terminal() {
       } else if (cmd.toLowerCase() === 'reboot') {
         newHistory.push("Initiating reboot sequence...");
         setTimeout(() => window.location.reload(), 1000);
+      } else if (cmd.toLowerCase() === 'launch') {
+        newHistory.push("Initiating launch sequence... Exceeding PPM safety threshold!");
+        if (onTriggerLaunch) {
+          onTriggerLaunch();
+        }
       } else if (cmd !== '') {
         newHistory.push(`Command not found: ${cmd}`);
       }

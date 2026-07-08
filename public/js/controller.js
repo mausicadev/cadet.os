@@ -115,5 +115,8 @@ function changeProgressBarColors(newBarColor, newProgressColor, progressElement)
   progressBarElement.style.backgroundColor = newBarColor;
 }
 
+  window.addOrangeBackgroundToContainer = addOrangeBackgroundToContainer;
+  window.addBlueBackgroundToContainer = addBlueBackgroundToContainer;
+
   document.addEventListener("DOMContentLoaded", setBlueBackgroundOnRefresh);
 }

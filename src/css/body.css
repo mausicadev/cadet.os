@@ -210,6 +210,11 @@ img {
   font-family: Dice;
 }
 
+.circle-container-left span.orange-text,
+.circle-container-right span.orange-text {
+  color: rgb(252, 104, 6) !important;
+  text-shadow: 0 0 2px rgba(252, 104, 6, 0.6);
+}
 
 .circle-container-left {
   position: absolute;
