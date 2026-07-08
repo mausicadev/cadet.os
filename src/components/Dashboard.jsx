@@ -48,14 +48,14 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
 
   const tempInText = `${formatValue(tempIn, 1)} 'C`;
   const tempOutText = `${formatValue(tempOut, 1)} 'C`;
-  const humText = `${formatValue(humidity, 1)}%`;
+  const humText = `${formatValue(humidity, 1)}`;
   const noiseText = `${formatValue(noise, 1)} dB`;
   const vocText = `${formatValue(voc)}`;
   const ch2oText = `${formatValue(ch2o)} ppb`;
   const pressText = `${formatValue(pressure, 2)} Pa`;
-  const pm1Text = `${formatValue(pm1)} µg/m³`;
-  const pm25Text = `${formatValue(pm25)} µg/m³`;
-  const pm10Text = `${formatValue(pm10)} µg/m³`;
+  const pm1Text = `${formatValue(pm1)} ug/m`;
+  const pm25Text = `${formatValue(pm25)} ug/m`;
+  const pm10Text = `${formatValue(pm10)} ug/m`;
   const radText = `${formatValue(radVal, 2)} uSv/h`;
   const cpmText = `${formatValue(cpm)} cpm`;
   const detText = alt.detector || main.detector || 'Unknown';
@@ -214,8 +214,8 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
       icon: 'https://img.icons8.com/ios/50/particles.png',
       title: 'PM10',
       current: `${formatValue(pm10)}g/m³`,
-      max: '100 g/m³',
-      min: '0 g/m³',
+      max: '100 g/m',
+      min: '0 g/m',
       progress: `${Math.min(100, Math.max(0, (pm10 / 100) * 100)).toFixed(1)}%`
     },
     {
@@ -223,8 +223,8 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
       icon: 'https://img.icons8.com/ios/50/particulate-matter-10.png',
       title: 'PM2.5',
       current: `${formatValue(pm25)}g/m³`,
-      max: '100 g/m³',
-      min: '0 g/m³',
+      max: '100 g/m',
+      min: '0 g/m',
       progress: `${Math.min(100, Math.max(0, (pm25 / 100) * 100)).toFixed(1)}%`
     },
     {
@@ -232,8 +232,8 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
       icon: 'https://img.icons8.com/ios/50/microorganisms.png',
       title: 'PM1',
       current: `${formatValue(pm1)}g/m³`,
-      max: '100 g/m³',
-      min: '0 g/m³',
+      max: '100 g/m',
+      min: '0 g/m',
       progress: `${Math.min(100, Math.max(0, (pm1 / 100) * 100)).toFixed(1)}%`
     }
   ];
@@ -282,9 +282,9 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
           <span style={{ "--angle": "-32deg" }}>BUNKER TEMP</span>
           <span style={{ "--angle": "-26deg", fontSize: "2.2rem" }}>{hasData ? tempInText : "15 'C"}</span>
 
-          <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>{`HUMIDITY: ${hasData ? humText : "74%"}`}</span>
+          <span style={{ "--angle": "-18deg", fontSize: "0.65rem" }}>{`HUMIDITY: ${hasData ? humText : "74"}`}</span>
           <span style={{ "--angle": "-15.5deg", fontSize: "0.65rem" }}>{`FEELS LIKE: ${hasData ? `${formatValue(tempIn - 2, 1)} 'C` : "13 'C"}`}</span>
-          <span style={{ "--angle": "-13deg", fontSize: "0.65rem" }}>PRECIPITATION: 0%</span>
+          <span style={{ "--angle": "-13deg", fontSize: "0.65rem" }}>PRECIPITATION: 0 </span>
           <span style={{ "--angle": "-10.5deg", fontSize: "0.65rem" }}>WIND: 28 KMH</span>
           <span style={{ "--angle": "-8deg", fontSize: "0.65rem" }}>{`PRESSURE: ${hasData ? pressText : "760 MMHG"}`}</span>
           <span style={{ "--angle": "-5.5deg", fontSize: "0.65rem" }}>SUNRISE: 06:18</span>
@@ -299,7 +299,7 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
           <span style={{ "--angle": "16deg", fontSize: "0.7rem" }}>{forecastTomorrowTemp}</span>
           <span style={{ "--angle": "18.5deg", fontSize: "0.7rem" }}>{forecastTomorrowCond}</span>
 
-          <span style={{ "--angle": "21.5deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}>{forecastNextName}</span>
+          <span className="orange-text"style={{ "--angle": "21.5deg", fontSize: "0.75rem", color: "rgb(252, 104, 6)" }}>{forecastNextName}</span>
           <span style={{ "--angle": "24.5deg", fontSize: "0.65rem" }}>{forecastNextDate}</span>
           <span style={{ "--angle": "27deg", fontSize: "0.7rem" }}>{forecastNextTemp}</span>
           <span style={{ "--angle": "29.5deg", fontSize: "0.7rem" }}>{forecastNextCond}</span>
@@ -314,7 +314,7 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
           <span style={{ "--angle": "22deg" }}>OUTSIDE TEMP</span>
           <span style={{ "--angle": "16deg", fontSize: "2.2rem" }}>{hasData ? tempOutText : "6 'C"}</span>
 
-          <span className="orange-text" style={{ "--angle": "9deg", fontSize: "0.75rem" }}>SUGAR ROCKET</span>
+          <span className="orange-text" style={{ "--angle": "9deg", fontSize: "0.75rem" }}>SWEET BLAST</span>
           <span style={{ "--angle": "5deg", fontSize: "0.7rem" }}>SWEET PROPULSION</span>
           <span style={{ "--angle": "1deg", fontSize: "0.7rem" }}>STATUS: STANDBY</span>
           <span style={{ "--angle": "-3deg", fontSize: "0.7rem", color: "rgb(252, 104, 6)" }}>RUN "launch" CMD</span>
