@@ -25,8 +25,7 @@
 A web-based interface mimicking a Fallout terminal. It features a mock desktop environment with movable windows, a dock, file manager, terminal, and a dashboard displaying real-time sensor data fetched from the uRadMonitor API.
 
 Originally started with vanilla HTML and JS, it was later migrated to React to simplify window management and state. Styling is written completely from scratch in vanilla CSS.
-
-There is no backend or server involved; everything runs entirely client-side.
+This is just a sweet piece of my big project 👀
 
 ---
 
@@ -76,12 +75,6 @@ Windows are draggable, resizable, and minimizable, with a configurable Grid layo
 - **SiriWave** — Classic iOS 9 waveform animations
 - **Vanilla CSS** — Written by hand without styling frameworks
 - **GitHub Pages** — Automated deploys on push to main branch
-
----
-
-## License
-
-[Apache 2.0](LICENSE)
 
 ---
 
