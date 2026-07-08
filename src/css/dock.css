@@ -23,12 +23,12 @@
   box-shadow: 0 0 25px rgba(104, 255, 240, 0.2), inset 0 0 15px rgba(104, 255, 240, 0.08);
   padding: 8px 16px;
   backdrop-filter: blur(12px);
-  pointer-events: auto; /* Active clicking */
+  pointer-events: auto;   
   transition: all 0.3s ease;
   z-index: 2001;
 }
 
-/* Cyber Bevel Left and Right */
+  
 .os-dock.left {
   left: calc(4% + 155px);
   transform: translateX(-50%);
@@ -49,7 +49,7 @@
     100% calc(100% - 10px), calc(100% - 10px) 100%,
     10px 100%, 0 calc(100% - 10px)
   );
-  border-color: #486866; /* Unified to match left dock border */
+  border-color: #486866;   
 }
 
 .os-dock.left:hover,
@@ -73,7 +73,7 @@
   gap: 8px;
 }
 
-/* Dock Item Button */
+  
 .dock-item {
   position: relative;
   background: transparent;
@@ -112,7 +112,7 @@
   justify-content: center;
 }
 
-/* Indicators */
+  
 .dock-indicator-container {
   position: absolute;
   bottom: 2px;
@@ -159,7 +159,7 @@
   }
 }
 
-/* Tooltip on hover */
+  
 .dock-tooltip {
   position: absolute;
   bottom: 60px;
@@ -193,7 +193,7 @@
   transform: translateY(0);
 }
 
-/* Active app styles on dock */
+  
 .active-item {
   color: #68fff0;
   border-color: rgba(104, 255, 240, 0.6);
@@ -217,7 +217,7 @@
   box-shadow: 0 0 15px rgba(252, 104, 6, 0.4);
 }
 
-/* Show Desktop Button style */
+  
 .show-desktop-btn {
   border-color: rgba(104, 255, 240, 0.25);
   color: #5ca9aa;
@@ -236,7 +236,7 @@
   box-shadow: 0 0 12px rgba(104, 255, 240, 0.3);
 }
 
-/* Power Reset Button style */
+  
 .power-reset-btn {
   border-color: rgba(104, 255, 240, 0.25);
   color: #5ca9aa;

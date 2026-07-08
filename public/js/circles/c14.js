@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const outerRadius = 325;
   const innerRadius = outerRadius - 20;
   const segmentColor = "var(--theme-primary)";
-  const gapAngle = 0.17; // Gap between segments in radians
+  const gapAngle = 0.17; 
 
-  const segmentSizes = [20]; // Segment sizes in degrees
+  const segmentSizes = [20]; 
   const segmentSizesRadians = segmentSizes.map((deg) => (deg * Math.PI) / 180);
 
   const svg = d3
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
   segmentSizesRadians.forEach((segmentAngle) => {
-    // First segment
+    
     const startAngle = gapAngle / 2;
     const endAngle = startAngle + segmentAngle - gapAngle;
 
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("d", arc)
       .attr("fill", segmentColor).attr("fill-opacity", 0.7);
 
-    // Opposite segment (diagonal)
-    const startAngleOpposite = startAngle + Math.PI; // 180 degrees in radians
+    
+    const startAngleOpposite = startAngle + Math.PI; 
     const endAngleOpposite = endAngle + Math.PI;
 
     const arcOpposite = d3

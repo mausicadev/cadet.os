@@ -5,17 +5,17 @@ function setProgress(circle, percentage, labelElement) {
     circle.style.strokeDasharray = `${circumference}`;
     circle.style.strokeDashoffset = `${circumference - (percentage / 100) * circumference}`;
     
-    // Actualizează textul
-    labelElement.textContent = ``; //${percentage}x
+    
+    labelElement.textContent = ``; 
   }
   
-  // Inițializare
+  
   document.addEventListener("DOMContentLoaded", () => {
     const circles = document.querySelectorAll(".loading-ring-value");
     const labels = document.querySelectorAll(".loading-label");
   
-    setProgress(circles[0], 77, labels[0]); // Prima bară
-    setProgress(circles[1], 53, labels[1]); // A doua bară
-    setProgress(circles[2], 31, labels[2]); // A treia bară
+    setProgress(circles[0], 77, labels[0]); 
+    setProgress(circles[1], 53, labels[1]); 
+    setProgress(circles[2], 31, labels[2]); 
   });
   

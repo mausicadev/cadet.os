@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const outerRadius = 350;
   const innerRadius = outerRadius - 20;
   const segmentColor = "var(--theme-primary)";
-  const gapAngle = 0.17; // Gap between segments in radians
+  const gapAngle = 0.17; 
 
-  const segmentSizes = [15]; // Segment sizes in degrees
+  const segmentSizes = [15]; 
   const segmentSizesRadians = segmentSizes.map((deg) => (deg * Math.PI) / 180);
 
-  const startingAngleDeg = 35; // Starting position in degrees
-  const startingAngleRad = (startingAngleDeg * Math.PI) / 180; // Convert to radians
+  const startingAngleDeg = 35; 
+  const startingAngleRad = (startingAngleDeg * Math.PI) / 180; 
 
   const svg = d3
     .select("#c12")
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .append("g")
     .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-  let currentAngle = startingAngleRad; // Start from the specified angle
+  let currentAngle = startingAngleRad; 
   segmentSizesRadians.forEach((segmentAngle) => {
     const startAngle = currentAngle + gapAngle / 2;
     const endAngle = startAngle + segmentAngle - gapAngle;

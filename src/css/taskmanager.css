@@ -2,7 +2,7 @@
   width: 600px;
   height: 400px;
   background-color: transparent;
-  color: #68fff0; /* Changed to Cyan to reduce orange overload */
+  color: #68fff0;   
   font-family: 'Courier New', Courier, monospace;
   display: flex;
   padding: 10px;
@@ -22,7 +22,7 @@
   text-transform: uppercase;
 }
 
-/* Sidebar styling */
+  
 .task-sidebar {
   width: 170px;
   border-right: 1px solid rgba(104, 255, 240, 0.2);
@@ -71,7 +71,7 @@
   color: #68fff0;
 }
 
-/* Completion Statistics HUD */
+  
 .completion-stats {
   padding-top: 8px;
   border-top: 1px solid rgba(104, 255, 240, 0.2);
@@ -118,7 +118,7 @@
   color: #fff;
 }
 
-/* Main Content Area */
+  
 .task-content-pane {
   flex-grow: 1;
   display: flex;
@@ -145,7 +145,7 @@
   color: #68fff0;
 }
 
-/* Tasks scrollable container */
+  
 .tasks-scroll-list {
   flex-grow: 1;
   border: 1px solid rgba(104, 255, 240, 0.15);
@@ -173,7 +173,7 @@
   letter-spacing: 1.5px;
 }
 
-/* Task Item */
+  
 .task-list-item {
   display: flex;
   justify-content: space-between;
@@ -278,7 +278,7 @@
   color: #fff;
 }
 
-/* Form Styling */
+  
 .task-input-form {
   border-top: 1px dashed rgba(104, 255, 240, 0.25);
   padding-top: 8px;
@@ -348,7 +348,7 @@
   background: rgba(104, 255, 240, 0.15);
 }
 
-/* Glowing text effects */
+  
 .glow-cyan {
   color: #68fff0 !important;
   text-shadow: 0 0 8px rgba(104, 255, 240, 0.7);

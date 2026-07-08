@@ -9,7 +9,7 @@
  ╚═════╝╚═╝  ╚═╝╚═════╝ ╚══════╝   ╚═╝   ╚═╝ ╚═════╝ ╚══════╝
 ```
 
-### ☢️ A Fictional Military Command Interface — Built in the Browser
+### ☢️ un OS militar fictiv care ruleaza in browser
 
 [![Deploy](https://img.shields.io/github/actions/workflow/status/mausicadev/cadet.os/pages.yml?branch=main&style=flat-square&label=DEPLOY&color=00e5cc)](https://mausicadev.github.io/cadet.os/)
 [![License](https://img.shields.io/badge/LICENSE-Apache_2.0-orange?style=flat-square)](LICENSE)
@@ -22,112 +22,69 @@
 
 ---
 
-Ever wanted to feel like you're running a subterranean defense bunker from a single browser tab?  
-**CadetOS** is a fully interactive, fake operating system with a sci-fi military aesthetic — think *Fallout* terminal meets *NORAD war room*, but it runs on React.
+Practic am vrut sa fac ceva gen Fallout terminal dar in browser. E un desktop fake cu ferestre, dock, file manager, terminal, si un dashboard care arata date reale de la senzori (uRadMonitor API).
 
-No backend. No servers. No nukes. Just vibes.
+Am inceput cu HTML si JS vanilla, dupa am mutat totul in React ca sa fie mai usor de gestionat ferestrele si state-ul. CSS-ul e scris de mana, fara Tailwind sau alte framework-uri.
 
----
-
-## 🖥️ What's Inside
-
-CadetOS boots into a **holographic grid dashboard** with live-animated widgets, D3-powered data circles, SiriWave audio visualizers, and a full windowed desktop environment you can actually use.
-
-| Module | What It Does |
-|:---|:---|
-| **Terminal** | Fake command-line with military-themed responses |
-| **File Manager** | Browse a simulated filesystem (`/sys`, `/bunker`, `/logs`, `/usr`) |
-| **Editor** | Open and edit files from the filesystem |
-| **Task Manager** | Monitor fake CPU, RAM, and process usage |
-| **Metrics Graph** | D3-rendered real-time telemetry charts |
-| **Notes** | Markdown-style notepad synced to the virtual FS |
-| **Radar** | Animated sweep radar with blip detection |
-| **Settings** | Theme colors, scanlines, blur, grid layout controls |
-
-> All windows are draggable, resizable, minimizable, and focusable — just like a real OS.
+Nu e un backend, nu e un server, totul ruleaza client-side.
 
 ---
 
-## 🎨 Themes
-
-Switch color palettes on the fly from the Settings panel:
-
-```
- ██ CYAN    — Default. Cold. Clinical. Beautiful.
- ██ ORANGE  — Emergency override mode.
- ██ GREEN   — Classic phosphor terminal.
- ██ RED     — DEFCON 1 aesthetic.
-```
-
-Pair any theme with adjustable **CRT scanline intensity** and **background blur** for peak immersion.
-
----
-
-
-## ⚡ Quick Start
+## cum pornesti
 
 ```bash
-# Clone the bunker
 git clone https://github.com/mausicadev/cadet.os.git
 cd cadet.os
 
-# Install dependencies
 npm install
-
-# Boot the system
 npm run dev
 ```
 
-Open `http://localhost:5173` and you're in.
+Deschizi `http://localhost:5173` si gata.
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## ce am in el
 
-| Shortcut | Action |
+- **Dashboard** cu cercuri D3.js care arata CO2, temperatura, radiatie, PM2.5, etc
+- **Terminal** simplu cu cateva comenzi (help, clear, status, reboot)
+- **File Manager** cu un filesystem fake (foldere, fisiere, preview)
+- **Task Manager** cu filtre si categorii
+- **Notes** care se salveaza in filesystem-ul virtual
+- **Editor** de text pentru fisierele din file manager
+- **Metrics Graph** pentru vizualizare date
+- **Settings** cu teme de culoare, grid layout, config senzori
+
+Ferestrele se pot muta, redimensiona, minimiza. Am facut si un grid layout care le aranja automat.
+
+---
+
+## shortcut-uri
+
+| Shortcut | Ce face |
 |:---|:---|
-| `D` `D` (double-tap) | Toggle Show Desktop |
-| `Ctrl/⌘ + D` | Toggle Show Desktop |
+| `D` `D` (dublu tap) | Show Desktop (minimizeaza tot) |
+| `Ctrl/⌘ + D` | Show Desktop |
 
 ---
 
-## 🛠️ Tech Stack
+## tech stack
 
-- **React 19** — UI components & state management
-- **Vite 8** — Lightning-fast dev server & build
-- **D3.js v7** — Data visualization (dashboard circles, metrics)
-- **SiriWave** — iOS-style audio waveform animations
-- **Vanilla CSS** — Custom-built, no utility frameworks
-- **GitHub Pages** — Auto-deployed on push to `main`
-
----
-
-## 🤝 Contributing
-
-Found a bug in the reactor core? Want to add a new module?
-
-1. Fork the repo
-2. Create your branch (`git checkout -b feature/laser-turrets`)
-3. Commit your changes (`git commit -m 'Add laser turret module'`)
-4. Push to the branch (`git push origin feature/laser-turrets`)
-5. Open a Pull Request
+- **React 19** — componente + state
+- **Vite 8** — dev server
+- **D3.js v7** — cercurile alea din dashboard
+- **SiriWave** — animatii de tip iOS waveform
+- **CSS vanilla** — fara framework-uri, totul manual
+- **GitHub Pages** — deploy automat pe push la main
 
 ---
 
-## 📜 License
+## licenta
 
-[Apache 2.0](LICENSE) — Use it, modify it, deploy it in your own bunker.
+[Apache 2.0](LICENSE)
 
 ---
 
-<div align="center">
-
-```
-[SYSTEM LOG] ALL STATIONS OPERATIONAL
-[SYSTEM LOG] README INTEGRITY: 100%
-[SYSTEM LOG] AWAITING FURTHER ORDERS, CADET.
-```
-
-**Built with ☕ and questionable military aesthetics.**
-
-</div>
+facut cu ☕ si estetica militara discutabila
+</CodeContent>
+<parameter name="toolAction">Rewriting README

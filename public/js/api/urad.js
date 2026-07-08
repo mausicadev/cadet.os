@@ -39,7 +39,7 @@ function fetchAndUpdateData() {
     })
     .then(response => response.ok ? response.json() : Promise.reject('HTTP error'))
     .then(data => {
-      //data = data.record;
+      
       
       const deviceInside = data.find(device => device.id === "82000470"); 
       const deviceOutside = data.find(device => device.id === "1100016F");

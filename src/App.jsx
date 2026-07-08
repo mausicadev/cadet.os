@@ -9,10 +9,9 @@ import Window from './components/Window';
 import Dock from './components/Dock';
 import Settings from './components/Settings';
 import Notes from './components/Notes';
-import Radar from './components/Radar';
 import './css/os.css';
 
-// Initial filesystem structures
+// structura initiala de fisiere - simuleaza un OS real
 const INITIAL_FILESYSTEM = {
   id: 'root',
   name: 'ROOT',
@@ -180,83 +179,63 @@ const getDefaultWindowLayouts = () => ({
 });
 
 function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, onSaveFile, sensorData, ...props }) {
-  switch (id) {
-    case 'terminal': return <Terminal {...props} />;
-    case 'tasks': return <TaskManager {...props} />;
-    case 'files': 
-      return (
-        <FileManager 
-          fileSystem={fileSystem} 
-          setFileSystem={setFileSystem} 
-          onOpenFile={onOpenFile} 
-          {...props} 
-        />
-      );
-    case 'metrics': return <MetricsGraph {...props} />;
-    case 'editor': 
-      return (
-        <Editor 
-          file={editingFile} 
-          onSaveFile={onSaveFile} 
-          {...props} 
-        />
-      );
-    case 'settings':
-      return (
-        <Settings 
-          sensorData={sensorData}
-          {...props}
-        />
-      );
-    case 'notes':
-      return (
-        <Notes 
-          fileSystem={fileSystem} 
-          setFileSystem={setFileSystem} 
-          onOpenFile={onOpenFile} 
-          {...props} 
-        />
-      );
-    default: return null;
-  }
+  const appComponents = {
+    terminal: <Terminal {...props} />,
+    tasks: <TaskManager {...props} />,
+    files: (
+      <FileManager
+        fileSystem={fileSystem}
+        setFileSystem={setFileSystem}
+        onOpenFile={onOpenFile}
+        {...props}
+      />
+    ),
+    metrics: <MetricsGraph {...props} />,
+    editor: (
+      <Editor
+        file={editingFile}
+        onSaveFile={onSaveFile}
+        {...props}
+      />
+    ),
+    settings: <Settings sensorData={sensorData} {...props} />,
+    notes: (
+      <Notes
+        fileSystem={fileSystem}
+        setFileSystem={setFileSystem}
+        onOpenFile={onOpenFile}
+        {...props}
+      />
+    )
+  };
+
+  return appComponents[id] ?? null;
 }
 
 function App() {
-  const storedConfig = getStoredConfig();
+  const saved = getStoredConfig();
 
-  // Lifted filesystem state
   const [fileSystem, setFileSystem] = useState(INITIAL_FILESYSTEM);
   const [editingFile, setEditingFile] = useState(null);
-
-  // On startup: only open the terminal window to prevent screen clutter; other windows can be connected on demand
-  const [openApps, setOpenApps] = useState([
-    'terminal'
-  ]);
+  const [openApps, setOpenApps] = useState(['terminal']);
   const [minimizedApps, setMinimizedApps] = useState([]);
-  const [focusStack, setFocusStack] = useState([
-    'terminal'
-  ]);
+  const [focusStack, setFocusStack] = useState(['terminal']);
   const [showDesktopActive, setShowDesktopActive] = useState(false);
-
-  // Default Grid Placements (4x2 screen grid coordinates)
-  // Left half: Columns 1-2. Right half: Columns 3-4.
-  const [gridPlacements, setGridPlacements] = useState(() => storedConfig?.gridPlacements || getDefaultGridPlacements());
-
-  // Settings State
-  const [gridLayoutActive, setGridLayoutActive] = useState(() => storedConfig?.gridLayoutActive ?? false);
-  const [themePreset, setThemePreset] = useState(() => storedConfig?.themePreset || 'cyan');
-  const [scanlineOpacity, setScanlineOpacity] = useState(() => storedConfig?.scanlineOpacity ?? 15);
-  const [dashboardBlur, setDashboardBlur] = useState(() => storedConfig?.dashboardBlur ?? 4);
-  const [soundActive, setSoundActive] = useState(() => storedConfig?.soundActive ?? true);
-  const [sensorApiUrl, setSensorApiUrl] = useState(() => storedConfig?.sensorApiUrl || 'https://data.uradmonitor.com/api/v1/devices');
-  const [sensorHeadersText, setSensorHeadersText] = useState(() => storedConfig?.sensorHeadersText || '{}');
-  const [windowLayouts, setWindowLayouts] = useState(() => storedConfig?.windowLayouts || getDefaultWindowLayouts());
+  const [gridPlacements, setGridPlacements] = useState(() => saved?.gridPlacements || getDefaultGridPlacements());
+  // am setat gridLayout default false ca sa nu fie haotic la inceput
+  const [gridLayoutActive, setGridLayoutActive] = useState(() => saved?.gridLayoutActive ?? false);
+  const [themePreset, setThemePreset] = useState(() => saved?.themePreset || 'cyan');
+  const [scanlineOpacity, setScanlineOpacity] = useState(() => saved?.scanlineOpacity ?? 15);
+  const [dashboardBlur, setDashboardBlur] = useState(() => saved?.dashboardBlur ?? 4);
+  const [soundActive, setSoundActive] = useState(() => saved?.soundActive ?? true);
+  const [sensorApiUrl, setSensorApiUrl] = useState(() => saved?.sensorApiUrl || 'https://data.uradmonitor.com/api/v1/devices');
+  const [sensorHeadersText, setSensorHeadersText] = useState(() => saved?.sensorHeadersText || '{}');
+  const [windowLayouts, setWindowLayouts] = useState(() => saved?.windowLayouts || getDefaultWindowLayouts());
   const [sensorData, setSensorData] = useState([]);
   const [sensorFetchStatus, setSensorFetchStatus] = useState('Waiting for URL');
   const [sensorFetchError, setSensorFetchError] = useState('');
-  const [sensorRefreshIntervalSeconds, setSensorRefreshIntervalSeconds] = useState(() => storedConfig?.sensorRefreshIntervalSeconds ?? 10);
+  const [sensorRefreshIntervalSeconds, setSensorRefreshIntervalSeconds] = useState(() => saved?.sensorRefreshIntervalSeconds ?? 10);
 
-  // Dynamically apply theme variables to the document root
   useEffect(() => {
     const root = document.documentElement;
     let primary = '#68fff0';
@@ -292,10 +271,11 @@ function App() {
     root.style.setProperty('--theme-primary-bg', bg);
   }, [themePreset]);
 
+  // salvam config-ul in localStorage de fiecare data cand se schimba ceva
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const configToPersist = {
+    const cfg = {
       gridLayoutActive,
       themePreset,
       scanlineOpacity,
@@ -308,7 +288,7 @@ function App() {
       windowLayouts
     };
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(configToPersist));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
   }, [gridLayoutActive, themePreset, scanlineOpacity, dashboardBlur, soundActive, gridPlacements, sensorApiUrl, sensorHeadersText, windowLayouts]);
 
   const loadSensorData = useCallback(async () => {
@@ -411,6 +391,7 @@ function App() {
       setOpenApps(prev => [...prev, appId]);
       setFocusStack(prev => [...prev, appId]);
     } else {
+      // daca e deja deschis, doar il aducem in fata
       if (minimizedApps.includes(appId)) {
         setMinimizedApps(prev => prev.filter(id => id !== appId));
       }
@@ -419,6 +400,7 @@ function App() {
   };
 
   const closeApp = (appId) => {
+    // scoatem din lista de deschise
     setOpenApps(prev => prev.filter(id => id !== appId));
     setFocusStack(prev => prev.filter(id => id !== appId));
     setMinimizedApps(prev => prev.filter(id => id !== appId));
@@ -431,7 +413,8 @@ function App() {
     if (!minimizedApps.includes(appId)) {
       setMinimizedApps(prev => [...prev, appId]);
     }
-    // Pass focus to the next open window that is not minimized
+    
+    // dam focus la urmatoarea fereastra
     const remaining = focusStack.filter(id => id !== appId && !minimizedApps.includes(id));
     if (remaining.length > 0) {
       const nextActive = remaining[remaining.length - 1];
@@ -476,7 +459,7 @@ function App() {
 
   const toggleShowDesktop = () => {
     setMinimizedApps(prevMinimized => {
-      // Check if all currently open apps are already minimized
+      
       const allOpenMinimized = openApps.every(id => prevMinimized.includes(id));
       if (allOpenMinimized && openApps.length > 0) {
         setShowDesktopActive(false);
@@ -488,12 +471,12 @@ function App() {
     });
   };
 
-  const handleOpenFileInEditor = (file) => {
+  const openInEditor = (file) => {
     setEditingFile(file);
     openApp('editor');
   };
 
-  const handleSaveFileContent = (fileId, newContent) => {
+  const saveFile = (fileId, newContent) => {
     const updateNode = (node) => {
       if (node.id === fileId) {
         return { ...node, content: newContent, size: `${newContent.length} B` };
@@ -503,14 +486,14 @@ function App() {
       }
       return node;
     };
-    
-    // Update filesystem state
+    // TODO: poate ar trebui sa salvez si pozitiile la unload
     setFileSystem(prev => updateNode(prev));
-    // Update editing file display info
+    
     setEditingFile(prev => prev && prev.id === fileId ? { ...prev, content: newContent, size: `${newContent.length} B` } : prev);
   };
 
-  const handleReboot = () => {
+  // reboot cu overlay - un pic dramatic dar arata misto
+  const reboot = () => {
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
@@ -550,12 +533,11 @@ function App() {
     }, 1500);
   };
 
-  // Keyboard Event Listener: Double 'd' press and Cmd/Ctrl + D
-  const lastDPressTimeRef = useRef(0);
+  // double-tap D pt show desktop
+  const lastDPress = useRef(0);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // 1. Check double 'd' / 'D'
       if (e.key === 'd' || e.key === 'D') {
         const target = e.target;
         const isInput =
@@ -565,17 +547,16 @@ function App() {
 
         if (!isInput) {
           const now = Date.now();
-          if (now - lastDPressTimeRef.current < 300) {
-            // Double press!
+          if (now - lastDPress.current < 300) {
             toggleShowDesktop();
-            lastDPressTimeRef.current = 0; // reset
+            lastDPress.current = 0; 
           } else {
-            lastDPressTimeRef.current = now;
+            lastDPress.current = now;
           }
         }
       }
 
-      // 2. Cmd/Ctrl + D (Standard shortcut backup)
+      // ctrl+D alternativa
       if ((e.key === 'd' || e.key === 'D') && (e.ctrlKey || e.metaKey)) {
         const target = e.target;
         const isInput =
@@ -584,7 +565,7 @@ function App() {
           target.isContentEditable;
 
         if (!isInput) {
-          e.preventDefault(); // Prevent standard browser bookmarking
+          e.preventDefault(); 
           toggleShowDesktop();
         }
       }
@@ -594,11 +575,11 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [openApps, minimizedApps, showDesktopActive]);
 
-  // Determine if we have visible windows that are NOT minimized
-  const hasVisibleWindows = openApps.some(id => !minimizedApps.includes(id));
+  // verificam daca e vreo fereastra vizibila
+  const anyVisible = openApps.some(id => !minimizedApps.includes(id));
 
-  // Dynamic Scanline Overlay CSS
-  const scanlineStyle = {
+  // stilul pt efectul CRT
+  const crtStyle = {
     position: 'fixed',
     top: 0, left: 0, right: 0, bottom: 0,
     background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
@@ -608,7 +589,7 @@ function App() {
     pointerEvents: 'none'
   };
 
-  const renderWindowOrPlaceholder = (appId) => {
+  const renderSlot = (appId) => {
     const app = APPS.find(a => a.id === appId);
     const isOpen = openApps.includes(appId);
     const isMinimized = minimizedApps.includes(appId);
@@ -645,9 +626,9 @@ function App() {
               id={app.id} 
               fileSystem={fileSystem}
               setFileSystem={setFileSystem}
-              onOpenFile={handleOpenFileInEditor}
+              onOpenFile={openInEditor}
               editingFile={editingFile}
-              onSaveFile={handleSaveFileContent}
+              onSaveFile={saveFile}
               onClose={() => closeApp(app.id)}
               gridLayoutActive={gridLayoutActive}
               setGridLayoutActive={setGridLayoutActive}
@@ -696,26 +677,26 @@ function App() {
 
   return (
     <div className="os-wrapper">
-      {/* Permanent Background HUD - blurs when windows are visible */}
+      {/* background cu dashboard-ul */}
       <div 
-        className={`os-background ${hasVisibleWindows ? 'blurred' : ''}`}
-        style={hasVisibleWindows ? { filter: `blur(${dashboardBlur}px) brightness(0.85)` } : {}}
+        className={`os-background ${anyVisible ? 'blurred' : ''}`}
+        style={anyVisible ? { filter: `blur(${dashboardBlur}px) brightness(0.85)` } : {}}
       >
         <Dashboard sensorData={sensorData} />
       </div>
 
-      {/* Cyber Screen Scanline Overlay */}
-      <div style={scanlineStyle} />
+      {/* efect scanline CRT */}
+      <div style={crtStyle} />
 
-      {/* Holographic Grid or Overlay Windows */}
+      {/* grid mode vs floating windows */}
       {gridLayoutActive ? (
         <div className="os-grid-layout">
-          {renderWindowOrPlaceholder('terminal')}
-          {renderWindowOrPlaceholder('files')}
-          {renderWindowOrPlaceholder('tasks')}
-          {renderWindowOrPlaceholder('notes')}
-          {renderWindowOrPlaceholder('metrics')}
-          {renderWindowOrPlaceholder('editor')}
+          {renderSlot('terminal')}
+          {renderSlot('files')}
+          {renderSlot('tasks')}
+          {renderSlot('notes')}
+          {renderSlot('metrics')}
+          {renderSlot('editor')}
         </div>
       ) : (
         <div className="os-overlays">
@@ -748,9 +729,9 @@ function App() {
                   id={app.id} 
                   fileSystem={fileSystem}
                   setFileSystem={setFileSystem}
-                  onOpenFile={handleOpenFileInEditor}
+                  onOpenFile={openInEditor}
                   editingFile={editingFile}
-                  onSaveFile={handleSaveFileContent}
+                  onSaveFile={saveFile}
                   onClose={() => closeApp(app.id)}
                   gridLayoutActive={gridLayoutActive}
                   setGridLayoutActive={setGridLayoutActive}
@@ -784,7 +765,7 @@ function App() {
         </div>
       )}
 
-      {/* Floating Settings Window - always on top of grid */}
+      {/* settings-ul e mereu deasupra */}
       {openApps.includes('settings') && !minimizedApps.includes('settings') && (
         <Window
           key="settings"
@@ -806,9 +787,9 @@ function App() {
             id="settings" 
             fileSystem={fileSystem}
             setFileSystem={setFileSystem}
-            onOpenFile={handleOpenFileInEditor}
+            onOpenFile={openInEditor}
             editingFile={editingFile}
-            onSaveFile={handleSaveFileContent}
+            onSaveFile={saveFile}
             onClose={() => closeApp('settings')}
             gridLayoutActive={gridLayoutActive}
             setGridLayoutActive={setGridLayoutActive}
@@ -839,7 +820,7 @@ function App() {
         </Window>
       )}
 
-      {/* Bottom Holographic Split Docks */}
+      {/* dock-ul jos */}
       <Dock
         apps={APPS}
         openApps={openApps}
@@ -848,7 +829,7 @@ function App() {
         onToggleApp={toggleApp}
         onToggleShowDesktop={toggleShowDesktop}
         showDesktopActive={showDesktopActive}
-        onReboot={handleReboot}
+        onReboot={reboot}
       />
     </div>
   );

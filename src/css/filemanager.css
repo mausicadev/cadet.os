@@ -11,7 +11,7 @@
   text-shadow: 0 0 5px rgba(104, 255, 240, 0.4);
 }
 
-/* File Manager Headers */
+  
 .fm-header {
   display: flex;
   justify-content: space-between;
@@ -76,7 +76,7 @@
   box-shadow: 0 0 8px rgba(104, 255, 240, 0.2);
 }
 
-/* File Manager Split Body */
+  
 .fm-body {
   display: flex;
   flex-grow: 1;
@@ -96,7 +96,7 @@
   text-transform: uppercase;
 }
 
-/* Sidebar Navigation */
+  
 .fm-sidebar {
   width: 160px;
   border-right: 1px solid rgba(104, 255, 240, 0.2);
@@ -171,7 +171,7 @@
   box-shadow: 0 0 6px rgb(252, 104, 6);
 }
 
-/* Explorer Grid Pane */
+  
 .fm-explorer {
   flex-grow: 1;
   display: flex;
@@ -305,7 +305,7 @@
   color: rgb(252, 104, 6);
 }
 
-/* File Preview Pane */
+  
 .fm-preview-pane {
   width: 170px;
   border-left: 1px solid rgba(104, 255, 240, 0.2);
@@ -409,7 +409,7 @@
   border-color: #68fff0;
 }
 
-/* Holographic Text Editor Modal Overlay */
+  
 .holographic-editor-overlay {
   position: absolute;
   top: 0;
@@ -507,7 +507,7 @@
   background: rgba(104, 255, 240, 0.15);
 }
 
-/* Glowing text effects */
+  
 .glow-cyan {
   color: #68fff0 !important;
   text-shadow: 0 0 8px rgba(104, 255, 240, 0.7);

@@ -10,7 +10,7 @@
   z-index: 10;
   pointer-events: auto;
   overflow: hidden;
-  /* Smooth macOS style slide-out animation transitions */
+    
   transition: transform 0.5s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -93,14 +93,14 @@
 .holo-window-content {
   flex-grow: 1;
   position: relative;
-  overflow: auto; /* allow normal scrolling when content is larger than window */
+  overflow: auto;   
   -webkit-overflow-scrolling: touch;
   min-height: 0;
   will-change: auto;
   box-sizing: border-box;
-  /* Hide visible scrollbars but keep scrolling behavior */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+    
+  scrollbar-width: none;   
+  -ms-overflow-style: none;   
 }
 
 .holo-window-content::-webkit-scrollbar {
@@ -109,14 +109,14 @@
   display: none;
 }
 
-/* Ensure direct children reflow to the window size (prevents fixed-width inner panels from creating scrollbars) */
+  
 .holo-window-content > * {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
 }
 
-/* Base OS overrides for the windowing system */
+  
 .os-background {
   position: absolute;
   top: 0;
@@ -128,7 +128,7 @@
 }
 
 .os-background.blurred {
-  filter: blur(4px) brightness(0.85); /* slight blur and dimming so window text is easy to read */
+  filter: blur(4px) brightness(0.85);   
 }
 
 .os-overlays {
@@ -138,16 +138,16 @@
   width: 100vw;
   height: 100vh;
   z-index: 5;
-  pointer-events: none; /* Let clicks pass through to dashboard */
+  pointer-events: none;   
 }
 
-/* Focused Window Glow Style */
+  
 .holo-window.focused {
   border-color: rgba(104, 255, 240, 0.85);
   box-shadow: 0 0 20px rgba(104, 255, 240, 0.35), inset 0 0 25px rgba(104, 255, 240, 0.15);
 }
 
-/* Slid Out (Minimized / Show Desktop) Window States */
+  
 .holo-window.slid-out {
   opacity: 0.35;
   cursor: pointer !important;
@@ -169,7 +169,7 @@
   color: rgb(252, 104, 6) !important;
 }
 
-/* Pulsing visual cue overlay for slid-out state */
+  
 .slid-out-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -190,11 +190,11 @@
   }
 }
 
-/* ===== HACKER GRID LAYOUT STYLE ===== */
+  
 .os-grid-layout {
   position: absolute;
-  top: 20px; /* Match left/right margin of 20px */
-  bottom: 120px; /* Above bottom split dock */
+  top: 20px;   
+  bottom: 120px;   
   left: 20px;
   right: 20px;
   display: grid;
@@ -205,7 +205,7 @@
   z-index: 5;
 }
 
-/* Resize Handle Style */
+  
 .holo-resize-handle {
   position: absolute;
   bottom: 1px;
@@ -225,7 +225,7 @@
   background: var(--theme-secondary, rgb(252, 104, 6));
 }
 
-/* In grid mode, active windows inside the grid cells stretch to fill */
+  
 .os-grid-layout .holo-window {
   position: relative !important;
   top: auto !important;
@@ -237,7 +237,7 @@
   box-sizing: border-box;
 }
 
-/* Make sure container widths/heights stretch in grid mode */
+  
 .os-grid-layout .terminal-container,
 .os-grid-layout .metrics-container,
 .os-grid-layout .file-manager-container,
@@ -252,7 +252,7 @@
   box-sizing: border-box;
 }
 
-/* Grid Placeholder Cards (Offline Channel state) */
+  
 .grid-placeholder {
   border: 1px dashed rgba(104, 255, 240, 0.25);
   background: rgba(0, 0, 0, 0.45);
@@ -343,7 +343,7 @@
   box-shadow: 0 0 8px rgba(104, 255, 240, 0.4);
 }
 
-/* Global Theme Overrides for standard panels */
+  
 :root {
   --theme-primary: #68fff0;
   --theme-secondary: rgb(252, 104, 6);
@@ -352,7 +352,7 @@
   --theme-primary-bg: rgba(104, 255, 240, 0.15);
 }
 
-/* Override existing components to adapt to the selected theme */
+  
 .holo-window {
   border-color: var(--theme-border) !important;
   box-shadow: 0 0 15px var(--theme-glow), inset 0 0 20px rgba(104, 255, 240, 0.1) !important;

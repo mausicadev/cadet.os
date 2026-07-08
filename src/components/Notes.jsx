@@ -2,41 +2,40 @@ import React, { useState, useEffect } from 'react';
 import '../css/notes.css';
 
 export default function Notes({ fileSystem, setFileSystem, onOpenFile }) {
-  const [selectedNoteId, setSelectedNoteId] = useState(null);
-  const [saveStatus, setSaveStatus] = useState('SYNCED');
+  const [activeId, setActiveId] = useState(null);
+  const [syncStatus, setSyncStatus] = useState('SYNCED');
 
-  // Helper to find the 'usr' folder
-  const findUsrFolder = (node) => {
+  // gasim folder-ul /usr pt note in arborele de directoare
+  const getUsrDir = (node) => {
     if (node.id === 'usr') return node;
     if (node.children) {
       for (const child of node.children) {
-        const found = findUsrFolder(child);
+        const found = getUsrDir(child);
         if (found) return found;
       }
     }
     return null;
   };
 
-  const usrFolder = findUsrFolder(fileSystem);
+  const usrFolder = getUsrDir(fileSystem);
   const notes = usrFolder ? usrFolder.children.filter(c => c.type === 'file') : [];
 
-  // Default to first note if none selected
+  // selectam prima nota default cand se incarca app-ul
   useEffect(() => {
-    if (notes.length > 0 && !selectedNoteId) {
-      // Find notes.txt if it exists, otherwise use the first one
+    if (notes.length > 0 && !activeId) {
       const defaultNote = notes.find(n => n.name === 'notes.txt') || notes[0];
-      setSelectedNoteId(defaultNote.id);
+      setActiveId(defaultNote.id);
     }
-  }, [notes, selectedNoteId]);
+  }, [notes, activeId]);
 
-  const activeNote = notes.find(n => n.id === selectedNoteId);
+  const current = notes.find(n => n.id === activeId);
 
-  const handleContentChange = (newContent) => {
-    if (!activeNote) return;
-    setSaveStatus('SAVING...');
+  const updateContent = (newContent) => {
+    if (!current) return;
+    setSyncStatus('SAVING...');
 
     const updateNode = (node) => {
-      if (node.id === activeNote.id) {
+      if (node.id === current.id) {
         return {
           ...node,
           content: newContent,
@@ -54,23 +53,23 @@ export default function Notes({ fileSystem, setFileSystem, onOpenFile }) {
 
     setFileSystem(prev => updateNode(prev));
     
-    // Simulate slight lag for cyber/hacker saving visual status
+    // sincronizarea e fake, dar arata bine
     setTimeout(() => {
-      setSaveStatus('SYNCED');
+      setSyncStatus('SYNCED');
     }, 400);
   };
 
-  const handleAddNote = () => {
+  const addNote = () => {
     const noteName = prompt("ENTER NEW MEMO NAME (e.g. log.txt):");
     if (!noteName) return;
     
-    const formattedName = noteName.toLowerCase().endsWith('.txt') 
+    const fname = noteName.toLowerCase().endsWith('.txt') 
       ? noteName.toLowerCase() 
       : `${noteName.toLowerCase()}.txt`;
 
     const newNote = {
       id: `note_${Date.now()}`,
-      name: formattedName,
+      name: fname,
       type: 'file',
       size: '12 B',
       mime: 'TEXT',
@@ -88,10 +87,10 @@ export default function Notes({ fileSystem, setFileSystem, onOpenFile }) {
     };
 
     setFileSystem(prev => addNode(prev));
-    setSelectedNoteId(newNote.id);
+    setActiveId(newNote.id);
   };
 
-  const handleDeleteNote = (noteId, e) => {
+  const deleteNote = (noteId, e) => {
     e.stopPropagation();
     if (notes.length <= 1) {
       alert("ERROR: CORE SYS REQUIRE MINIMUM 1 MEMO NODE ACTIVE.");
@@ -107,28 +106,28 @@ export default function Notes({ fileSystem, setFileSystem, onOpenFile }) {
 
     setFileSystem(prev => filterNode(prev));
     
-    if (selectedNoteId === noteId) {
+    if (activeId === noteId) {
       const remaining = notes.filter(n => n.id !== noteId);
-      setSelectedNoteId(remaining.length > 0 ? remaining[0].id : null);
+      setActiveId(remaining.length > 0 ? remaining[0].id : null);
     }
   };
 
   return (
     <div className="notes-container">
-      {/* Sidebar Panel */}
+      {/* sidebar cu lista de note */}
       <div className="notes-sidebar">
         <div className="notes-sidebar-header">BUNKER MEMOS</div>
         <div className="notes-list">
           {notes.map(note => (
             <div 
               key={note.id}
-              className={`note-item ${note.id === selectedNoteId ? 'active' : ''}`}
-              onClick={() => setSelectedNoteId(note.id)}
+              className={`note-item ${note.id === activeId ? 'active' : ''}`}
+              onClick={() => setActiveId(note.id)}
             >
               <span className="note-name">{note.name.toUpperCase()}</span>
               <button 
                 className="note-delete-btn"
-                onClick={(e) => handleDeleteNote(note.id, e)}
+                onClick={(e) => deleteNote(note.id, e)}
               >
                 ×
               </button>
@@ -136,28 +135,28 @@ export default function Notes({ fileSystem, setFileSystem, onOpenFile }) {
           ))}
         </div>
         <div className="notes-sidebar-actions">
-          <button className="note-btn glow-cyan" onClick={handleAddNote}>
+          <button className="note-btn glow-cyan" onClick={addNote}>
             + CREATE MEMO
           </button>
         </div>
       </div>
 
-      {/* Memo Editor Content */}
+      {/* editorul de text */}
       <div className="notes-editor">
-        {activeNote ? (
+        {current ? (
           <>
             <div className="notes-editor-header">
               <div className="active-note-title">
-                PATH: <span className="glow-cyan">/usr/{activeNote.name.toUpperCase()}</span>
+                PATH: <span className="glow-cyan">/usr/{current.name.toUpperCase()}</span>
               </div>
               <div className="note-save-status glow-orange">
-                [{saveStatus}]
+                [{syncStatus}]
               </div>
             </div>
             <div className="notes-editor-textarea-wrapper">
               <textarea
-                value={activeNote.content}
-                onChange={(e) => handleContentChange(e.target.value)}
+                value={current.content}
+                onChange={(e) => updateContent(e.target.value)}
                 className="notes-textarea"
                 spellCheck="false"
               />

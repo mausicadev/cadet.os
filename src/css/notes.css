@@ -38,12 +38,12 @@
   gap: 6px;
 }
 
-/* visually minimize internal scrollbars while keeping scroll behavior */
+  
 .notes-list::-webkit-scrollbar {
   width: 6px;
 }
 .notes-list::-webkit-scrollbar-thumb {
-  background: transparent; /* keep subtle */
+  background: transparent;   
 }
 
 .note-item {
@@ -114,7 +114,7 @@
   border-color: var(--theme-primary, #68fff0);
 }
 
-/* Notes Editor */
+  
 .notes-editor {
   flex-grow: 1;
   display: flex;

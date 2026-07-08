@@ -11,23 +11,24 @@ export default function Dock({
   showDesktopActive,
   onReboot
 }) {
-  // Split apps: 4 on the Left, 3 on the Right (Radar removed)
+  
+  // apps separate pt stanga si dreapta sa arate splituit
   const leftApps = apps.filter(app => ['terminal', 'files', 'tasks', 'notes'].includes(app.id));
   const rightApps = apps.filter(app => ['metrics', 'editor', 'settings'].includes(app.id));
 
-  const renderDockItem = (app) => {
+  const dockBtn = (app) => {
     const isOpen = openApps.includes(app.id);
     const isActive = activeAppId === app.id;
     const isMinimized = minimizedApps.includes(app.id);
 
-    let indicatorClass = 'dot';
+    let dotCls = 'dot';
     if (isOpen) {
       if (isMinimized) {
-        indicatorClass += ' open minimized';
+        dotCls += ' open minimized';
       } else if (isActive) {
-        indicatorClass += ' open active';
+        dotCls += ' open active';
       } else {
-        indicatorClass += ' open';
+        dotCls += ' open';
       }
     }
 
@@ -41,7 +42,7 @@ export default function Dock({
         <span className="dock-icon">{app.icon}</span>
         <span className="dock-tooltip">{app.label}</span>
         <span className="dock-indicator-container">
-          <span className={indicatorClass} />
+          <span className={dotCls} />
         </span>
       </button>
     );
@@ -49,21 +50,21 @@ export default function Dock({
 
   return (
     <div className="os-split-dock-container">
-      {/* LEFT DOCK - 3 Items */}
+      {/* dock stanga - terminal, files, tasks, notes */}
       <div className="os-dock left">
         <div className="dock-scanline" />
         <div className="dock-apps">
-          {leftApps.map(renderDockItem)}
+          {leftApps.map(dockBtn)}
         </div>
       </div>
 
-      {/* RIGHT DOCK - 3 Items */}
+      {/* dock dreapta - metrics, editor, settings + butoane speciale */}
       <div className="os-dock right">
         <div className="dock-scanline" />
         <div className="dock-apps">
-          {rightApps.map(renderDockItem)}
+          {rightApps.map(dockBtn)}
           
-          {/* Action Item: Show Desktop Toggle */}
+          {/* buton show desktop */}
           <button
             className={`dock-item show-desktop-btn ${showDesktopActive ? 'active-desktop' : ''}`}
             onClick={onToggleShowDesktop}
@@ -77,7 +78,7 @@ export default function Dock({
             <span className="dock-tooltip">SHOW DESKTOP</span>
           </button>
 
-          {/* Action Item: Power Reset */}
+          {/* buton reboot (dramatic lol) */}
           <button
             className="dock-item power-reset-btn glow-orange"
             onClick={onReboot}

@@ -12,7 +12,7 @@ export default function Editor({ file, onSaveFile, onClose }) {
     }
   }, [file]);
 
-  const handleSave = () => {
+  const onSave = () => {
     if (file) {
       onSaveFile(file.id, content);
       alert(`CHANGES SAVED TO ${file.name.toUpperCase()}`);
@@ -28,12 +28,12 @@ export default function Editor({ file, onSaveFile, onClose }) {
     );
   }
 
-  const charCount = content.length;
-  const lineCount = content.split('\n').length;
+  const chars = content.length;
+  const lines = content.split('\n').length;
 
   return (
     <div className="cyber-editor-container">
-      {/* Editor Control Header */}
+      {/* header de control pt salvare si anulare */}
       <div className="editor-control-header">
         <div className="file-info">
           <span className="file-label">EDITING SOURCE:</span>
@@ -44,13 +44,13 @@ export default function Editor({ file, onSaveFile, onClose }) {
           <button className="editor-act-btn cancel" onClick={onClose}>
             CANCEL
           </button>
-          <button className="editor-act-btn save glow-cyan-border" onClick={handleSave}>
+          <button className="editor-act-btn save glow-cyan-border" onClick={onSave}>
             SAVE CHANGES
           </button>
         </div>
       </div>
 
-      {/* Editor Text Area */}
+      {/* zona principala de editare text */}
       <div className="editor-textarea-wrapper">
         <textarea
           value={content}
@@ -60,15 +60,15 @@ export default function Editor({ file, onSaveFile, onClose }) {
         />
       </div>
 
-      {/* Editor Footer / Info panel */}
+      {/* bara de jos cu statistici si buffer stack */}
       <div className="editor-footer">
         <div className="footer-stat">
           <span>LINES:</span>
-          <span className="stat-val glow-cyan">{lineCount}</span>
+          <span className="stat-val glow-cyan">{lines}</span>
         </div>
         <div className="footer-stat">
           <span>SIZE:</span>
-          <span className="stat-val glow-orange">{charCount} B</span>
+          <span className="stat-val glow-orange">{chars} B</span>
         </div>
         <div className="footer-stat">
           <span>BUFFER STACK:</span>

@@ -43,7 +43,7 @@
   color: rgba(252, 104, 6, 0.7);
 }
 
-/* Header */
+  
 .editor-control-header {
   display: flex;
   justify-content: space-between;
@@ -111,7 +111,7 @@
   color: #fff;
 }
 
-/* Textarea wrapper & field */
+  
 .editor-textarea-wrapper {
   flex-grow: 1;
   border: 1px solid rgba(104, 255, 240, 0.15);
@@ -144,7 +144,7 @@
   background: rgba(104, 255, 240, 0.3);
 }
 
-/* Footer stats */
+  
 .editor-footer {
   display: flex;
   gap: 16px;
@@ -163,7 +163,7 @@
   font-weight: bold;
 }
 
-/* Glowing text helpers */
+  
 .glow-cyan {
   color: #68fff0 !important;
   text-shadow: 0 0 8px rgba(104, 255, 240, 0.7);

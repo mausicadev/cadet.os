@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const width = 1000; // Canvas width
-    const height = 1000; // Canvas height
-    const outerRadius = 276; // Outer radius of the circle
-    const innerRadius = outerRadius - 6; // Inner radius of the circle
-    const segmentColor = "transparent"; // Transparent background for segments
-    const progressColors = ["var(--theme-primary)", "var(--theme-secondary)", "var(--theme-secondary)", "var(--theme-primary)"]; // Colors for progress bars
-    const cornerRadius = 1; // Corner radius for rounding
-    const animationDuration = 1000; // Duration of the animation in ms
+    const width = 1000; 
+    const height = 1000; 
+    const outerRadius = 276; 
+    const innerRadius = outerRadius - 6; 
+    const segmentColor = "transparent"; 
+    const progressColors = ["var(--theme-primary)", "var(--theme-secondary)", "var(--theme-secondary)", "var(--theme-primary)"]; 
+    const cornerRadius = 1; 
+    const animationDuration = 1000; 
 
-    // Segment configuration
+    
     const segments = [
         { start: 71, end: 88, capAt: "end" },
         { start: 92, end: 109, capAt: "start" },
@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
         { start: 272, end: 289, capAt: "start" },
     ];
 
-    // Store progress for each segment
+    
     const progressValues = [50, 50, 50, 50];
 
-    // Convert degrees to radians for D3
+    
     const toRadians = (deg) => (deg * Math.PI) / 180;
 
-    // Create the SVG canvas
+    
     const svg = d3
         .select("#c18")
         .append("svg")
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .append("g")
         .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    // Draw each segment
+    
     segments.forEach(({ start, end }, index) => {
         const startAngle = toRadians(start);
         const endAngle = toRadians(end);
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("class", `segment-${index}`);
     });
 
-    // Function to draw the progress bar
+    
     const drawProgressBar = (segmentIndex, progress) => {
         const { start, end, capAt } = segments[segmentIndex];
         const totalAngle = end - start;
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("fill", progressColors[segmentIndex % progressColors.length]);
     };
 
-    // Function to animate all progress bars
+    
     const animateProgress = () => {
         const newProgressValues = progressValues.map(() => Math.random() * 100);
 
@@ -104,6 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
-    // Start animations
+    
     animateProgress();
 });

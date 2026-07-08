@@ -1,4 +1,4 @@
-/* ===== OS Wrapper ===== */
+  
 .os-wrapper {
   position: relative;
   width: 100vw;
@@ -7,8 +7,8 @@
   background-color: #0d0d0d;
 }
 
-/* ===== App Launcher Button ===== */
-/* Styled to match the HUD panels: beveled corners, grid bg, cyberpunky font */
+  
+  
 .app-launcher {
   position: fixed;
   bottom: 20px;
@@ -70,7 +70,7 @@
               inset 0 0 12px rgba(104, 255, 240, 0.1);
 }
 
-/* Launcher icon: 3x3 grid of small squares matching the HUD grid style */
+  
 .launcher-icon {
   display: grid;
   grid-template-columns: repeat(3, 6px);
@@ -95,7 +95,7 @@
   background: #68fff0;
 }
 
-/* X icon for close state */
+  
 .launcher-close {
   color: #68fff0;
   font-size: 1.1rem;
@@ -105,7 +105,7 @@
   text-shadow: 0 0 6px rgba(104, 255, 240, 0.5);
 }
 
-/* ===== Launcher Menu ===== */
+  
 .launcher-menu {
   position: fixed;
   bottom: 74px;
@@ -130,7 +130,7 @@
     8px 100%, 0 calc(100% - 8px)
   );
 
-  /* Slide-up entrance */
+    
   animation: menu-open 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
 }
 
@@ -160,7 +160,7 @@
   }
 }
 
-/* Scan-line overlay on the menu */
+  
 .launcher-menu::before {
   content: "";
   position: absolute;
@@ -171,7 +171,7 @@
   z-index: 1;
 }
 
-/* Menu header */
+  
 .launcher-menu-header {
   padding: 10px 14px 7px;
   font-family: cyberpunky, 'Courier New', Courier, monospace;
@@ -184,7 +184,7 @@
   text-shadow: 0 0 2px rgba(104, 255, 240, 0.3);
 }
 
-/* Menu items */
+  
 .launcher-menu-item {
   display: flex;
   align-items: center;

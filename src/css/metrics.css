@@ -11,7 +11,7 @@
   overflow-y: auto;
 }
 
-/* Scrollbar styling */
+  
 .metrics-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -128,7 +128,7 @@
   color: #fff;
 }
 
-/* RAM / Storage circular indicator card custom styles */
+  
 .ram-card {
   display: flex;
   flex-direction: column;
@@ -199,7 +199,7 @@
   font-size: 0.7rem;
 }
 
-/* Glowing text effects */
+  
 .glow-cyan {
   color: #68fff0 !important;
   text-shadow: 0 0 8px rgba(104, 255, 240, 0.7);
@@ -210,7 +210,7 @@
   text-shadow: 0 0 8px rgba(252, 104, 6, 0.7);
 }
 
-/* GPU Card Override to support orange themes */
+  
 .metric-card:nth-child(2) {
   border-color: rgba(252, 104, 6, 0.2);
 }

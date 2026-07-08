@@ -27,7 +27,7 @@ let percentageR = 0;
 let percentageB = 0;
 let rotationAngle = -100;
 
-// Funcții globale
+
 const rotateIdle = (timestamp) => {
   if (!isIdleRotationActive || isInFastSpin) return;
 

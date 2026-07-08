@@ -10,8 +10,8 @@ export default function TaskManager() {
     { id: 5, text: 'POST THE VIDEO', done: false, category: 'media' },
   ]);
   const [newTask, setNewTask] = useState('');
-  const [newTaskCategory, setNewTaskCategory] = useState('tech');
-  const [activeFilter, setActiveFilter] = useState('ALL'); // ALL, ACTIVE, COMPLETED
+  const [newCat, setNewCat] = useState('tech');
+  const [filter, setFilter] = useState('ALL'); 
 
   const addTask = (e) => {
     e.preventDefault();
@@ -22,79 +22,79 @@ export default function TaskManager() {
         id: Date.now(),
         text: newTask.toUpperCase(),
         done: false,
-        category: newTaskCategory
+        category: newCat
       }
     ]);
     setNewTask('');
   };
 
-  const toggleTask = (id) => {
+  const toggle = (id) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
   };
 
-  const removeTask = (id) => {
+  const remove = (id) => {
     setTasks(tasks.filter(t => t.id !== id));
   };
 
-  // Calculations for Stats Panel
-  const totalCount = tasks.length;
-  const completedCount = tasks.filter(t => t.done).length;
-  const completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+  // statistici simple pt task-uri
+  const total = tasks.length;
+  const doneCount = tasks.filter(t => t.done).length;
+  const progress = total > 0 ? Math.round((doneCount / total) * 100) : 0;
 
-  const filteredTasks = tasks.filter(task => {
-    if (activeFilter === 'ACTIVE') return !task.done;
-    if (activeFilter === 'COMPLETED') return task.done;
+  const visible = tasks.filter(task => {
+    if (filter === 'ACTIVE') return !task.done;
+    if (filter === 'COMPLETED') return task.done;
     return true;
   });
 
   return (
     <div className="task-manager-app">
-      {/* Sidebar - Category Filters and Completion stats */}
+      {/* sidebar cu filtre */}
       <div className="task-sidebar">
         <div className="sidebar-title">TASK FILTERS</div>
         <div className="filter-list">
           <button
-            className={`filter-btn ${activeFilter === 'ALL' ? 'active glow-orange' : ''}`}
-            onClick={() => setActiveFilter('ALL')}
+            className={`filter-btn ${filter === 'ALL' ? 'active glow-orange' : ''}`}
+            onClick={() => setFilter('ALL')}
           >
             <span className="filter-bullet">»</span> ALL TASKS ({tasks.length})
           </button>
           <button
-            className={`filter-btn ${activeFilter === 'ACTIVE' ? 'active glow-orange' : ''}`}
-            onClick={() => setActiveFilter('ACTIVE')}
+            className={`filter-btn ${filter === 'ACTIVE' ? 'active glow-orange' : ''}`}
+            onClick={() => setFilter('ACTIVE')}
           >
             <span className="filter-bullet">»</span> ACTIVE ({tasks.filter(t => !t.done).length})
           </button>
           <button
-            className={`filter-btn ${activeFilter === 'COMPLETED' ? 'active glow-orange' : ''}`}
-            onClick={() => setActiveFilter('COMPLETED')}
+            className={`filter-btn ${filter === 'COMPLETED' ? 'active glow-orange' : ''}`}
+            onClick={() => setFilter('COMPLETED')}
           >
-            <span className="filter-bullet">»</span> COMPLETED ({completedCount})
+            <span className="filter-bullet">»</span> COMPLETED ({doneCount})
           </button>
         </div>
 
         <div className="completion-stats">
           <div className="stats-label">
             <span>CORE PROGRESS</span>
-            <span className="glow-orange">{completionRate}%</span>
+            <span className="glow-orange">{progress}%</span>
           </div>
           <div className="stats-bar">
-            <div className="stats-progress glow-orange-shadow" style={{ width: `${completionRate}%` }} />
+            <div className="stats-progress glow-orange-shadow" style={{ width: `${progress}%` }} />
           </div>
           <div className="stats-details">
             <div className="stats-row">
               <span>TOTAL NODES</span>
-              <span>{totalCount}</span>
+              <span>{total}</span>
             </div>
             <div className="stats-row">
               <span>SOLVED</span>
-              <span className="glow-cyan">{completedCount}</span>
+              <span className="glow-cyan">{doneCount}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Task list & form */}
+      {/* lista de task-uri */}
       <div className="task-content-pane">
         <div className="task-list-header">
           <span>TASK FOR TODAY</span>
@@ -102,12 +102,12 @@ export default function TaskManager() {
         </div>
 
         <div className="tasks-scroll-list">
-          {filteredTasks.length === 0 ? (
+          {visible.length === 0 ? (
             <div className="no-tasks">NO MATCHING TASKS FOUND</div>
           ) : (
-            filteredTasks.map(task => (
+            visible.map(task => (
               <div key={task.id} className={`task-list-item ${task.done ? 'task-done' : ''}`}>
-                <div className="task-left-section" onClick={() => toggleTask(task.id)}>
+                <div className="task-left-section" onClick={() => toggle(task.id)}>
                   <div className={`task-checkbox ${task.done ? 'checked glow-cyan-border' : ''}`}>
                     {task.done ? '✕' : ''}
                   </div>
@@ -115,7 +115,7 @@ export default function TaskManager() {
                 </div>
                 <div className="task-right-section">
                   <span className={`task-category-tag tag-${task.category}`}>{task.category}</span>
-                  <button className="task-item-delete glow-orange" onClick={() => removeTask(task.id)}>
+                  <button className="task-item-delete glow-orange" onClick={() => remove(task.id)}>
                     DEL
                   </button>
                 </div>
@@ -124,7 +124,7 @@ export default function TaskManager() {
           )}
         </div>
 
-        {/* Form to add tasks */}
+        {/* form pt task nou */}
         <form onSubmit={addTask} className="task-input-form">
           <div className="input-row">
             <span className="prompt-indicator">&gt;</span>
@@ -142,8 +142,8 @@ export default function TaskManager() {
               <button
                 key={cat}
                 type="button"
-                className={`tag-select-btn ${newTaskCategory === cat ? 'active' : ''}`}
-                onClick={() => setNewTaskCategory(cat)}
+                className={`tag-select-btn ${newCat === cat ? 'active' : ''}`}
+                onClick={() => setNewCat(cat)}
               >
                 {cat.toUpperCase()}
               </button>

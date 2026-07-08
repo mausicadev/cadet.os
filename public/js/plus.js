@@ -1,49 +1,43 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const container = document.querySelector(".container");
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.querySelector('.container');
+  if (!container) return;
 
-    const gridSize = 40; // Pixels between pluses
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    const columns = Math.floor(screenWidth / gridSize);
-    const rows = Math.floor(screenHeight / gridSize);
-  
-    // Create grid cells to track filled positions
-    const grid = new Array(rows).fill(null).map(() => new Array(columns).fill(false));
-  
-    const createPlus = () => {
-      const plus = document.createElement("div");
-      plus.classList.add("plus");
-      plus.textContent = "+";
-  
-      // Find a random empty position in the grid
-      let placed = false;
-      while (!placed) {
-        const col = Math.floor(Math.random() * columns);
-        const row = Math.floor(Math.random() * rows);
-  
-        if (!grid[row][col]) {
-          grid[row][col] = true;
-          const x = col * gridSize;
-          const y = row * gridSize;
-  
-          plus.style.left = `${x}px`;
-          plus.style.top = `${y}px`;
-          plus.style.animationDelay = `${Math.random() * 5}s`;
-  
-          container.appendChild(plus);
-  
-          // Automatically clear grid position after 6 seconds
-          setTimeout(() => {
-            grid[row][col] = false;
-            plus.remove();
-          }, 8000);
-  
-          placed = true;
-        }
-      }
-    };
-  
-    // Create pluses at random intervals
-    setInterval(createPlus, 40);
-  });
+  const cellSize = 40;
+  const columns = Math.floor(window.innerWidth / cellSize);
+  const rows = Math.floor(window.innerHeight / cellSize);
+  const occupiedCells = new Array(rows).fill(null).map(() => new Array(columns).fill(false));
+
+  const createPlus = () => {
+    const plus = document.createElement('div');
+    plus.classList.add('plus');
+    plus.textContent = '+';
+
+    let placed = false;
+
+    while (!placed) {
+      const col = Math.floor(Math.random() * columns);
+      const row = Math.floor(Math.random() * rows);
+
+      if (occupiedCells[row][col]) continue;
+
+      occupiedCells[row][col] = true;
+      const x = col * cellSize;
+      const y = row * cellSize;
+
+      plus.style.left = `${x}px`;
+      plus.style.top = `${y}px`;
+      plus.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(plus);
+
+      setTimeout(() => {
+        occupiedCells[row][col] = false;
+        plus.remove();
+      }, 8000);
+
+      placed = true;
+    }
+  };
+
+  setInterval(createPlus, 40);
+});
 

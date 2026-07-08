@@ -172,19 +172,19 @@
     transform: rotate(10deg);
   }
   20% {
-    transform: rotate(25deg); /* Smooth clockwise rotation */
+    transform: rotate(25deg);   
   }
   40% {
-    transform: rotate(-15deg); /* Gradual counterclockwise */
+    transform: rotate(-15deg);   
   }
   60% {
-    transform: rotate(20deg); /* Smooth clockwise again */
+    transform: rotate(20deg);   
   }
   80% {
-    transform: rotate(-10deg); /* Gradual counterclockwise */
+    transform: rotate(-10deg);   
   }
   100% {
-    transform: rotate(10deg); /* Matches the start for smooth looping */
+    transform: rotate(10deg);   
   }
 }
 
@@ -193,19 +193,19 @@
     transform: rotate(-85deg);
   }
   20% {
-    transform: rotate(-70deg); /* Smooth clockwise rotation */
+    transform: rotate(-70deg);   
   }
   40% {
-    transform: rotate(-100deg); /* Gradual counterclockwise */
+    transform: rotate(-100deg);   
   }
   60% {
-    transform: rotate(-75deg); /* Smooth clockwise again */
+    transform: rotate(-75deg);   
   }
   80% {
-    transform: rotate(-95deg); /* Gradual counterclockwise */
+    transform: rotate(-95deg);   
   }
   100% {
-    transform: rotate(-85deg); /* Matches the start for smooth looping */
+    transform: rotate(-85deg);   
   }
 }
 
@@ -214,19 +214,19 @@
       transform: rotate(-40deg);
     }
     20% {
-      transform: rotate(-45deg); /* Smooth clockwise rotation */
+      transform: rotate(-45deg);   
     }
     40% {
-      transform: rotate(-65deg); /* Gradual counterclockwise */
+      transform: rotate(-65deg);   
     }
     60% {
-      transform: rotate(-40deg); /* Smooth clockwise again */
+      transform: rotate(-40deg);   
     }
     80% {
-      transform: rotate(-60deg); /* Gradual counterclockwise */
+      transform: rotate(-60deg);   
     }
     100% {
-      transform: rotate(-40deg); /* Matches the start for smooth looping */
+      transform: rotate(-40deg);   
     }
 }
 
@@ -235,19 +235,19 @@
       transform: rotate(20deg);
     }
     20% {
-      transform: rotate(23deg); /* Smooth clockwise rotation */
+      transform: rotate(23deg);   
     }
     40% {
-      transform: rotate(21deg); /* Gradual counterclockwise */
+      transform: rotate(21deg);   
     }
     60% {
-      transform: rotate(27deg); /* Smooth clockwise again */
+      transform: rotate(27deg);   
     }
     80% {
-      transform: rotate(17deg); /* Gradual counterclockwise */
+      transform: rotate(17deg);   
     }
     100% {
-      transform: rotate(20deg); /* Matches the start for smooth looping */
+      transform: rotate(20deg);   
     }
 }
 
@@ -256,19 +256,19 @@
       transform: rotate(26deg);
     }
     20% {
-      transform: rotate(20deg); /* Smooth clockwise rotation */
+      transform: rotate(20deg);   
     }
     40% {
-      transform: rotate(12deg); /* Gradual counterclockwise */
+      transform: rotate(12deg);   
     }
     60% {
-      transform: rotate(25deg); /* Smooth clockwise again */
+      transform: rotate(25deg);   
     }
     80% {
-      transform: rotate(13deg); /* Gradual counterclockwise */
+      transform: rotate(13deg);   
     }
     100% {
-      transform: rotate(20deg); /* Matches the start for smooth looping */
+      transform: rotate(20deg);   
     }
 }
 

@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     const width = 1000;
     const height = 1000;
-    const outerRadius = 240; // Radius of the circle
-    const innerRadius = outerRadius - 38; // Inner radius to add background
-    const segmentWidth = 15; // Thickness of each segment
-    const cornerRadius = 2; // Rounded corners for segments
-    const padAngle = 0.05; // Spacing between segments
-    // Colors
-    const backgroundColor = "rgba(0, 0, 0, 0)"; // Cyan, semi-transparent
-    const borderColor = "var(--theme-primary)"; // Bright cyan for borders
-    const segmentColors = ["var(--theme-primary-bg)"]; // Teal for segments
-    const numSegments = 24; // Number of segments
-    const segmentAngle = (2 * Math.PI) / numSegments; // Angle for each segment
+    const outerRadius = 240; 
+    const innerRadius = outerRadius - 38; 
+    const segmentWidth = 15; 
+    const cornerRadius = 2; 
+    const padAngle = 0.05; 
+    
+    const backgroundColor = "rgba(0, 0, 0, 0)"; 
+    const borderColor = "var(--theme-primary)"; 
+    const segmentColors = ["var(--theme-primary-bg)"]; 
+    const numSegments = 24; 
+    const segmentAngle = (2 * Math.PI) / numSegments; 
   
-    // Append SVG
+    
     const svg = d3
       .select("#c1")
       .append("svg")
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("r", innerRadius)
       .attr("fill", backgroundColor);
   
-    // Create segments
+    
     for (let i = 0; i < numSegments; i++) {
       svg
         .append("path")

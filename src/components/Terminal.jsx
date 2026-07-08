@@ -7,19 +7,21 @@ export default function Terminal() {
     "Type 'help' for a list of commands."
   ]);
   const [input, setInput] = useState('');
-  const bottomRef = useRef(null);
-  const inputRef = useRef(null);
+  const endRef = useRef(null);
+  const cmdRef = useRef(null);
 
-  // Focus input WITHOUT scrolling the page
+  // auto-focus la input cand deschidem terminalul
   useEffect(() => {
-    inputRef.current?.focus({ preventScroll: true });
+    cmdRef.current?.focus({ preventScroll: true });
   }, []);
 
-  const handleCommand = (e) => {
+  const runCmd = (e) => {
     if (e.key === 'Enter') {
       const cmd = input.trim();
       const newHistory = [...history, `> ${cmd}`];
       
+      // comenzi disponibile simple
+      // TODO: mai multe comenzi interesante in viitor
       if (cmd.toLowerCase() === 'help') {
         newHistory.push("Available commands: help, clear, status, reboot");
       } else if (cmd.toLowerCase() === 'clear') {
@@ -40,10 +42,10 @@ export default function Terminal() {
     }
   };
 
-  // Scroll only within the terminal's own output container, never the page
+  // auto-scroll la ultimul rand din terminal cand se adauga comenzi
   useEffect(() => {
-    if (bottomRef.current) {
-      const container = bottomRef.current.closest('.terminal-output');
+    if (endRef.current) {
+      const container = endRef.current.closest('.terminal-output');
       if (container) {
         container.scrollTop = container.scrollHeight;
       }
@@ -56,16 +58,16 @@ export default function Terminal() {
         {history.map((line, i) => (
           <div key={i} className="terminal-line">{line}</div>
         ))}
-        <div ref={bottomRef} />
+        <div ref={endRef} />
       </div>
       <div className="terminal-input-row">
         <span className="prompt">&gt;</span>
         <input 
-          ref={inputRef}
+          ref={cmdRef}
           type="text" 
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleCommand}
+          onKeyDown={runCmd}
           className="terminal-input"
         />
       </div>

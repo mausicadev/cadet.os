@@ -7,9 +7,9 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // Save error info to state so we can render a helpful overlay
+    // prindem erorile ca sa nu crape tot OS-ul direct
     this.setState({ error, info });
-    // Also log to console for devtools
+    // TODO: log la vreun serviciu extern
     console.error('ErrorBoundary caught:', error, info);
   }
 

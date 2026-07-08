@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const segmentColor = "var(--theme-primary-bg)", lineColor = "var(--theme-primary)";
     const gapAngle = 0.05, inclinationAngle = 0.06;
     const startAngleOffset1 = 1.517, startAngleOffset2 = 1.567, endAngleFactor = 0.357;
-    const glowIntensity = 1; // Glow intensity for connectors
+    const glowIntensity = 1; 
   
     const innerSegmentSizes = [133, 133];
     const outerSegmentSizes = [41, 41];
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         y: radius * Math.sin(angle),
     });
   
-    // Define the glow filter for connectors
+    
     const defs = svg.append("defs");
     const filter = defs
         .append("filter")
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .attr("y2", extendedOuterPoint.y)
                 .attr("stroke", lineColor)
                 .attr("stroke-width", 3)
-                .attr("filter", "url(#glow)"); // Apply the glow filter
+                .attr("filter", "url(#glow)"); 
         });
     });
   });

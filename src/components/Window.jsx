@@ -29,13 +29,13 @@ export default function Window({
     if (id === 'notes') return { width: 600, height: 380 };
     return { width: 600, height: 400 };
   });
-  const [isDragging, setIsDragging] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [isResizing, setIsResizing] = useState(false);
+  const [resizing, setResizing] = useState(false);
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, w: 0, h: 0 });
-  const [isClosing, setIsClosing] = useState(false);
-  const [slideTransform, setSlideTransform] = useState('translate(0px, 0px)');
-  const [animClass, setAnimClass] = useState('opening');
+  const [closing, setClosing] = useState(false);
+  const [slideTx, setSlideTx] = useState('translate(0px, 0px)');
+  const [anim, setAnim] = useState('opening');
   
   const windowRef = useRef(null);
 
@@ -51,8 +51,8 @@ export default function Window({
     }
   }, [sizeProp?.width, sizeProp?.height]);
 
-  // Keep default base sizes for initial sizing only; allow free-aspect resizing like native OS windows
-  const defaultBaseSize = {
+  
+  const baseSizes = {
     terminal: { width: 600, height: 400 },
     files: { width: 700, height: 420 },
     metrics: { width: 600, height: 400 },
@@ -62,18 +62,18 @@ export default function Window({
     notes: { width: 600, height: 380 }
   };
 
-  // Clear the opening keyframe animation once it completes to prevent it from locking the transform
+  // animatie de deschidere fereastra
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAnimClass('');
+      setAnim('');
     }, 450);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleResizeMouseDown = (e) => {
+  const startResize = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsResizing(true);
+    setResizing(true);
     setResizeStart({
       x: e.clientX,
       y: e.clientY,
@@ -82,8 +82,8 @@ export default function Window({
     });
   };
 
-  const handleResizeMouseMove = (e) => {
-    if (isResizing) {
+  const onResizeMove = (e) => {
+    if (resizing) {
       const dw = e.clientX - resizeStart.x;
       const dh = e.clientY - resizeStart.y;
       const nextSize = {
@@ -95,40 +95,40 @@ export default function Window({
     }
   };
 
-  const handleResizeMouseUp = () => {
-    setIsResizing(false);
+  const stopResize = () => {
+    setResizing(false);
   };
 
   useEffect(() => {
-    if (isResizing) {
-      window.addEventListener('mousemove', handleResizeMouseMove);
-      window.addEventListener('mouseup', handleResizeMouseUp);
+    if (resizing) {
+      window.addEventListener('mousemove', onResizeMove);
+      window.addEventListener('mouseup', stopResize);
     } else {
-      window.removeEventListener('mousemove', handleResizeMouseMove);
-      window.removeEventListener('mouseup', handleResizeMouseUp);
+      window.removeEventListener('mousemove', onResizeMove);
+      window.removeEventListener('mouseup', stopResize);
     }
     return () => {
-      window.removeEventListener('mousemove', handleResizeMouseMove);
-      window.removeEventListener('mouseup', handleResizeMouseUp);
+      window.removeEventListener('mousemove', onResizeMove);
+      window.removeEventListener('mouseup', stopResize);
     };
-  }, [isResizing, resizeStart]);
+  }, [resizing, resizeStart]);
 
-  const handleMouseDown = (e) => {
-    if (slidOut || gridLayoutActive) return; // Prevent dragging while minimized or in grid mode
+  const startDrag = (e) => {
+    if (slidOut || gridLayoutActive) return; 
     onFocus && onFocus();
-    setIsDragging(true);
+    setDragging(true);
     setDragOffset({
       x: e.clientX - (position.right ? window.innerWidth - position.right : position.x),
       y: e.clientY - position.y
     });
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  const stopDrag = () => {
+    setDragging(false);
   };
 
-  const handleMouseMove = (e) => {
-    if (isDragging) {
+  const onDragMove = (e) => {
+    if (dragging) {
       const nextPosition = position.right ? {
         x: e.clientX - dragOffset.x,
         y: e.clientY - dragOffset.y,
@@ -143,20 +143,20 @@ export default function Window({
   };
 
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+    if (dragging) {
+      window.addEventListener('mousemove', onDragMove);
+      window.addEventListener('mouseup', stopDrag);
     } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', onDragMove);
+      window.removeEventListener('mouseup', stopDrag);
     }
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', onDragMove);
+      window.removeEventListener('mouseup', stopDrag);
     };
-  }, [isDragging, dragOffset]);
+  }, [dragging, dragOffset]);
 
-  // Calculate slide translation for macOS-style hide desktop animation
+  // calculam unde sa slide-uiasca fereastra cand minimizam
   useEffect(() => {
     if (slidOut && windowRef.current) {
       const rect = windowRef.current.getBoundingClientRect();
@@ -171,25 +171,20 @@ export default function Window({
       let tx = 0;
       let ty = 0;
 
-      // Assign each window ID to a specific corner of the screen
+      // am pus 35px offset ca sa se vada un pic din fereastra minimizata la margini
       if (id === 'terminal') {
-        // Top-Left corner
         tx = -(left + width - 35);
         ty = -(top + height - 35);
       } else if (id === 'tasks') {
-        // Top-Right corner
         tx = screenW - left - 35;
         ty = -(top + height - 35);
       } else if (id === 'files') {
-        // Bottom-Left corner
         tx = -(left + width - 35);
         ty = screenH - top - 35;
       } else if (id === 'metrics') {
-        // Bottom-Right corner
         tx = screenW - left - 35;
         ty = screenH - top - 35;
       } else {
-        // Dynamic fallback logic
         if (left + width / 2 < screenW / 2) {
           tx = -(left + width - 35);
         } else {
@@ -202,19 +197,19 @@ export default function Window({
         }
       }
 
-      setSlideTransform(`translate(${tx}px, ${ty}px)`);
+      setSlideTx(`translate(${tx}px, ${ty}px)`);
     } else {
-      setSlideTransform('translate(0px, 0px)');
+      setSlideTx('translate(0px, 0px)');
     }
   }, [slidOut, position, id, windowRef.current]);
 
-  const handleClose = (e) => {
+  const doClose = (e) => {
     e.stopPropagation();
-    setIsClosing(true);
-    setTimeout(onClose, 400); // Wait for exit animation
+    setClosing(true);
+    setTimeout(onClose, 400); 
   };
 
-  const handleWindowClick = (e) => {
+  const onWinClick = (e) => {
     if (slidOut) {
       e.stopPropagation();
       onRestore && onRestore();
@@ -230,32 +225,30 @@ export default function Window({
     width: gridLayoutActive ? '100%' : `${size.width}px`,
     height: gridLayoutActive ? '100%' : `${size.height}px`,
     zIndex: zIndex || 10,
-    transform: slideTransform,
+    transform: slideTx,
   };
-
-  // We no longer scale the inner content - let it reflow/scroll naturally like native windows
 
   return (
     <div
       ref={windowRef}
-      className={`holo-window ${isClosing ? 'closing' : animClass} ${slidOut ? 'slid-out' : ''} ${focused ? 'focused' : ''}`}
+      className={`holo-window ${closing ? 'closing' : anim} ${slidOut ? 'slid-out' : ''} ${focused ? 'focused' : ''}`}
       style={style}
-      onClick={handleWindowClick}
+      onClick={onWinClick}
     >
-      {/* Visual cue overlay for slid-out state */}
+      {/* overlay cand e minimizat */}
       {slidOut && <div className="slid-out-overlay glow-orange" />}
 
-      <div className="holo-window-header" onMouseDown={handleMouseDown}>
+      <div className="holo-window-header" onMouseDown={startDrag}>
         <div className="holo-title">{title}</div>
-        <div className="holo-close" onClick={handleClose}>[X]</div>
+        <div className="holo-close" onClick={doClose}>[X]</div>
       </div>
       <div className="holo-window-content">
         {children}
       </div>
 
-      {/* Resize Handle */}
+      {/* resize handle - doar in modul floating */}
       {!gridLayoutActive && !slidOut && (
-        <div className="holo-resize-handle" onMouseDown={handleResizeMouseDown} />
+        <div className="holo-resize-handle" onMouseDown={startResize} />
       )}
     </div>
   );

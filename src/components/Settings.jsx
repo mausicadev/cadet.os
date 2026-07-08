@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import '../css/settings.css';
 
-const DEFAULT_SENSOR_DATA_TEMPLATE = [
+const DEMO_SENSORS = [
   {
     "id": "sensor_001",
     "city": "Your City",
@@ -61,12 +61,13 @@ export default function Settings({
   sensorFetchError,
   fetchSensorData
 }) {
-  const fileInputRef = useRef(null);
-  const [configMessage, setConfigMessage] = useState('');
-  const [showDataViewer, setShowDataViewer] = useState(false);
+  const fileRef = useRef(null);
+  const [msg, setMsg] = useState('');
+  const [showData, setShowData] = useState(false);
+  // poate ar tb sa pun si un buton de clear data
 
-  const downloadConfigTemplate = () => {
-    const payload = Array.isArray(sensorData) && sensorData.length > 0 ? sensorData : DEFAULT_SENSOR_DATA_TEMPLATE;
+  const downloadJson = () => {
+    const payload = Array.isArray(sensorData) && sensorData.length > 0 ? sensorData : DEMO_SENSORS;
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -74,10 +75,11 @@ export default function Settings({
     link.download = 'sensor-data.json';
     link.click();
     URL.revokeObjectURL(url);
-    setConfigMessage('Sensor data JSON downloaded.');
+    setMsg('Sensor data JSON downloaded.');
   };
 
-  const handleImportConfig = (event) => {
+  // TODO: validare mai buna pt json
+  const importConfig = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -87,7 +89,7 @@ export default function Settings({
         const imported = JSON.parse(reader.result || '{}');
         if (Array.isArray(imported)) {
           setSensorData(imported);
-          setConfigMessage('Sensor data imported.');
+          setMsg('Sensor data imported.');
           return;
         }
         if (imported.sensorApiUrl) setSensorApiUrl(imported.sensorApiUrl);
@@ -122,9 +124,9 @@ export default function Settings({
             setWindowLayouts(imported.layout.windowLayouts);
           }
         }
-        setConfigMessage('Configuration imported.');
+        setMsg('Configuration imported.');
       } catch {
-        setConfigMessage('Import failed. Please use a valid JSON file.');
+        setMsg('Import failed. Please use a valid JSON file.');
       }
     };
 
@@ -132,7 +134,7 @@ export default function Settings({
     event.target.value = '';
   };
 
-  const renderAppCoords = (appId, label) => {
+  const gridControl = (appId, label) => {
     const placement = gridPlacements[appId] || { row: 1, col: 1, colspan: 1, rowspan: 1 };
     
     const updatePlacement = (key, value) => {
@@ -195,11 +197,11 @@ export default function Settings({
   return (
     <div className="settings-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflow: 'auto' }}>
       <div className="settings-header">
-        SYSTEM CONTROL PANEL v2.0.5
+        SYSTEM CONTROL PANEL v2.1.0
       </div>
 
       <div className="settings-grid" style={{ flex: 1, overflow: 'auto', paddingRight: '8px' }}>
-        {/* INTERFACE GRID GROUP */}
+        {/* sectiunea de display/layout */}
         <div className="settings-group">
           <div className="settings-group-title">DISPLAY MODE & LAYOUT</div>
           
@@ -238,24 +240,24 @@ export default function Settings({
           </div>
         </div>
 
-        {/* GRID COORDINATES CONFIGURATION */}
+        {/* grid placement pt fiecare app */}
         {gridLayoutActive && (
           <div className="settings-group">
             <div className="settings-group-title">GRID COORDINATES (4x2 SETUP)</div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {renderAppCoords('files', 'FILES MANAGER')}
-              {renderAppCoords('editor', 'CODE EDITOR')}
-              {renderAppCoords('terminal', 'TERMINAL')}
-              {renderAppCoords('metrics', 'METRICS')}
-              {renderAppCoords('tasks', 'TASKS')}
-              {renderAppCoords('notes', 'NOTES')}
+              {gridControl('files', 'FILES MANAGER')}
+              {gridControl('editor', 'CODE EDITOR')}
+              {gridControl('terminal', 'TERMINAL')}
+              {gridControl('metrics', 'METRICS')}
+              {gridControl('tasks', 'TASKS')}
+              {gridControl('notes', 'NOTES')}
             </div>
           </div>
         )}
 
 
 
-        {/* AUDIO & SYSTEM CORE */}
+        {/* system defaults - url, headers, interval */}
         <div className="settings-group">
           <div className="settings-group-title">SYSTEM DEFAULTS</div>
 
@@ -325,7 +327,7 @@ export default function Settings({
           <div className="settings-row" style={{ flexWrap: 'wrap', gap: '8px' }}>
             <button
               type="button"
-              onClick={downloadConfigTemplate}
+              onClick={downloadJson}
               style={{ background: 'rgba(104, 255, 240, 0.12)', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem' }}
             >
               DOWNLOAD JSON
@@ -339,29 +341,29 @@ export default function Settings({
             </button>
             <button
               type="button"
-              onClick={() => setShowDataViewer(v => !v)}
+              onClick={() => setShowData(v => !v)}
               style={{
-                background: showDataViewer ? 'rgba(104, 255, 240, 0.25)' : 'rgba(104, 255, 240, 0.12)',
+                background: showData ? 'rgba(104, 255, 240, 0.25)' : 'rgba(104, 255, 240, 0.12)',
                 color: 'var(--theme-primary, #68fff0)',
-                border: `1px solid ${showDataViewer ? 'var(--theme-primary, #68fff0)' : 'var(--theme-border)'}`,
+                border: `1px solid ${showData ? 'var(--theme-primary, #68fff0)' : 'var(--theme-border)'}`,
                 padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem',
-                boxShadow: showDataViewer ? '0 0 6px var(--theme-glow)' : 'none'
+                boxShadow: showData ? '0 0 6px var(--theme-glow)' : 'none'
               }}
             >
-              {showDataViewer ? '▲ HIDE DATA' : '▼ VIEW DATA'}
+              {showData ? '▲ HIDE DATA' : '▼ VIEW DATA'}
             </button>
             <button
               type="button"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => fileRef.current?.click()}
               style={{ background: 'rgba(104, 255, 240, 0.12)', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem' }}
             >
               IMPORT CONFIG
             </button>
-            <input ref={fileInputRef} type="file" accept="application/json" onChange={handleImportConfig} style={{ display: 'none' }} />
+            <input ref={fileRef} type="file" accept="application/json" onChange={importConfig} style={{ display: 'none' }} />
           </div>
 
-          {/* ── Inline Data Viewer ── */}
-          {showDataViewer && (
+          {/* toggle pt viewer - TODO: animatie? */}
+          {showData && (
             <div style={{
               marginTop: '10px',
               border: '1px solid var(--theme-border)',
@@ -369,7 +371,7 @@ export default function Settings({
               borderRadius: '2px',
               overflow: 'hidden',
             }}>
-              {/* Inspector Header */}
+              {/* data inspector panel */}
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '8px 12px',
@@ -418,7 +420,7 @@ export default function Settings({
 
                       return (
                         <div key={idx} style={{ marginBottom: idx < sensorData.length - 1 ? '16px' : 0 }}>
-                          {/* Device sub-header */}
+                          {/* device header cu id si locatie */}
                           <div style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
                             marginBottom: '8px', paddingBottom: '6px',
@@ -445,7 +447,7 @@ export default function Settings({
                             </span>
                           </div>
 
-                          {/* Field mapping table */}
+                          {/* tabelul cu field-uri known */}
                           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.62rem', fontFamily: 'monospace', marginBottom: '10px' }}>
                             <thead>
                               <tr style={{ background: 'rgba(104,255,240,0.04)' }}>
@@ -479,7 +481,7 @@ export default function Settings({
                                   </tr>
                                 );
                               })}
-                              {/* Extra/unmapped fields */}
+                              {/* extra fields care nu-s mapate */}
                               {extraFields.length > 0 && (
                                 <tr>
                                   <td colSpan={4} style={{ padding: '6px 8px 2px', color: 'rgba(252,104,6,0.5)', fontSize: '0.58rem', letterSpacing: '0.06em' }}>
@@ -505,7 +507,7 @@ export default function Settings({
                       );
                     })}
 
-                    {/* Raw JSON section */}
+                    {/* raw json la final */}
                     <div style={{ borderTop: '1px solid rgba(104,255,240,0.1)', paddingTop: '10px', marginTop: '4px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                         <span style={{ fontSize: '0.62rem', color: 'rgba(104,255,240,0.45)', letterSpacing: '0.06em' }}>▸ RAW JSON PAYLOAD</span>
@@ -538,10 +540,11 @@ export default function Settings({
             </div>
           )}
 
-          {(configMessage || sensorFetchStatus || sensorFetchError) && (
+          {/* status messages */}
+          {(msg || sensorFetchStatus || sensorFetchError) && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
-              {configMessage && (
-                <div className="glow-cyan" style={{ fontSize: '0.7rem' }}>{configMessage}</div>
+              {msg && (
+                <div className="glow-cyan" style={{ fontSize: '0.7rem' }}>{msg}</div>
               )}
               <div className="glow-cyan" style={{ fontSize: '0.7rem' }}>{sensorFetchStatus}</div>
               {sensorFetchError && (
