@@ -209,67 +209,67 @@
   }
 }
 
-  @keyframes r3 {
-    0% {
-      transform: rotate(-40deg);
-    }
-    20% {
-      transform: rotate(-45deg);   
-    }
-    40% {
-      transform: rotate(-65deg);   
-    }
-    60% {
-      transform: rotate(-40deg);   
-    }
-    80% {
-      transform: rotate(-60deg);   
-    }
-    100% {
-      transform: rotate(-40deg);   
-    }
+@keyframes r3 {
+  0% {
+    transform: rotate(-40deg);
+  }
+  20% {
+    transform: rotate(-45deg);
+  }
+  40% {
+    transform: rotate(-65deg);
+  }
+  60% {
+    transform: rotate(-40deg);
+  }
+  80% {
+    transform: rotate(-60deg);
+  }
+  100% {
+    transform: rotate(-40deg);
+  }
 }
 
-  @keyframes r4 {
-    0% {
-      transform: rotate(20deg);
-    }
-    20% {
-      transform: rotate(23deg);   
-    }
-    40% {
-      transform: rotate(21deg);   
-    }
-    60% {
-      transform: rotate(27deg);   
-    }
-    80% {
-      transform: rotate(17deg);   
-    }
-    100% {
-      transform: rotate(20deg);   
-    }
+@keyframes r4 {
+  0% {
+    transform: rotate(20deg);
+  }
+  20% {
+    transform: rotate(23deg);
+  }
+  40% {
+    transform: rotate(21deg);
+  }
+  60% {
+    transform: rotate(27deg);
+  }
+  80% {
+    transform: rotate(17deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
 }
 
-  @keyframes r5 {
-    0% {
-      transform: rotate(26deg);
-    }
-    20% {
-      transform: rotate(20deg);   
-    }
-    40% {
-      transform: rotate(12deg);   
-    }
-    60% {
-      transform: rotate(25deg);   
-    }
-    80% {
-      transform: rotate(13deg);   
-    }
-    100% {
-      transform: rotate(20deg);   
-    }
+@keyframes r5 {
+  0% {
+    transform: rotate(26deg);
+  }
+  20% {
+    transform: rotate(20deg);
+  }
+  40% {
+    transform: rotate(12deg);
+  }
+  60% {
+    transform: rotate(25deg);
+  }
+  80% {
+    transform: rotate(13deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
 }
 
 .dashboard-center-scale {
