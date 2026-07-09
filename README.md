@@ -1,22 +1,39 @@
+<p align="center">
+	<img src="public/assets/img/banner.png" alt="cadet.os banner" width="720" />
+</p>
+
+
 # cadet.os
 
-This project is a small browser-based bunker operating system built around a fake desktop environment. I made it to feel like a control room: windows you can drag around, a command terminal, a file system, a telemetry dashboard, and a handful of systems that behave like they belong in a sealed-off facility.
+<p align="center">
+	<a href="https://github.com/mausicadev/cadet.os"><img src="https://img.shields.io/badge/GitHub-cadet.os-24292e?logo=github" alt="repo"></a>
+	<img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license">
+	<a href="https://github.com/mausicadev/cadet.os/stargazers"><img src="https://img.shields.io/github/stars/mausicadev/cadet.os?style=social" alt="stars"></a>
+</p>
 
-The experience is intentionally a bit rough around the edges, but that is part of the charm. It mixes a retro terminal mood with a more modern interface, and the whole thing is designed to feel lived-in rather than polished in a corporate way.
+<p align="center">
+  <a href="https://cadetos.vercel.app" target="_blank" rel="noopener">
+    <img src="https://img.shields.io/badge/Live%20Demo-Open%20Site-black?style=for-the-badge&logo=vercel" alt="Live demo">
+  </a>
+</p>
 
-## What it does
+_Handmade bunker UI → web OS — rugged, simple, and expanding into hardware._
 
-- Presents a desktop-style interface with draggable windows and a dock.
-- Includes a terminal with a few custom commands.
-- Offers a fake file manager, notes app, task list, and editor.
-- Pulls in sensor telemetry and displays it on a dashboard.
-- Lets you tweak theme presets, scanline intensity, and sensor URLs from settings.
+I'm a 12th-grade student at a military school in Romania. I started this project because a friend runs a bunker and needed an interface — the first version (screenshot below) ran there. Now I'm expanding it into a web OS that will be part of my hardware project, Sweet Blast.
 
-## How I built it
+<p align="center">
+	<img src="public/assets/img/inside.png" alt="inside screenshot" width="600" />
+</p>
 
-The app started as a static web prototype and later moved to React so the window system and state management would be easier to manage. The UI is all hand-written CSS, and the telemetry visuals are built around the existing dashboard assets in the project.
+---
 
-## Running it locally
+**Quick features**
+
+- 🪟 Desktop-like windows and a dock
+- 🖥️ Terminal with custom commands
+- 📁 File manager, notes, task list, and telemetry dashboard
+
+**Try it**
 
 ```bash
 git clone https://github.com/mausicadev/cadet.os.git
@@ -25,20 +42,10 @@ npm install
 npm run dev
 ```
 
-Then open the local Vite URL in your browser.
+Open the local Vite URL in your browser to try it.
 
-## Commands in the terminal
+Short, simple, and built with stubbornness.
 
-The terminal supports a small set of commands:
+---
 
-- help
-- clear
-- status
-- reboot
-- launch
-- pulse
-- mission
-
-## Notes
-
-This is a personal project, and the style leans heavily into the idea of a bunker interface with old hardware energy. I wanted it to feel like something that was assembled by hand and then kept alive through stubbornness.
+Made by a 12th-grade student in Romania — part of the Sweet Blast hardware project.
