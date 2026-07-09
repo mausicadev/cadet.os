@@ -64,19 +64,7 @@ export default function Dock({
         <div className="dock-apps">
           {rightApps.map(dockBtn)}
           
-          {/* buton show desktop */}
-          <button
-            className={`dock-item show-desktop-btn ${showDesktopActive ? 'active-desktop' : ''}`}
-            onClick={onToggleShowDesktop}
-            title={showDesktopActive ? "Restore All Windows" : "Minimize All (Show Desktop - Double 'D')"}
-          >
-            <span className="dock-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgb(252, 104, 6)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px rgba(252, 104, 6, 0.5))' }}>
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-              </svg>
-            </span>
-            <span className="dock-tooltip">SHOW DESKTOP</span>
-          </button>
+          {/* show-desktop button removed - use double 'D' shortcut */}
 
           {/* buton reboot (dramatic lol) */}
           <button

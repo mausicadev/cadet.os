@@ -62,18 +62,18 @@
 }
 
 .holo-window-header {
-  height: 30px;
-  background: rgba(104, 255, 240, 0.15);
-  border-bottom: 1px solid rgba(104, 255, 240, 0.3);
+  height: 36px;
+  background: rgba(104, 255, 240, 0.12);
+  border-bottom: 1px solid rgba(104, 255, 240, 0.22);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 12px;
   cursor: grab;
-  color: #68fff0;
-  font-family: cyberpunky, 'Courier New', Courier, monospace;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
+  color: #c8fff9;
+  font-family: 'Segoe UI', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Courier New', Courier, monospace;
+  font-size: 0.88rem;
+  letter-spacing: 1.6px;
 }
 
 .holo-window-header:active {

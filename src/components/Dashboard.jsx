@@ -348,7 +348,7 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
             </div>
           </div>
           <div className="progress-bar">
-            <div className="progress">
+            <div className="progress" style={{ width: widget.progress }}>
               <span className="progress-value-left">{widget.progress}</span>
               <span className="progress-value-right"></span>
             </div>
@@ -383,7 +383,7 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
             </div>
           </div>
           <div className="progress-bar">
-            <div className="progress">
+            <div className="progress" style={{ width: widget.progress }}>
               <span className="progress-value-left">{widget.progress}</span>
               <span className="progress-value-right"></span>
             </div>

@@ -160,6 +160,9 @@ export default function Settings({
               className="cyber-slider"
             />
           </div>
+          <div style={{ marginTop: '6px', fontSize: '0.72rem', color: 'rgba(104,255,240,0.6)' }}>
+            Shortcut: double-press <strong>D</strong> to toggle "Show Desktop" (minimize/restore all windows).
+          </div>
         </div>
 
 
