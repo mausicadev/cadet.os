@@ -291,7 +291,7 @@
   }
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1700px) {
   .dashboard-center-scale {
     transform: translate(-50%, -50%) scale(0.72);
   }
@@ -301,6 +301,9 @@
   }
   .rrectangles:hover, .lrectangles:hover {
     opacity: 1;
+  }
+  #c0 {
+    display: none;
   }
 }
 

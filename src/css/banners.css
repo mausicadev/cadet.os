@@ -136,7 +136,7 @@
 #container-9,
 #container-8 {
   width: 800px;
-  height: 200px;
+  height: 195px;
   margin: 0;
   z-index: 3;
   position: relative;
@@ -171,7 +171,7 @@
   margin-left: 90px;
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1700px) {
   .side-by-side-wrapper {
     gap: 0;
     left: 50%;
@@ -215,7 +215,7 @@
   }
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 1700px) {
   #container-9 canvas,
   #container-8 canvas {
     display: none !important;
@@ -229,7 +229,7 @@
   }
 }
 
-@media (min-width: 1451px) {
+@media (min-width: 1701px) {
   #container-8 {
     display: block;
     opacity: 1;
