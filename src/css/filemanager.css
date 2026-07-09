@@ -1,14 +1,17 @@
 .file-manager-container {
   width: 700px;
   height: 420px;
-  background-color: transparent;
+  background: rgba(3, 8, 10, 0.78);
+  border: 1.6px solid #486866;
+  border-radius: 6px;
   color: #68fff0;
   font-family: 'Courier New', Courier, monospace;
   display: flex;
   flex-direction: column;
   padding: 10px;
   box-sizing: border-box;
-  text-shadow: 0 0 5px rgba(104, 255, 240, 0.4);
+  text-shadow: 0 0 4px rgba(104, 255, 240, 0.25);
+  letter-spacing: 0.02em;
 }
 
   
@@ -16,18 +19,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1.6px solid rgba(104, 255, 240, 0.3);
+  border-bottom: 1.2px solid rgba(104, 255, 240, 0.24);
   padding-bottom: 8px;
   margin-bottom: 8px;
   gap: 12px;
+  background: linear-gradient(180deg, rgba(104, 255, 240, 0.04), transparent);
+  border-radius: 4px 4px 0 0;
 }
 
 .fm-path-bar {
   display: flex;
   align-items: center;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  color: rgba(104, 255, 240, 0.7);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: rgba(104, 255, 240, 0.76);
   flex-grow: 1;
   overflow-x: auto;
   white-space: nowrap;
@@ -39,9 +44,10 @@
 
 .segment-btn {
   cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 2px;
+  padding: 2px 5px;
+  border-radius: 3px;
   transition: all 0.2s ease;
+  color: rgba(104, 255, 240, 0.86);
 }
 
 .segment-btn:hover {
@@ -117,8 +123,8 @@
 
 .folder-tree-node {
   cursor: pointer;
-  padding: 4px 6px;
-  font-size: 0.75rem;
+  padding: 5px 7px;
+  font-size: 0.74rem;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -126,11 +132,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: rgba(104, 255, 240, 0.82);
 }
 
 .folder-tree-node:hover {
-  background: rgba(104, 255, 240, 0.08);
+  background: rgba(104, 255, 240, 0.1);
   color: #fff;
+  transform: translateX(1px);
 }
 
 .folder-tree-node.active {
@@ -186,14 +194,15 @@
 }
 
 .explorer-btn {
-  background: transparent;
-  border: 1px solid rgba(104, 255, 240, 0.3);
+  background: rgba(3, 8, 10, 0.4);
+  border: 1px solid rgba(104, 255, 240, 0.28);
   color: #68fff0;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.7rem;
+  font-size: 0.69rem;
   padding: 3px 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  border-radius: 3px;
 }
 
 .explorer-btn:hover {
@@ -233,7 +242,7 @@
 .grid-item {
   position: relative;
   border: 1px solid rgba(104, 255, 240, 0.12);
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, rgba(7, 14, 16, 0.7), rgba(4, 10, 12, 0.56));
   padding: 8px 6px;
   text-align: center;
   cursor: pointer;
@@ -244,11 +253,14 @@
   height: 90px;
   box-sizing: border-box;
   transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .grid-item:hover {
-  border-color: rgba(104, 255, 240, 0.4);
-  background: rgba(104, 255, 240, 0.05);
+  border-color: rgba(104, 255, 240, 0.42);
+  background: rgba(104, 255, 240, 0.09);
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(104, 255, 240, 0.08);
 }
 
 .grid-item.selected {

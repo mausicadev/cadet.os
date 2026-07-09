@@ -17,4 +17,8 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
+  transform: scale(0.9);
+  transform-origin: top left;
+  width: 111.111vw;
+  height: 111.111vh;
 }

@@ -311,7 +311,7 @@
   .os-dock {
     padding: 14px 22px;
     gap: 14px;
-    bottom: 28px;
+    bottom: 10px;
   }
 
   .dock-item {

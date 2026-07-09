@@ -302,9 +302,6 @@
   .rrectangles:hover, .lrectangles:hover {
     opacity: 1;
   }
-  #c0 {
-    display: none;
-  }
 }
 
 @media (max-width: 1200px) {

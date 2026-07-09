@@ -1,11 +1,12 @@
 .holo-window {
   position: absolute;
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(104, 255, 240, 0.5);
+  background: linear-gradient(180deg, rgba(6, 12, 14, 0.97), rgba(2, 6, 8, 0.92));
+  border: 1.7px solid #486866;
   box-shadow:
-    0 0 15px rgba(104, 255, 240, 0.2),
-    inset 0 0 20px rgba(104, 255, 240, 0.1);
-  border-radius: 4px;
+    0 0 0 1px rgba(104, 255, 240, 0.08) inset,
+    0 12px 34px rgba(0, 0, 0, 0.38),
+    0 0 22px rgba(72, 104, 102, 0.18);
+  border-radius: 9px;
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(8px);
@@ -22,18 +23,21 @@
 .holo-window::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(104, 255, 240, 0.05) 51%
-  );
-  background-size: 100% 4px;
+  inset: 0;
   pointer-events: none;
   z-index: 15;
+  /* removed gradient to avoid small top-left highlight */
+  background: none;
+}
+
+.holo-window::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border: 1px solid rgba(104, 255, 240, 0.08);
+  border-radius: 7px;
+  pointer-events: none;
+  z-index: 16;
 }
 
 .holo-window.opening {
@@ -74,21 +78,28 @@
 }
 
 .holo-window-header {
-  height: 36px;
-  background: rgba(104, 255, 240, 0.12);
-  border-bottom: 1px solid rgba(104, 255, 240, 0.22);
+  height: 38px;
+  background: linear-gradient(180deg, rgba(104, 255, 240, 0.2), rgba(104, 255, 240, 0.08));
+  border-bottom: 1px solid rgba(104, 255, 240, 0.26);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 10px 0 12px;
   cursor: grab;
   color: #c8fff9;
   font-family:
     'Segoe UI', Inter, system-ui,
     -apple-system, BlinkMacSystemFont,
     'Courier New', Courier, monospace;
-  font-size: 0.88rem;
-  letter-spacing: 1.6px;
+  font-size: 0.86rem;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-window-header::before {
+  /* removed the left accent stripe to eliminate the top-left gradient */
+  display: none;
 }
 
 .holo-window-header:active {
@@ -97,12 +108,26 @@
 
 .holo-close {
   cursor: pointer;
-  transition: color 0.2s, text-shadow 0.2s;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(104, 255, 240, 0.36);
+  background: rgba(3, 8, 10, 0.62);
+  border-radius: 3px;
+  color: #68fff0;
+  font-size: 0.72rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 0 6px rgba(104, 255, 240, 0.08);
 }
 
 .holo-close:hover {
   color: #fff;
-  text-shadow: 0 0 10px #fff;
+  background: rgba(104, 255, 240, 0.14);
+  box-shadow: 0 0 10px rgba(104, 255, 240, 0.2);
+  transform: translateY(-1px);
 }
 
 .holo-window-content {
@@ -115,6 +140,7 @@
   box-sizing: border-box;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.07));
 }
 
 .holo-window-content::-webkit-scrollbar {
