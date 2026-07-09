@@ -1,7 +1,7 @@
 .terminal-container {
   width: 600px;
   height: 400px;
-  background-color: transparent;
+  background: linear-gradient(180deg, rgba(4, 10, 13, 0.98), rgba(2, 7, 9, 0.96));
   color: #68fff0;
   font-family: 'Courier New', Courier, monospace;
   display: flex;
@@ -9,6 +9,20 @@
   padding: 1rem;
   box-sizing: border-box;
   text-shadow: 0 0 5px rgba(104, 255, 240, 0.5);
+  border: 1px solid rgba(104, 255, 240, 0.16);
+  clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.terminal-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.55rem;
+  margin-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(104, 255, 240, 0.2);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #9feef0;
 }
 
 .terminal-output {
@@ -23,13 +37,15 @@
 .terminal-line {
   margin: 0.25rem 0;
   line-height: 1.5;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .terminal-input-row {
   display: flex;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  border-top: 1px solid rgba(104, 255, 240, 0.16);
+  padding-top: 0.6rem;
 }
 
 .prompt {
@@ -42,7 +58,7 @@
   border: none;
   color: #68fff0;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   outline: none;
   text-shadow: 0 0 5px rgba(104, 255, 240, 0.5);
 }

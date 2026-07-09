@@ -11,6 +11,7 @@ import Settings from './components/Settings';
 import Notes from './components/Notes';
 import LaunchPage from './components/LaunchPage';
 import './css/os.css';
+import './App.css';
 
 // structura initiala de fisiere
 const INITIAL_FILESYSTEM = {
@@ -160,15 +161,6 @@ const getStoredConfig = () => {
   }
 };
 
-const getDefaultGridPlacements = () => ({
-  files: { row: 1, col: 1, colspan: 2, rowspan: 1 },
-  editor: { row: 2, col: 1, colspan: 2, rowspan: 1 },
-  terminal: { row: 1, col: 3, colspan: 1, rowspan: 1 },
-  metrics: { row: 1, col: 4, colspan: 1, rowspan: 1 },
-  tasks: { row: 2, col: 3, colspan: 1, rowspan: 1 },
-  notes: { row: 2, col: 4, colspan: 1, rowspan: 1 }
-});
-
 const getDefaultWindowLayouts = () => ({
   terminal: { position: { x: 80, y: 80 }, size: { width: 600, height: 400 } },
   tasks: { position: { x: 500, y: 80 }, size: { width: 550, height: 400 } },
@@ -222,9 +214,6 @@ function App() {
   const [minimizedApps, setMinimizedApps] = useState([]);
   const [focusStack, setFocusStack] = useState([]);
   const [showDesktopActive, setShowDesktopActive] = useState(false);
-  const [gridPlacements, setGridPlacements] = useState(() => saved?.gridPlacements || getDefaultGridPlacements());
-  // am setat gridLayout default false ca sa nu fie haotic la inceput
-  const [gridLayoutActive, setGridLayoutActive] = useState(() => saved?.gridLayoutActive ?? false);
   const [themePreset, setThemePreset] = useState(() => saved?.themePreset || 'cyan');
   const [scanlineOpacity, setScanlineOpacity] = useState(() => saved?.scanlineOpacity ?? 15);
   const [dashboardBlur, setDashboardBlur] = useState(() => saved?.dashboardBlur ?? 4);
@@ -254,6 +243,8 @@ function App() {
     { period: 'TOMORROW', temp: '12 °C', condition: 'SUNNY' },
     { period: 'MONDAY', temp: '10 °C', condition: 'CLOUDY' }
   ]);
+  const [missionMessage, setMissionMessage] = useState('AIRLOCK STATUS: STEADY');
+  const [beaconPulse, setBeaconPulse] = useState(false);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -425,12 +416,10 @@ function App() {
     if (typeof window === 'undefined') return;
 
     const cfg = {
-      gridLayoutActive,
       themePreset,
       scanlineOpacity,
       dashboardBlur,
       soundActive,
-      gridPlacements,
       sensorApiUrl,
       sensorHeadersText,
       sensorRefreshIntervalSeconds,
@@ -439,7 +428,7 @@ function App() {
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-  }, [gridLayoutActive, themePreset, scanlineOpacity, dashboardBlur, soundActive, gridPlacements, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
+  }, [themePreset, scanlineOpacity, dashboardBlur, soundActive, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
 
   const loadSensorData = useCallback(async () => {
     if (!sensorApiUrl) {
@@ -739,95 +728,6 @@ function App() {
     pointerEvents: 'none'
   };
 
-  const renderSlot = (appId) => {
-    const app = APPS.find(a => a.id === appId);
-    const isOpen = openApps.includes(appId);
-    const isMinimized = minimizedApps.includes(appId);
-    const placement = gridPlacements[appId] || { row: 1, col: 1, colspan: 1, rowspan: 1 };
-    
-    const gridItemStyle = {
-      gridColumn: `${placement.col} / span ${placement.colspan}`,
-      gridRow: `${placement.row} / span ${placement.rowspan}`,
-      pointerEvents: 'auto'
-    };
-    
-    if (isOpen && !isMinimized) {
-      const isFocused = activeAppId === appId;
-      const zIndex = 100 + focusStack.indexOf(appId);
-      
-      return (
-        <div style={gridItemStyle} key={appId}>
-          <Window
-            id={app.id}
-            title={app.label}
-            onClose={() => closeApp(app.id)}
-            defaultPos={app.defaultPos}
-            position={windowLayouts[app.id]?.position}
-            size={windowLayouts[app.id]?.size}
-            onLayoutChange={(layout) => setWindowLayouts(prev => ({ ...prev, [app.id]: { ...prev[app.id], ...layout } }))}
-            focused={isFocused}
-            zIndex={zIndex}
-            slidOut={false}
-            onFocus={() => focusApp(app.id)}
-            onRestore={() => restoreApp(app.id)}
-            gridLayoutActive={true}
-          >
-            <AppContent 
-              id={app.id} 
-              fileSystem={fileSystem}
-              setFileSystem={setFileSystem}
-              onOpenFile={openInEditor}
-              editingFile={editingFile}
-              onSaveFile={saveFile}
-              onClose={() => closeApp(app.id)}
-              gridLayoutActive={gridLayoutActive}
-              setGridLayoutActive={setGridLayoutActive}
-              themePreset={themePreset}
-              setThemePreset={setThemePreset}
-              scanlineOpacity={scanlineOpacity}
-              setScanlineOpacity={setScanlineOpacity}
-              dashboardBlur={dashboardBlur}
-              setDashboardBlur={setDashboardBlur}
-              soundActive={soundActive}
-              setSoundActive={setSoundActive}
-              gridPlacements={gridPlacements}
-              setGridPlacements={setGridPlacements}
-              sensorApiUrl={sensorApiUrl}
-              setSensorApiUrl={setSensorApiUrl}
-              sensorHeadersText={sensorHeadersText}
-              setSensorHeadersText={setSensorHeadersText}
-              sensorRefreshIntervalSeconds={sensorRefreshIntervalSeconds}
-              setSensorRefreshIntervalSeconds={setSensorRefreshIntervalSeconds}
-              windowLayouts={windowLayouts}
-              setWindowLayouts={setWindowLayouts}
-              sensorData={sensorData}
-              setSensorData={setSensorData}
-              sensorFetchStatus={sensorFetchStatus}
-              sensorFetchError={sensorFetchError}
-              fetchSensorData={loadSensorData}
-              onTriggerLaunch={triggerLaunchSequence}
-              weatherApiUrl={weatherApiUrl}
-              setWeatherApiUrl={setWeatherApiUrl}
-            />
-          </Window>
-        </div>
-      );
-    } else {
-      return (
-        <div className="grid-placeholder" style={gridItemStyle} key={`${appId}-placeholder`}>
-          <div className="placeholder-status">
-            <span className="placeholder-blink" />
-            NODE OFFLINE
-          </div>
-          <div className="placeholder-title">{app.label}</div>
-          <button className="placeholder-btn" onClick={() => toggleApp(appId)}>
-            CONNECT LINK
-          </button>
-        </div>
-      );
-    }
-  };
-
   if (currentRoute === 'launch') {
     return <LaunchPage onReturn={handleReturnFromLaunch} />;
   }
@@ -850,18 +750,7 @@ function App() {
       {/* efect scanline CRT */}
       <div style={crtStyle} />
 
-      {/* grid mode vs floating windows */}
-      {gridLayoutActive ? (
-        <div className="os-grid-layout">
-          {renderSlot('terminal')}
-          {renderSlot('files')}
-          {renderSlot('tasks')}
-          {renderSlot('notes')}
-          {renderSlot('metrics')}
-          {renderSlot('editor')}
-        </div>
-      ) : (
-        <div className="os-overlays">
+      <div className="os-overlays">
           {APPS.filter(app => app.id !== 'settings').map(app => {
             const isOpen = openApps.includes(app.id);
             if (!isOpen) return null;
@@ -885,7 +774,6 @@ function App() {
                 slidOut={isMinimized}
                 onFocus={() => focusApp(app.id)}
                 onRestore={() => restoreApp(app.id)}
-                gridLayoutActive={false}
               >
                 <AppContent 
                   id={app.id} 
@@ -895,8 +783,6 @@ function App() {
                   editingFile={editingFile}
                   onSaveFile={saveFile}
                   onClose={() => closeApp(app.id)}
-                  gridLayoutActive={gridLayoutActive}
-                  setGridLayoutActive={setGridLayoutActive}
                   themePreset={themePreset}
                   setThemePreset={setThemePreset}
                   scanlineOpacity={scanlineOpacity}
@@ -905,8 +791,6 @@ function App() {
                   setDashboardBlur={setDashboardBlur}
                   soundActive={soundActive}
                   setSoundActive={setSoundActive}
-                  gridPlacements={gridPlacements}
-                  setGridPlacements={setGridPlacements}
                   sensorApiUrl={sensorApiUrl}
                   setSensorApiUrl={setSensorApiUrl}
                   sensorHeadersText={sensorHeadersText}
@@ -928,7 +812,6 @@ function App() {
             );
           })}
         </div>
-      )}
 
       {/* settings-ul e mereu deasupra */}
       {openApps.includes('settings') && !minimizedApps.includes('settings') && (
@@ -946,7 +829,6 @@ function App() {
           slidOut={false}
           onFocus={() => focusApp('settings')}
           onRestore={() => restoreApp('settings')}
-          gridLayoutActive={false}
         >
           <AppContent 
             id="settings" 
@@ -956,8 +838,6 @@ function App() {
             editingFile={editingFile}
             onSaveFile={saveFile}
             onClose={() => closeApp('settings')}
-            gridLayoutActive={gridLayoutActive}
-            setGridLayoutActive={setGridLayoutActive}
             themePreset={themePreset}
             setThemePreset={setThemePreset}
             scanlineOpacity={scanlineOpacity}
@@ -966,8 +846,6 @@ function App() {
             setDashboardBlur={setDashboardBlur}
             soundActive={soundActive}
             setSoundActive={setSoundActive}
-            gridPlacements={gridPlacements}
-            setGridPlacements={setGridPlacements}
             sensorApiUrl={sensorApiUrl}
             setSensorApiUrl={setSensorApiUrl}
             sensorHeadersText={sensorHeadersText}

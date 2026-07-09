@@ -35,8 +35,6 @@ const DEMO_SENSORS = [
 ];
 
 export default function Settings({
-  gridLayoutActive,
-  setGridLayoutActive,
   themePreset,
   setThemePreset,
   scanlineOpacity,
@@ -45,8 +43,6 @@ export default function Settings({
   setDashboardBlur,
   soundActive,
   setSoundActive,
-  gridPlacements,
-  setGridPlacements,
   sensorApiUrl,
   setSensorApiUrl,
   sensorHeadersText,
@@ -104,9 +100,6 @@ export default function Settings({
           setSensorHeadersText(JSON.stringify(imported.headers, null, 2));
         }
         if (imported.layout) {
-          if (typeof imported.layout.gridLayoutActive === 'boolean') {
-            setGridLayoutActive(imported.layout.gridLayoutActive);
-          }
           if (imported.layout.themePreset) {
             setThemePreset(imported.layout.themePreset);
           }
@@ -118,9 +111,6 @@ export default function Settings({
           }
           if (typeof imported.layout.soundActive === 'boolean') {
             setSoundActive(imported.layout.soundActive);
-          }
-          if (imported.layout.gridPlacements) {
-            setGridPlacements(imported.layout.gridPlacements);
           }
           if (imported.layout.windowLayouts) {
             setWindowLayouts(imported.layout.windowLayouts);
@@ -136,66 +126,6 @@ export default function Settings({
     event.target.value = '';
   };
 
-  const gridControl = (appId, label) => {
-    const placement = gridPlacements[appId] || { row: 1, col: 1, colspan: 1, rowspan: 1 };
-    
-    const updatePlacement = (key, value) => {
-      setGridPlacements(prev => ({
-        ...prev,
-        [appId]: {
-          ...prev[appId],
-          [key]: parseInt(value)
-        }
-      }));
-    };
-
-    return (
-      <div className="grid-config-row" key={appId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed rgba(104, 255, 240, 0.1)' }}>
-        <span className="grid-config-label" style={{ fontSize: '0.75rem', fontWeight: 'bold' }}>{label}</span>
-        
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <div>
-            R: 
-            <select 
-              value={placement.row} 
-              onChange={(e) => updatePlacement('row', e.target.value)}
-              style={{ background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', fontFamily: 'monospace', fontSize: '0.7rem', marginLeft: '4px', padding: '1px 4px', outline: 'none' }}
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-          <div>
-            C: 
-            <select 
-              value={placement.col} 
-              onChange={(e) => updatePlacement('col', e.target.value)}
-              style={{ background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', fontFamily: 'monospace', fontSize: '0.7rem', marginLeft: '4px', padding: '1px 4px', outline: 'none' }}
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </div>
-          <div>
-            SPAN: 
-            <select 
-              value={placement.colspan} 
-              onChange={(e) => updatePlacement('colspan', e.target.value)}
-              style={{ background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', fontFamily: 'monospace', fontSize: '0.7rem', marginLeft: '4px', padding: '1px 4px', outline: 'none' }}
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="settings-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', overflow: 'auto' }}>
       <div className="settings-header">
@@ -207,16 +137,6 @@ export default function Settings({
         <div className="settings-group">
           <div className="settings-group-title">DISPLAY MODE & LAYOUT</div>
           
-          <div className="settings-row">
-            <span className="settings-label">HACKER GRID LAYOUT:</span>
-            <div 
-              className={`cyber-toggle ${gridLayoutActive ? 'active' : ''}`}
-              onClick={() => setGridLayoutActive(!gridLayoutActive)}
-            >
-              <div className="cyber-toggle-knob" />
-            </div>
-          </div>
-
           <div className="settings-row">
             <span className="settings-label">BACKGROUND BLUR ({dashboardBlur}px):</span>
             <input 
@@ -241,22 +161,6 @@ export default function Settings({
             />
           </div>
         </div>
-
-        {/* grid placement pt fiecare app */}
-        {gridLayoutActive && (
-          <div className="settings-group">
-            <div className="settings-group-title">GRID COORDINATES (4x2 SETUP)</div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {gridControl('files', 'FILES MANAGER')}
-              {gridControl('editor', 'CODE EDITOR')}
-              {gridControl('terminal', 'TERMINAL')}
-              {gridControl('metrics', 'METRICS')}
-              {gridControl('tasks', 'TASKS')}
-              {gridControl('notes', 'NOTES')}
-            </div>
-          </div>
-        )}
-
 
 
         {/* system defaults - url, headers, interval */}

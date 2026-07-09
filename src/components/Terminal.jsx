@@ -6,6 +6,7 @@ export default function Terminal({ onTriggerLaunch }) {
     "CadetOS v1.0.0",
     "Type 'help' for a list of commands."
   ]);
+  const [commandCount, setCommandCount] = useState(0);
   const [input, setInput] = useState('');
   const endRef = useRef(null);
   const cmdRef = useRef(null);
@@ -19,25 +20,32 @@ export default function Terminal({ onTriggerLaunch }) {
     if (e.key === 'Enter') {
       const cmd = input.trim();
       const newHistory = [...history, `> ${cmd}`];
+      setCommandCount((count) => count + 1);
       
-      // comenzi disponibile simple
-      // TODO: mai multe comenzi interesante in viitor
-      if (cmd.toLowerCase() === 'help') {
-        newHistory.push("Available commands: help, clear, status, reboot, launch");
-      } else if (cmd.toLowerCase() === 'clear') {
+      const lower = cmd.toLowerCase();
+      if (lower === 'help') {
+        newHistory.push("Available commands: help, clear, status, reboot, launch, pulse, mission");
+      } else if (lower === 'clear') {
         setHistory([]);
         setInput('');
         return;
-      } else if (cmd.toLowerCase() === 'status') {
-        newHistory.push("All systems nominal. Bunker temperature: 15 'C.");
-      } else if (cmd.toLowerCase() === 'reboot') {
+      } else if (lower === 'status') {
+        newHistory.push("All systems nominal. Bunker temperature: 15 'C. Airlock pressure: 0.97 bar.");
+      } else if (lower === 'reboot') {
         newHistory.push("Initiating reboot sequence...");
         setTimeout(() => window.location.reload(), 1000);
-      } else if (cmd.toLowerCase() === 'launch') {
+      } else if (lower === 'launch') {
         newHistory.push("Initiating launch sequence... Exceeding PPM safety threshold!");
         if (onTriggerLaunch) {
           onTriggerLaunch();
         }
+      } else if (lower === 'pulse') {
+        newHistory.push("Beacon pulse dispatched to the outer perimeter.");
+        if (window.dispatchEvent) {
+          window.dispatchEvent(new CustomEvent('cadet-pulse'));
+        }
+      } else if (lower === 'mission') {
+        newHistory.push(`Mission note: ${commandCount + 1} loops completed. Keep the beacon warm and the logs clean.`);
       } else if (cmd !== '') {
         newHistory.push(`Command not found: ${cmd}`);
       }
@@ -59,6 +67,10 @@ export default function Terminal({ onTriggerLaunch }) {
 
   return (
     <div className="terminal-container">
+      <div className="terminal-banner">
+        <span>CONSOLE // BUNKER NETWORK</span>
+        <span>AUTH: LEVEL 4</span>
+      </div>
       <div className="terminal-output">
         {history.map((line, i) => (
           <div key={i} className="terminal-line">{line}</div>

@@ -14,8 +14,7 @@ export default function Window({
   zIndex,
   slidOut,
   onFocus,
-  onRestore,
-  gridLayoutActive
+  onRestore
 }) {
   const [position, setPosition] = useState(() => positionProp || defaultPos || { x: 50, y: 50 });
   const [size, setSize] = useState(() => {
@@ -114,7 +113,7 @@ export default function Window({
   }, [resizing, resizeStart]);
 
   const startDrag = (e) => {
-    if (slidOut || gridLayoutActive) return; 
+    if (slidOut) return; 
     onFocus && onFocus();
     setDragging(true);
     setDragOffset({
@@ -219,11 +218,11 @@ export default function Window({
   };
 
   const style = {
-    top: gridLayoutActive ? 'auto' : `${position.y}px`,
-    left: gridLayoutActive ? 'auto' : (position.right === undefined ? `${position.x}px` : undefined),
-    right: gridLayoutActive ? 'auto' : (position.right !== undefined ? `${position.right}px` : undefined),
-    width: gridLayoutActive ? '100%' : `${size.width}px`,
-    height: gridLayoutActive ? '100%' : `${size.height}px`,
+    top: `${position.y}px`,
+    left: position.right === undefined ? `${position.x}px` : undefined,
+    right: position.right !== undefined ? `${position.right}px` : undefined,
+    width: `${size.width}px`,
+    height: `${size.height}px`,
     zIndex: zIndex || 10,
     transform: slideTx,
   };
@@ -247,7 +246,7 @@ export default function Window({
       </div>
 
       {/* resize handle - doar in modul floating */}
-      {!gridLayoutActive && !slidOut && (
+      {!slidOut && (
         <div className="holo-resize-handle" onMouseDown={startResize} />
       )}
     </div>
