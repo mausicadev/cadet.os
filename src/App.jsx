@@ -10,6 +10,8 @@ import Dock from './components/Dock';
 import Settings from './components/Settings';
 import Notes from './components/Notes';
 import LaunchPage from './components/LaunchPage';
+import LoginSequence from './components/LoginSequence';
+import HousePage from './components/HousePage';
 import './css/os.css';
 import './App.css';
 
@@ -65,17 +67,6 @@ Honestly, coding the custom window system from scratch and sorting out the setti
 
 const APPS = [
   { 
-    id: 'terminal', 
-    label: 'TERMINAL', 
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
-        <polyline points="4 17 10 11 4 5"></polyline>
-        <line x1="12" y1="19" x2="20" y2="19"></line>
-      </svg>
-    ), 
-    defaultPos: { x: 80, y: 80 } 
-  },
-  { 
     id: 'tasks', 
     label: 'TASKS', 
     icon: (
@@ -90,37 +81,6 @@ const APPS = [
     ), 
     defaultPos: { x: 500, y: 80 } 
   },
-  { 
-    id: 'files', 
-    label: 'FILES', 
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
-        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-      </svg>
-    ), 
-    defaultPos: { x: 220, y: 220 } 
-  },
-  { 
-    id: 'metrics', 
-    label: 'METRICS', 
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-      </svg>
-    ), 
-    defaultPos: { x: 620, y: 250 } 
-  },
-  {
-    id: 'editor',
-    label: 'EDITOR',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
-        <path d="M12 20h9"></path>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-      </svg>
-    ),
-    defaultPos: { x: 340, y: 160 }
-  },
   {
     id: 'notes',
     label: 'NOTES',
@@ -134,6 +94,48 @@ const APPS = [
       </svg>
     ),
     defaultPos: { x: 80, y: 500 }
+  },
+  {
+    id: 'editor',
+    label: 'EDITOR',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+        <path d="M12 20h9"></path>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+      </svg>
+    ),
+    defaultPos: { x: 340, y: 160 }
+  },
+  { 
+    id: 'files', 
+    label: 'FILES', 
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+      </svg>
+    ), 
+    defaultPos: { x: 220, y: 220 } 
+  },
+  { 
+    id: 'terminal', 
+    label: 'TERMINAL', 
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+        <polyline points="4 17 10 11 4 5"></polyline>
+        <line x1="12" y1="19" x2="20" y2="19"></line>
+      </svg>
+    ), 
+    defaultPos: { x: 80, y: 80 } 
+  },
+  { 
+    id: 'metrics', 
+    label: 'METRICS', 
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+      </svg>
+    ), 
+    defaultPos: { x: 620, y: 250 } 
   },
   {
     id: 'settings',
@@ -226,14 +228,20 @@ function App() {
   const [sensorFetchError, setSensorFetchError] = useState('');
   const [sensorRefreshIntervalSeconds, setSensorRefreshIntervalSeconds] = useState(() => saved?.sensorRefreshIntervalSeconds ?? 10);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem('cadet_auth') === 'true';
+  });
+
   const [launchOverrunActive, setLaunchOverrunActive] = useState(false);
   const [ppmOverride, setPpmOverride] = useState(null);
   const [currentRoute, setCurrentRoute] = useState(() => {
     const hash = window.location.hash;
     if (hash === '#/launch' || hash === '#launch') return 'launch';
+    if (hash === '#/bunker' || hash === '#bunker') return 'bunker';
+    if (hash === '#/house' || hash === '#house') return 'house';
     const query = window.location.search;
     if (query.includes('launch')) return 'launch';
-    return 'desktop';
+    return 'house';
   });
 
   const [weatherApiUrl, setWeatherApiUrl] = useState(() => saved?.weatherApiUrl || 'https://api.open-meteo.com/v1/forecast?latitude=45.7537&longitude=21.2257&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto');
@@ -251,8 +259,12 @@ function App() {
       const hash = window.location.hash;
       if (hash === '#/launch' || hash === '#launch') {
         setCurrentRoute('launch');
+      } else if (hash === '#/bunker' || hash === '#bunker') {
+        setCurrentRoute('bunker');
+      } else if (hash === '#/house' || hash === '#house') {
+        setCurrentRoute('house');
       } else {
-        setCurrentRoute('desktop');
+        setCurrentRoute('house');
       }
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -633,6 +645,7 @@ function App() {
 
   // reboot cu overlay - un pic dramatic dar arata misto
   const reboot = () => {
+    sessionStorage.removeItem('cadet_auth');
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
@@ -728,8 +741,22 @@ function App() {
     pointerEvents: 'none'
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('cadet_auth');
+    setIsAuthenticated(false);
+    window.location.hash = '';
+  };
+
+  if (!isAuthenticated) {
+    return <LoginSequence onLoginSuccess={(name) => { setIsAuthenticated(true); sessionStorage.setItem('cadet_auth', 'true'); window.location.hash = '#/bunker'; }} />;
+  }
+
   if (currentRoute === 'launch') {
     return <LaunchPage onReturn={handleReturnFromLaunch} />;
+  }
+
+  if (currentRoute === 'house') {
+    return <HousePage onNavigateToBunker={() => { window.location.hash = '#/bunker'; }} onLogout={handleLogout} />;
   }
 
   return (
@@ -876,6 +903,7 @@ function App() {
         onToggleShowDesktop={toggleShowDesktop}
         showDesktopActive={showDesktopActive}
         onReboot={reboot}
+        onLogout={handleLogout}
       />
     </div>
   );

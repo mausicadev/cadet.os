@@ -9,12 +9,13 @@ export default function Dock({
   onToggleApp,
   onToggleShowDesktop,
   showDesktopActive,
-  onReboot
+  onReboot,
+  onLogout
 }) {
   
-  // apps separate pt stanga si dreapta sa arate splituit
-  const leftApps = apps.filter(app => ['terminal', 'files', 'tasks', 'notes'].includes(app.id));
-  const rightApps = apps.filter(app => ['metrics', 'editor', 'settings'].includes(app.id));
+  // apps separate pt stanga si dreapta sa arate splituit (5 left, 5 right)
+  const leftApps = apps.filter(app => ['tasks', 'notes', 'editor', 'files', 'terminal'].includes(app.id));
+  const rightApps = apps.filter(app => ['metrics', 'settings'].includes(app.id));
 
   const dockBtn = (app) => {
     const isOpen = openApps.includes(app.id);
@@ -66,6 +67,21 @@ export default function Dock({
           
           {/* show-desktop button removed - use double 'D' shortcut */}
 
+          {/* buton house blueprint */}
+          <button
+            className="dock-item"
+            onClick={() => window.location.hash = '#/house'}
+            title="House Blueprint"
+          >
+            <span className="dock-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span className="dock-tooltip">HOUSE</span>
+          </button>
+
           {/* buton reboot (dramatic lol) */}
           <button
             className="dock-item power-reset-btn glow-orange"
@@ -80,6 +96,24 @@ export default function Dock({
             </span>
             <span className="dock-tooltip">POWER RESET</span>
           </button>
+
+          {/* buton logout */}
+          {onLogout && (
+            <button
+              className="dock-item"
+              onClick={onLogout}
+              title="Logout"
+            >
+              <span className="dock-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--theme-primary, #68fff0)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 0 3px var(--theme-glow, rgba(104, 255, 240, 0.5)))' }}>
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+              </span>
+              <span className="dock-tooltip">LOGOUT</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

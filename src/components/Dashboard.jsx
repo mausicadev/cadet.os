@@ -91,7 +91,11 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
   useEffect(() => {
     const dashboardRoot = document.getElementById('c0');
     if (dashboardRoot?.querySelector('svg')) return;
-    if (window.__cadet_scripts_initialised) return;
+    if (window.__cadet_scripts_initialised) {
+      // Force trigger event if scripts were already initialized to draw the circles
+      document.dispatchEvent(new Event('DOMContentLoaded'));
+      return;
+    }
 
     const scripts = [
       '/js/plus.js',
@@ -115,7 +119,7 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
       window.__cadet_scripts_initialised = true;
     };
 
-    if (window.__cadet_scripts_initialised || window.__cadet_scripts_loading) {
+    if (window.__cadet_scripts_loading) {
       return;
     }
 
