@@ -133,7 +133,6 @@ export default function LoginSequence({ onLoginSuccess }) {
 
   return (
     <div className="container">
-      {/* Centered Login UI */}
       <div className="ls-center">
         {step === 1 && (
           <>
@@ -200,10 +199,8 @@ export default function LoginSequence({ onLoginSuccess }) {
 
         {step === 4 && (
           <div className={`ls-seq ls-seq-p${phase}`}>
-            {/* Phase 1 & 6: Centered orange plus */}
             <div className="ls-seq-solo-plus">+</div>
 
-            {/* Grid frame with corners, box, avatar */}
             <div className="ls-seq-frame">
               <span className="ls-seq-cp ls-seq-tl">+</span>
               <span className="ls-seq-cp ls-seq-tr">+</span>
@@ -291,7 +288,7 @@ export default function LoginSequence({ onLoginSuccess }) {
           display: flex;
           align-items: center;
           min-height: 1.5em;
-          transform: translateY(5px); /* shift down to center custom font baseline */
+          transform: translateY(5px);
         }
 
         .ls-password-dot {
@@ -302,7 +299,7 @@ export default function LoginSequence({ onLoginSuccess }) {
           border-radius: 50%;
           margin-right: 6px;
           align-self: center;
-          transform: translateY(-4px); /* align with high baseline of custom font and cursor */
+          transform: translateY(-4px);
           box-shadow: 0 0 3px rgba(104, 255, 240, 0.6);
         }
 
@@ -313,7 +310,7 @@ export default function LoginSequence({ onLoginSuccess }) {
           background-color: #68fff0;
           vertical-align: middle;
           margin-left: 0px;
-          transform: translateY(-4px); /* align with high baseline of custom font */
+          transform: translateY(-4px);
           animation: ls-blink 2s step-end infinite;
         }
 
@@ -431,7 +428,6 @@ export default function LoginSequence({ onLoginSuccess }) {
           font-weight: normal;
         }
 
-        /* ===== LOGIN ANIMATION SEQUENCE ===== */
         .ls-seq {
           position: relative;
           width: 140px;

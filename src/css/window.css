@@ -26,7 +26,6 @@
   inset: 0;
   pointer-events: none;
   z-index: 15;
-  /* removed gradient to avoid small top-left highlight */
   background: none;
 }
 
@@ -98,7 +97,6 @@
 }
 
 .holo-window-header::before {
-  /* removed the left accent stripe to eliminate the top-left gradient */
   display: none;
 }
 
