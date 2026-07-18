@@ -13,6 +13,7 @@ export default function Window({
   focused,
   zIndex,
   slidOut,
+  blur = 12,
   onFocus,
   onRestore
 }) {
@@ -244,6 +245,8 @@ export default function Window({
     height: `${size.height}px`,
     zIndex: zIndex || 10,
     transform: slideTx,
+    backdropFilter: `blur(${blur}px) saturate(150%)`,
+    WebkitBackdropFilter: `blur(${blur}px) saturate(150%)`,
   };
 
   return (

@@ -811,6 +811,7 @@ function App() {
                 focused={isFocused}
                 zIndex={zIndex}
                 slidOut={isMinimized}
+                blur={windowBlur}
                 onFocus={() => focusApp(app.id)}
                 onRestore={() => restoreApp(app.id)}
               >
@@ -872,6 +873,7 @@ function App() {
           focused={activeAppId === 'settings'}
           zIndex={500}
           slidOut={false}
+          blur={windowBlur}
           onFocus={() => focusApp('settings')}
           onRestore={() => restoreApp('settings')}
         >
