@@ -24,12 +24,12 @@
 }
 
 .notes-sidebar-header {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--theme-secondary, rgb(252, 104, 6));
   border-bottom: 1px solid rgba(104, 255, 240, 0.15);
-  padding-bottom: 3px;
+  padding-bottom: 6px;
 }
 
 .notes-list {
@@ -44,10 +44,10 @@
 .notes-list::-webkit-scrollbar-thumb { background: transparent; }
 
 .note-item {
-  padding: 6px 8px;
+  padding: 8px 10px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(104, 255, 240, 0.15);
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -79,8 +79,8 @@
   border: none;
   color: var(--theme-secondary, rgb(252, 104, 6));
   cursor: pointer;
-  font-size: 0.7rem;
-  padding: 0 3px;
+  font-size: 0.85rem;
+  padding: 0 4px;
   line-height: 1;
   opacity: 0;
   transition: opacity 0.15s;
@@ -100,13 +100,14 @@
   border: 1px solid rgba(104, 255, 240, 0.2);
   color: var(--theme-primary, #68fff0);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.6rem;
-  padding: 3px 5px;
+  font-size: 0.75rem;
+  padding: 6px 10px;
   cursor: pointer;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.15s;
+  border-radius: 4px;
 }
 
 .note-btn:hover {
@@ -130,13 +131,13 @@
 }
 
 .active-note-title {
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   font-weight: bold;
   letter-spacing: 1px;
 }
 
 .note-save-status {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: var(--theme-secondary, rgb(252, 104, 6));
 }
 
@@ -155,9 +156,9 @@
   border: none;
   color: var(--theme-primary, #68fff0);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   line-height: 1.45;
-  padding: 6px;
+  padding: 10px;
   outline: none;
   resize: none;
   box-sizing: border-box;
@@ -176,6 +177,6 @@
   align-items: center;
   text-align: center;
   color: var(--theme-secondary, rgb(252, 104, 6));
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   letter-spacing: 1px;
 }

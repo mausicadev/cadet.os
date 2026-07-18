@@ -189,9 +189,9 @@ export default function Settings({
             <span className="settings-label">SENSOR DATA URL:</span>
             <input
               type="text"
+              className="cyber-input"
               value={sensorApiUrl}
               onChange={(e) => setSensorApiUrl(e.target.value)}
-              style={{ width: '100%', background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 8px', fontFamily: 'monospace', fontSize: '0.72rem' }}
               placeholder="https://data.uradmonitor.com/api/v1/devices"
             />
           </div>
@@ -199,21 +199,10 @@ export default function Settings({
           <div className="settings-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
             <span className="settings-label">SENSOR HEADERS (JSON):</span>
             <textarea
+              className="cyber-textarea"
               value={sensorHeadersText}
               onChange={(e) => setSensorHeadersText(e.target.value)}
               rows={3}
-              style={{ 
-                width: '100%', 
-                background: '#000', 
-                color: 'var(--theme-primary, #68fff0)', 
-                border: '1px solid var(--theme-border)', 
-                padding: '6px 8px', 
-                fontFamily: 'monospace', 
-                fontSize: '0.72rem', 
-                resize: 'vertical',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
-              }}
               placeholder='{} (leave empty for public APIs)'
             />
             <style>{`textarea::-webkit-scrollbar { display: none; }`}</style>
@@ -224,11 +213,12 @@ export default function Settings({
             <span className="settings-label">AUTO FETCH INTERVAL:</span>
             <input
               type="number"
+              className="cyber-input"
               min={5}
               step={1}
               value={sensorRefreshIntervalSeconds}
               onChange={(e) => setSensorRefreshIntervalSeconds(Math.max(5, Number(e.target.value) || 10))}
-              style={{ width: '100px', background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 8px', fontFamily: 'monospace', fontSize: '0.72rem' }}
+              style={{ width: '120px' }}
             />
             <span style={{ fontSize: '0.65rem', color: 'rgba(104, 255, 240, 0.6)' }}>Auto-fetch sensor data every {sensorRefreshIntervalSeconds} seconds.</span>
           </div>
@@ -237,9 +227,9 @@ export default function Settings({
             <span className="settings-label">WEATHER FORECAST URL (Open-Meteo):</span>
             <input
               type="text"
+              className="cyber-input"
               value={weatherApiUrl || ''}
               onChange={(e) => setWeatherApiUrl && setWeatherApiUrl(e.target.value)}
-              style={{ width: '100%', background: '#000', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 8px', fontFamily: 'monospace', fontSize: '0.72rem' }}
               placeholder="https://api.open-meteo.com/v1/forecast?latitude=45.75&longitude=21.22&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto"
             />
             <span style={{ fontSize: '0.65rem', color: 'rgba(104, 255, 240, 0.6)' }}>Fetches daily weather for the right HUD panel. Uses Open-Meteo by default.</span>
@@ -248,35 +238,29 @@ export default function Settings({
           <div className="settings-row" style={{ flexWrap: 'wrap', gap: '8px' }}>
             <button
               type="button"
+              className="cyber-btn"
               onClick={downloadJson}
-              style={{ background: 'rgba(104, 255, 240, 0.12)', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem' }}
             >
               DOWNLOAD JSON
             </button>
             <button
               type="button"
+              className="cyber-btn"
               onClick={fetchSensorData}
-              style={{ background: 'rgba(104, 255, 240, 0.12)', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem' }}
             >
               FETCH NOW
             </button>
             <button
               type="button"
+              className={`cyber-btn ${showData ? 'active' : 'cyber-btn-outline'}`}
               onClick={() => setShowData(v => !v)}
-              style={{
-                background: showData ? 'rgba(104, 255, 240, 0.25)' : 'rgba(104, 255, 240, 0.12)',
-                color: 'var(--theme-primary, #68fff0)',
-                border: `1px solid ${showData ? 'var(--theme-primary, #68fff0)' : 'var(--theme-border)'}`,
-                padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem',
-                boxShadow: showData ? '0 0 6px var(--theme-glow)' : 'none'
-              }}
             >
               {showData ? '▲ HIDE DATA' : '▼ VIEW DATA'}
             </button>
             <button
               type="button"
+              className="cyber-btn"
               onClick={() => fileRef.current?.click()}
-              style={{ background: 'rgba(104, 255, 240, 0.12)', color: 'var(--theme-primary, #68fff0)', border: '1px solid var(--theme-border)', padding: '6px 10px', cursor: 'pointer', fontSize: '0.72rem' }}
             >
               IMPORT CONFIG
             </button>

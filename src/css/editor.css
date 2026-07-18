@@ -41,7 +41,7 @@
 }
 
 .editor-empty-state p {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   line-height: 1.5;
   max-width: 360px;
   color: rgba(252, 104, 6, 0.6);
@@ -59,12 +59,12 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.68rem;
+  font-size: 0.85rem;
 }
 
 .file-label { color: rgba(104, 255, 240, 0.5); }
 .file-name { font-weight: bold; }
-.file-mime { font-size: 0.62rem; }
+.file-mime { font-size: 0.75rem; }
 
 .editor-actions-row {
   display: flex;
@@ -76,12 +76,13 @@
   border: 1px solid rgba(104, 255, 240, 0.2);
   color: var(--theme-primary, #68fff0);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.62rem;
-  padding: 2px 7px;
+  font-size: 0.75rem;
+  padding: 4px 10px;
   cursor: pointer;
   transition: all 0.15s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border-radius: 4px;
 }
 
 .editor-act-btn:hover {
@@ -125,9 +126,9 @@
   border: none;
   color: var(--theme-primary, #68fff0);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   line-height: 1.45;
-  padding: 6px;
+  padding: 10px;
   outline: none;
   resize: none;
   box-sizing: border-box;
@@ -142,8 +143,8 @@
   display: flex;
   gap: 12px;
   border-top: 1px solid rgba(104, 255, 240, 0.1);
-  padding-top: 4px;
-  font-size: 0.6rem;
+  padding-top: 8px;
+  font-size: 0.75rem;
 }
 
 .footer-stat {

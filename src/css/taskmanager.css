@@ -37,15 +37,15 @@
   border: none;
   color: rgba(104, 255, 240, 0.7);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   text-align: left;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 4px 6px;
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
   gap: 4px;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 .filter-btn:hover {
@@ -60,7 +60,7 @@
 }
 
 .filter-bullet {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--theme-primary, #68fff0);
 }
 
@@ -72,7 +72,7 @@
 .stats-label {
   display: flex;
   justify-content: space-between;
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   color: rgba(104, 255, 240, 0.5);
   margin-bottom: 3px;
   letter-spacing: 0.5px;
@@ -97,7 +97,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-size: 0.58rem;
+  font-size: 0.7rem;
 }
 
 .stats-row {
@@ -120,18 +120,19 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(104, 255, 240, 0.15);
-  padding-bottom: 4px;
-  font-size: 0.78rem;
+  padding-bottom: 6px;
+  font-size: 0.85rem;
   font-weight: bold;
   letter-spacing: 1px;
 }
 
 .header-status-badge {
-  font-size: 0.62rem;
-  padding: 1px 5px;
+  font-size: 0.72rem;
+  padding: 2px 6px;
   background: rgba(104, 255, 240, 0.06);
   border: 1px solid rgba(104, 255, 240, 0.2);
   color: var(--theme-primary, #68fff0);
+  border-radius: 4px;
 }
 
 .tasks-scroll-list {
@@ -184,17 +185,18 @@
 }
 
 .task-checkbox {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border: 1px solid rgba(104, 255, 240, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   font-weight: bold;
   color: #fff;
   transition: all 0.15s ease;
   background: rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
 }
 
 .task-checkbox.checked {
@@ -204,7 +206,7 @@
 }
 
 .task-item-text {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: #eaffff;
   transition: all 0.15s ease;
 }
@@ -221,9 +223,9 @@
 }
 
 .task-category-tag {
-  font-size: 0.5rem;
-  padding: 1px 4px;
-  border-radius: 0;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
   text-transform: uppercase;
   border: 1px solid;
   letter-spacing: 0.5px;
@@ -252,10 +254,11 @@
   border: 1px solid rgba(252, 104, 6, 0.3);
   color: var(--theme-secondary, rgb(252, 104, 6));
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.58rem;
-  padding: 1px 5px;
+  font-size: 0.7rem;
+  padding: 2px 6px;
   cursor: pointer;
   transition: all 0.15s ease;
+  border-radius: 4px;
 }
 
 .task-item-delete:hover {
@@ -285,21 +288,21 @@
 
 .task-app-input {
   flex-grow: 1;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(104, 255, 240, 0.25);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--theme-primary, #68fff0);
   border-radius: 4px;
   color: var(--theme-primary, #68fff0);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.72rem;
-  padding: 4px 8px;
+  font-size: 0.8rem;
+  padding: 6px 10px;
   outline: none;
-  text-shadow: 0 0 3px rgba(104, 255, 240, 0.4);
+  box-shadow: inset 0 0 6px rgba(104, 255, 240, 0.15);
   transition: all 0.2s ease;
 }
 
 .task-app-input:focus {
-  border-color: var(--theme-primary, #68fff0);
-  box-shadow: 0 0 6px rgba(104, 255, 240, 0.15);
+  box-shadow: inset 0 0 10px rgba(104, 255, 240, 0.3), 0 0 8px rgba(104, 255, 240, 0.2);
+  border-color: #fff;
 }
 
 .category-select-row {
@@ -317,10 +320,11 @@
   border: 1px solid rgba(104, 255, 240, 0.18);
   color: rgba(104, 255, 240, 0.6);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.5rem;
-  padding: 1px 5px;
+  font-size: 0.65rem;
+  padding: 2px 6px;
   cursor: pointer;
   transition: all 0.15s ease;
+  border-radius: 4px;
 }
 
 .tag-select-btn:hover { background: rgba(104, 255, 240, 0.05); }
