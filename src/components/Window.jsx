@@ -28,8 +28,11 @@ export default function Window({
     if (id === 'notes') return { width: 600, height: 380 };
     return { width: 600, height: 400 };
   });
-  const [dragging, setDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const dragRef = useRef({ isDragging: false, offsetX: 0, offsetY: 0, hasRight: false });
+  const latestProps = useRef({ size, position, onLayoutChange });
+  useEffect(() => {
+    latestProps.current = { size, position, onLayoutChange };
+  }, [size, position, onLayoutChange]);
   const [resizing, setResizing] = useState(false);
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, w: 0, h: 0 });
   const [closing, setClosing] = useState(false);
@@ -112,48 +115,64 @@ export default function Window({
     };
   }, [resizing, resizeStart]);
 
-  const startDrag = (e) => {
-    if (slidOut) return; 
-    onFocus && onFocus();
-    setDragging(true);
-    setDragOffset({
-      x: e.clientX - (position.right ? window.innerWidth - position.right : position.x),
-      y: e.clientY - position.y
-    });
-  };
+  const onDragMoveDOM = useRef((e) => {
+    if (dragRef.current.isDragging && windowRef.current) {
+      const nextX = e.clientX - dragRef.current.offsetX;
+      const nextY = e.clientY - dragRef.current.offsetY;
+      
+      windowRef.current.style.left = `${nextX}px`;
+      windowRef.current.style.top = `${nextY}px`;
+      if (dragRef.current.hasRight) {
+         windowRef.current.style.right = 'auto';
+      }
+    }
+  });
 
-  const stopDrag = () => {
-    setDragging(false);
-  };
+  const stopDragDOM = useRef((e) => {
+    if (dragRef.current.isDragging) {
+      dragRef.current.isDragging = false;
+      window.removeEventListener('mousemove', onDragMoveDOM.current);
+      window.removeEventListener('mouseup', stopDragDOM.current);
 
-  const onDragMove = (e) => {
-    if (dragging) {
-      const nextPosition = position.right ? {
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
+      const nextX = e.clientX - dragRef.current.offsetX;
+      const nextY = e.clientY - dragRef.current.offsetY;
+      
+      const finalPosition = dragRef.current.hasRight ? {
+        x: nextX,
+        y: nextY,
         right: undefined
       } : {
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y
+        x: nextX,
+        y: nextY
       };
-      setPosition(nextPosition);
-      onLayoutChange?.({ position: nextPosition, size });
+      
+      setPosition(finalPosition);
+      latestProps.current.onLayoutChange?.({ position: finalPosition, size: latestProps.current.size });
     }
+  });
+
+  const startDrag = (e) => {
+    e.preventDefault(); 
+    if (slidOut) return; 
+    onFocus && onFocus();
+    
+    dragRef.current = {
+      isDragging: true,
+      offsetX: e.clientX - (position.right ? window.innerWidth - position.right : position.x),
+      offsetY: e.clientY - position.y,
+      hasRight: position.right !== undefined
+    };
+
+    window.addEventListener('mousemove', onDragMoveDOM.current);
+    window.addEventListener('mouseup', stopDragDOM.current);
   };
 
   useEffect(() => {
-    if (dragging) {
-      window.addEventListener('mousemove', onDragMove);
-      window.addEventListener('mouseup', stopDrag);
-    } else {
-      window.removeEventListener('mousemove', onDragMove);
-      window.removeEventListener('mouseup', stopDrag);
-    }
     return () => {
-      window.removeEventListener('mousemove', onDragMove);
-      window.removeEventListener('mouseup', stopDrag);
+      window.removeEventListener('mousemove', onDragMoveDOM.current);
+      window.removeEventListener('mouseup', stopDragDOM.current);
     };
-  }, [dragging, dragOffset]);
+  }, []);
 
   // calculam unde sa slide-uiasca fereastra cand minimizam
   useEffect(() => {
