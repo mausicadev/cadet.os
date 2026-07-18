@@ -219,6 +219,7 @@ function App() {
   const [themePreset, setThemePreset] = useState(() => saved?.themePreset || 'cyan');
   const [scanlineOpacity, setScanlineOpacity] = useState(() => saved?.scanlineOpacity ?? 15);
   const [dashboardBlur, setDashboardBlur] = useState(() => saved?.dashboardBlur ?? 4);
+  const [windowBlur, setWindowBlur] = useState(() => saved?.windowBlur ?? 12);
   const [soundActive, setSoundActive] = useState(() => saved?.soundActive ?? true);
   const [sensorApiUrl, setSensorApiUrl] = useState(() => saved?.sensorApiUrl || 'https://data.uradmonitor.com/api/v1/devices');
   const [sensorHeadersText, setSensorHeadersText] = useState(() => saved?.sensorHeadersText || '{}');
@@ -428,7 +429,9 @@ function App() {
     root.style.setProperty('--theme-glow', glow);
     root.style.setProperty('--theme-border', border);
     root.style.setProperty('--theme-primary-bg', bg);
-  }, [themePreset]);
+    root.style.setProperty('--window-bg-opacity', '0.2');
+    root.style.setProperty('--window-blur', `${windowBlur}px`);
+  }, [themePreset, windowBlur]);
 
   // salvam config-ul in localStorage de fiecare data cand se schimba ceva
   useEffect(() => {
@@ -438,6 +441,7 @@ function App() {
       themePreset,
       scanlineOpacity,
       dashboardBlur,
+      windowBlur,
       soundActive,
       sensorApiUrl,
       sensorHeadersText,
@@ -447,7 +451,7 @@ function App() {
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-  }, [themePreset, scanlineOpacity, dashboardBlur, soundActive, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
+  }, [themePreset, scanlineOpacity, dashboardBlur, windowBlur, soundActive, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
 
   const loadSensorData = useCallback(async () => {
     if (!sensorApiUrl) {
@@ -828,6 +832,8 @@ function App() {
                   setScanlineOpacity={setScanlineOpacity}
                   dashboardBlur={dashboardBlur}
                   setDashboardBlur={setDashboardBlur}
+                  windowBlur={windowBlur}
+                  setWindowBlur={setWindowBlur}
                   soundActive={soundActive}
                   setSoundActive={setSoundActive}
                   sensorApiUrl={sensorApiUrl}
@@ -885,6 +891,8 @@ function App() {
             setScanlineOpacity={setScanlineOpacity}
             dashboardBlur={dashboardBlur}
             setDashboardBlur={setDashboardBlur}
+            windowBlur={windowBlur}
+            setWindowBlur={setWindowBlur}
             soundActive={soundActive}
             setSoundActive={setSoundActive}
             sensorApiUrl={sensorApiUrl}

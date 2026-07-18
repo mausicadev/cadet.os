@@ -13,14 +13,14 @@
   background: linear-gradient(90deg, #122225 1px, transparent 1px),
               linear-gradient(0deg, #122225 1px, transparent 1px);
   background-size: 10px 10px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, var(--window-bg-opacity, 0.2));
   border: 1px solid rgba(104, 255, 240, 0.35);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(104, 255, 240, 0.03);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(var(--window-blur, 12px)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--window-blur, 12px)) saturate(150%);
   z-index: 10;
   pointer-events: auto;
   overflow: hidden;

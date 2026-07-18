@@ -57,7 +57,9 @@ export default function Settings({
   sensorFetchError,
   fetchSensorData,
   weatherApiUrl,
-  setWeatherApiUrl
+  setWeatherApiUrl,
+  windowBlur,
+  setWindowBlur
 }) {
   const fileRef = useRef(null);
   const [msg, setMsg] = useState('');
@@ -100,14 +102,17 @@ export default function Settings({
           setSensorHeadersText(JSON.stringify(imported.headers, null, 2));
         }
         if (imported.layout) {
-          if (imported.layout.themePreset) {
+          if (typeof imported.layout.themePreset === 'string') {
             setThemePreset(imported.layout.themePreset);
+          }
+          if (typeof imported.layout.dashboardBlur === 'number') {
+            setDashboardBlur(imported.layout.dashboardBlur);
           }
           if (typeof imported.layout.scanlineOpacity === 'number') {
             setScanlineOpacity(imported.layout.scanlineOpacity);
           }
-          if (typeof imported.layout.dashboardBlur === 'number') {
-            setDashboardBlur(imported.layout.dashboardBlur);
+          if (typeof imported.layout.windowBlur === 'number') {
+            setWindowBlur(imported.layout.windowBlur);
           }
           if (typeof imported.layout.soundActive === 'boolean') {
             setSoundActive(imported.layout.soundActive);
@@ -146,6 +151,17 @@ export default function Settings({
               value={dashboardBlur}
               onChange={(e) => setDashboardBlur(parseInt(e.target.value))}
               className="cyber-slider"
+            />
+          </div>
+
+          <div className="settings-row">
+            <span className="settings-label">WINDOW BLUR ({windowBlur}px):</span>
+            <input 
+              type="range" 
+              min="0" max="30" 
+              className="cyber-slider"
+              value={windowBlur}
+              onChange={(e) => setWindowBlur(parseInt(e.target.value))}
             />
           </div>
 
