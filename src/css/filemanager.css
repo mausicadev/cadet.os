@@ -59,15 +59,17 @@
 
 .fm-search-input {
   width: 100%;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(104, 255, 240, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(104, 255, 240, 0.25);
+  border-radius: 4px;
   color: var(--theme-primary, #68fff0);
-  padding: 3px 6px;
+  padding: 4px 8px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.72rem;
   outline: none;
   box-sizing: border-box;
   text-shadow: 0 0 3px rgba(104, 255, 240, 0.4);
+  transition: all 0.2s ease;
 }
 
 .fm-search-input:focus {
@@ -96,11 +98,12 @@
 
 .fm-sidebar {
   width: 140px;
-  border-right: 1px solid rgba(104, 255, 240, 0.1);
+  background: rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(104, 255, 240, 0.15);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-right: 6px;
+  padding: 6px;
   box-sizing: border-box;
 }
 
@@ -201,14 +204,16 @@
 
 .items-grid {
   flex-grow: 1;
-  border: 1px solid rgba(104, 255, 240, 0.08);
-  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(104, 255, 240, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+  border-radius: 4px;
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   grid-auto-rows: max-content;
-  gap: 5px;
-  padding: 6px;
+  gap: 8px;
+  padding: 8px;
   box-sizing: border-box;
 }
 
@@ -226,8 +231,8 @@
 
 .grid-item {
   position: relative;
-  border: 1px solid rgba(104, 255, 240, 0.08);
-  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(104, 255, 240, 0.15);
+  background: rgba(104, 255, 240, 0.02);
   padding: 6px 4px;
   text-align: center;
   cursor: pointer;
@@ -238,7 +243,7 @@
   height: 82px;
   box-sizing: border-box;
   transition: all 0.15s ease;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 .grid-item:hover {
@@ -294,8 +299,9 @@
 
 .fm-preview-pane {
   width: 150px;
-  border-left: 1px solid rgba(104, 255, 240, 0.1);
-  padding-left: 6px;
+  background: rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(104, 255, 240, 0.15);
+  padding: 6px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

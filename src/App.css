@@ -22,17 +22,3 @@ body {
   box-sizing: border-box;
 }
 
-.holo-window {
-  border-radius: 8px;
-  background: rgba(4, 10, 13, 0.88);
-}
-
-.holo-window-header {
-  border-bottom: 1px solid rgba(104, 255, 240, 0.18);
-  background: linear-gradient(90deg, rgba(104, 255, 240, 0.13), rgba(3, 12, 16, 0.9));
-}
-
-.holo-window-content {
-  background: linear-gradient(180deg, rgba(8, 15, 19, 0.95), rgba(3, 8, 12, 0.95));
-}
-
