@@ -267,18 +267,18 @@ export default function FileManager({ fileSystem, setFileSystem, onOpenFile }) {
         <div className="fm-preview-pane">
           <div className="sidebar-title">FILE META</div>
           {selectedFile ? (
-            <div className="preview-details">
-              <div className="preview-row">
-                <span className="prev-label">FILENAME</span>
-                <span className="prev-val glow-cyan">{selectedFile.name}</span>
+            <div className="fm-preview-details">
+              <div className="fm-info-row">
+                <span className="fm-info-label">FILENAME</span>
+                <span className="fm-info-value glow-cyan">{selectedFile.name}</span>
               </div>
-              <div className="preview-row">
-                <span className="prev-label">FILE SIZE</span>
-                <span className="prev-val">{selectedFile.size}</span>
+              <div className="fm-info-row">
+                <span className="fm-info-label">FILE SIZE</span>
+                <span className="fm-info-value">{selectedFile.size}</span>
               </div>
-              <div className="preview-row">
-                <span className="prev-label">DATATYPE</span>
-                <span className="prev-val glow-orange">{selectedFile.mime}</span>
+              <div className="fm-info-row">
+                <span className="fm-info-label">DATATYPE</span>
+                <span className="fm-info-value glow-orange">{selectedFile.mime}</span>
               </div>
               <div className="preview-content-box">
                 <div className="preview-content-title">CONTENT PREVIEW:</div>
