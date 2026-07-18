@@ -278,7 +278,7 @@ export default function FileManager({ fileSystem, setFileSystem, onOpenFile }) {
               </div>
               <div className="fm-info-row">
                 <span className="fm-info-label">DATATYPE</span>
-                <span className="fm-info-value glow-orange">{selectedFile.mime}</span>
+                <span className="fm-info-value glow-cyan">{selectedFile.mime}</span>
               </div>
               <div className="preview-content-box">
                 <div className="preview-content-title">CONTENT PREVIEW:</div>

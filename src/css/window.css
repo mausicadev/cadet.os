@@ -63,21 +63,21 @@
 }
 
 .holo-window-header {
-  height: 32px;
-  background: linear-gradient(90deg, rgba(104, 255, 240, 0.15) 0%, rgba(104, 255, 240, 0.02) 100%);
-  border-bottom: 1px solid rgba(104, 255, 240, 0.3);
+  height: 28px;
+  background: linear-gradient(90deg, rgba(104, 255, 240, 0.12) 0%, rgba(104, 255, 240, 0.02) 100%);
+  border-bottom: 1px solid rgba(104, 255, 240, 0.25);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 10px;
   cursor: grab;
-  color: var(--theme-primary);
+  color: #68fff0;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   position: relative;
-  text-shadow: 0 0 8px var(--theme-primary);
+  text-shadow: 0 0 4px rgba(104, 255, 240, 0.4);
 }
 
 .holo-window-header::after {
@@ -87,24 +87,24 @@
   left: 0;
   height: 1px;
   width: 30%;
-  background: var(--theme-primary);
-  box-shadow: 0 0 10px var(--theme-primary);
+  background: #68fff0;
+  box-shadow: 0 0 8px #68fff0;
 }
 
 .holo-window-header:active { cursor: grabbing; }
 
 .holo-close {
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(104, 255, 240, 0.3);
   background: rgba(0, 0, 0, 0.5);
   border-radius: 2px;
-  color: var(--theme-primary);
-  font-size: 0.75rem;
+  color: #68fff0;
+  font-size: 0.72rem;
   font-weight: bold;
   font-family: sans-serif;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -114,7 +114,7 @@
   color: #fff;
   background: rgba(252, 104, 6, 0.6);
   border-color: rgb(252, 104, 6);
-  box-shadow: 0 0 12px rgba(252, 104, 6, 0.6);
+  box-shadow: 0 0 8px rgba(252, 104, 6, 0.6);
   transform: scale(1.1);
 }
 
@@ -156,8 +156,8 @@
 }
 
 .holo-window.focused {
-  border-color: rgba(104, 255, 240, 0.7);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(104, 255, 240, 0.2), inset 0 0 30px rgba(104, 255, 240, 0.1), 0 0 15px rgba(104, 255, 240, 0.15);
+  border-color: rgba(104, 255, 240, 0.6);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(104, 255, 240, 0.15), 0 0 12px rgba(104, 255, 240, 0.12);
 }
 
 .holo-window.slid-out {
@@ -205,7 +205,7 @@
   width: 10px;
   height: 10px;
   cursor: se-resize;
-  background: var(--theme-primary);
+  background: rgba(104, 255, 240, 0.4);
   clip-path: polygon(100% 0, 0 100%, 100% 100%);
   opacity: 0.5;
   transition: all 0.2s ease;
@@ -214,35 +214,23 @@
 
 .holo-resize-handle:hover {
   opacity: 1;
-  background: var(--theme-secondary);
+  background: #68fff0;
 }
 
-.terminal-container, .cyber-editor-container, .file-manager-container, .metrics-container, .task-manager-container, .task-manager-app, .notes-container, .settings-container {
-  color: var(--theme-primary) !important;
-  text-shadow: 0 0 4px var(--theme-glow) !important;
-}
 .dock-item { border-color: var(--theme-border) !important; }
 .dock-indicator-container .dot.open.active {
   background-color: var(--theme-primary) !important;
   box-shadow: 0 0 8px var(--theme-primary) !important;
 }
 .dock-indicator-container .dot.open {
-  background-color: var(--theme-secondary) !important;
-  box-shadow: 0 0 6px var(--theme-secondary) !important;
+  background-color: rgba(104, 255, 240, 0.5) !important;
+  box-shadow: 0 0 6px rgba(104, 255, 240, 0.5) !important;
 }
-.segment-btn, .fm-search-input, .fm-action-btn, .explorer-btn {
-  color: var(--theme-primary) !important;
-  border-color: var(--theme-border) !important;
-}
-.fm-search-input { background-color: rgba(0,0,0,0.4) !important; }
-.sidebar-title, .preview-row .prev-label { color: var(--theme-secondary) !important; }
 .glow-cyan {
-  color: var(--theme-primary) !important;
-  text-shadow: 0 0 6px var(--theme-glow) !important;
+  color: #68fff0 !important;
 }
 .glow-orange {
-  color: var(--theme-secondary) !important;
-  text-shadow: 0 0 6px rgba(252, 104, 6, 0.6) !important;
+  color: rgb(252, 104, 6) !important;
 }
 .top-banner .right-text, .top-banner h1, .bottom-banner h1 {
   color: var(--theme-primary) !important;

@@ -176,7 +176,7 @@ const getDefaultWindowLayouts = () => ({
 function AppContent({ id, fileSystem, setFileSystem, onOpenFile, editingFile, onSaveFile, sensorData, ...props }) {
   const appComponents = {
     terminal: <Terminal {...props} />,
-    tasks: <TaskManager {...props} />,
+    tasks: <TaskManager tasks={props.tasks} setTasks={props.setTasks} {...props} />,
     files: (
       <FileManager
         fileSystem={fileSystem}
@@ -253,6 +253,13 @@ function App() {
   ]);
   const [missionMessage, setMissionMessage] = useState('AIRLOCK STATUS: STEADY');
   const [beaconPulse, setBeaconPulse] = useState(false);
+  const [tasks, setTasks] = useState([
+    { id: 1, text: 'FINISH THE PENTAGON', done: false },
+    { id: 2, text: 'BUILD ANOTHER PC', done: false },
+    { id: 3, text: 'INSTALL WINDOWS', done: true },
+    { id: 4, text: 'REVIEW THE DRONE', done: false },
+    { id: 5, text: 'POST THE VIDEO', done: false }
+  ]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -771,6 +778,7 @@ function App() {
           launchOverrunActive={launchOverrunActive} 
           weatherForecast={weatherForecast} 
           ppmOverride={ppmOverride}
+          tasks={tasks}
         />
       </div>
 
@@ -809,6 +817,10 @@ function App() {
                   onOpenFile={openInEditor}
                   editingFile={editingFile}
                   onSaveFile={saveFile}
+                  sensorData={sensorData}
+                  isMinimized={isMinimized}
+                  tasks={tasks}
+                  setTasks={setTasks}
                   onClose={() => closeApp(app.id)}
                   themePreset={themePreset}
                   setThemePreset={setThemePreset}
@@ -865,6 +877,8 @@ function App() {
             editingFile={editingFile}
             onSaveFile={saveFile}
             onClose={() => closeApp('settings')}
+            tasks={tasks}
+            setTasks={setTasks}
             themePreset={themePreset}
             setThemePreset={setThemePreset}
             scanlineOpacity={scanlineOpacity}

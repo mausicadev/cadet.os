@@ -181,7 +181,7 @@ export default function MetricsGraph() {
   // redesenam graficele pe canvas cand se schimba istoricul
   useEffect(() => {
     drawChart(cpuCanvasRef.current, cpuHist, 'rgb(104, 255, 240)', 100);
-    drawChart(gpuCanvasRef.current, gpuHist, 'rgb(252, 104, 6)', 100);
+    drawChart(gpuCanvasRef.current, gpuHist, 'rgb(104, 255, 240)', 100);
     drawChart(netCanvasRef.current, netHist, 'rgb(104, 255, 240)', 50); 
   }, [cpuHist, gpuHist, netHist]);
 
@@ -201,7 +201,7 @@ export default function MetricsGraph() {
         </div>
         <div className="meta-item">
           <span className="meta-label">CORE STATE</span>
-          <span className="meta-value glow-orange">STABLE</span>
+          <span className="meta-value glow-cyan">STABLE</span>
         </div>
       </div>
 
@@ -232,7 +232,7 @@ export default function MetricsGraph() {
         <div className="metric-card">
           <div className="card-header">
             <span className="card-title">GPU CORE HUD</span>
-            <span className="card-badge glow-orange">{stats.gpuUsage}%</span>
+            <span className="card-badge glow-cyan">{stats.gpuUsage}%</span>
           </div>
           <div className="chart-wrapper">
             <canvas ref={gpuCanvasRef} width={270} height={110} className="metric-canvas" />
@@ -240,7 +240,7 @@ export default function MetricsGraph() {
           <div className="card-details">
             <div className="detail-row">
               <span>VRAM UTILS</span>
-              <span className="glow-orange">{stats.gpuMem} GB / {stats.gpuMemMax} GB</span>
+              <span className="glow-cyan">{stats.gpuMem} GB / {stats.gpuMemMax} GB</span>
             </div>
             <div className="detail-row">
               <span>CORE TEMP</span>

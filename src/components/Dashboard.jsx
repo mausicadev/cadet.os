@@ -4,7 +4,7 @@ import "../css/banners.css";
 import "../css/rectangles.css";
 import "../css/circles.css";
 
-export default function Dashboard({ sensorData = [], launchOverrunActive = false, weatherForecast = [], ppmOverride = null }) {
+export default function Dashboard({ sensorData = [], launchOverrunActive = false, weatherForecast = [], ppmOverride = null, tasks = [] }) {
   const formatValue = (value, digits = 0, suffix = '') => {
     const number = Number(value);
     if (!Number.isFinite(number)) return `0${suffix}`;
@@ -410,11 +410,12 @@ export default function Dashboard({ sensorData = [], launchOverrunActive = false
 
       <div className="right-text">
         <p>TASK FOR TODAY</p>
-        <p>FINISH THE PENTAGON</p>
-        <p>BUILD ANOTHER PC</p>
-        <p>INSTALL WINDOWS</p>
-        <p>REVIEW THE DRONE</p>
-        <p>POST THE VIDEO</p>
+        {tasks.slice(0, 5).map(task => (
+          <p key={task.id} style={{ textDecoration: task.done ? 'line-through' : 'none', opacity: task.done ? 0.5 : 1 }}>
+            {task.text}
+          </p>
+        ))}
+        {tasks.length > 5 && <p>...</p>}
       </div>
     </div>
 
