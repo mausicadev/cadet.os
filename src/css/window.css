@@ -16,7 +16,7 @@
   background-color: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(104, 255, 240, 0.35);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(104, 255, 240, 0.03);
-  border-radius: 0;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(12px) saturate(150%);
@@ -118,7 +118,7 @@
   justify-content: center;
   border: 1px solid rgba(104, 255, 240, 0.25);
   background: transparent;
-  border-radius: 0;
+  border-radius: 3px;
   color: #68fff0;
   font-size: 0.72rem;
   font-weight: bold;
