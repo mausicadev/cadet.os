@@ -43,6 +43,8 @@ export default function Settings({
   setDashboardBlur,
   soundActive,
   setSoundActive,
+  autoLogin,
+  setAutoLogin,
   sensorApiUrl,
   setSensorApiUrl,
   sensorHeadersText,
@@ -94,6 +96,9 @@ export default function Settings({
         }
         if (imported.sensorApiUrl) setSensorApiUrl(imported.sensorApiUrl);
         if (imported.url) setSensorApiUrl(imported.url);
+        if (typeof imported.autoLogin === 'boolean' && setAutoLogin) {
+          setAutoLogin(imported.autoLogin);
+        }
         if (typeof imported.sensorHeadersText === 'string') {
           setSensorHeadersText(imported.sensorHeadersText);
         } else if (imported.sensorHeaders) {
@@ -116,6 +121,9 @@ export default function Settings({
           }
           if (typeof imported.layout.soundActive === 'boolean') {
             setSoundActive(imported.layout.soundActive);
+          }
+          if (typeof imported.layout.autoLogin === 'boolean' && setAutoLogin) {
+            setAutoLogin(imported.layout.autoLogin);
           }
           if (imported.layout.windowLayouts) {
             setWindowLayouts(imported.layout.windowLayouts);
@@ -185,6 +193,19 @@ export default function Settings({
         {/* system defaults - url, headers, interval */}
         <div className="settings-group">
           <div className="settings-group-title">SYSTEM DEFAULTS</div>
+
+          <div className="settings-row">
+            <span className="settings-label">AUTO-LOGIN ON STARTUP:</span>
+            <div 
+              className={`cyber-toggle ${autoLogin ? 'active' : ''}`}
+              onClick={() => setAutoLogin && setAutoLogin(!autoLogin)}
+            >
+              <div className="cyber-toggle-knob" />
+            </div>
+          </div>
+          <div style={{ marginTop: '-2px', marginBottom: '6px', fontSize: '0.65rem', color: 'rgba(104, 255, 240, 0.6)' }}>
+            Auto-types credentials and signs in automatically on boot. Default: ON.
+          </div>
 
           <div className="settings-row">
             <span className="settings-label">AUDIO CUES / RADAR PINGS:</span>

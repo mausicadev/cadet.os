@@ -42,7 +42,7 @@ const ScrambleText = ({ text, delay = 0, duration = 1200, className }) => {
   return <span className={className}>{displayText}</span>;
 };
 
-export default function LoginSequence({ onLoginSuccess }) {
+export default function LoginSequence({ onLoginSuccess, autoLogin = true }) {
   const [step, setStep] = useState(1);
   const [phase, setPhase] = useState(0);
   const [username, setUsername] = useState('');
@@ -52,6 +52,26 @@ export default function LoginSequence({ onLoginSuccess }) {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const audioCtxRef = useRef(null);
+  const autoLoginCancelled = useRef(false);
+  const timeoutsRef = useRef([]);
+
+  const addTimeout = (fn, delay) => {
+    const id = setTimeout(() => {
+      if (!autoLoginCancelled.current) {
+        fn();
+      }
+    }, delay);
+    timeoutsRef.current.push(id);
+    return id;
+  };
+
+  const cancelAutoLogin = () => {
+    if (!autoLoginCancelled.current) {
+      autoLoginCancelled.current = true;
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => setShowCursor(prev => !prev), 530);
@@ -73,11 +93,11 @@ export default function LoginSequence({ onLoginSuccess }) {
       setTimeout(() => setPhase(5), 3200),
       setTimeout(() => setPhase(6), 4200),
       setTimeout(() => {
-        onLoginSuccess(username.trim().toUpperCase());
+        onLoginSuccess((username.trim() || 'ADMIN').toUpperCase());
       }, 5100),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [step]);
+  }, [step, username, onLoginSuccess]);
 
   const initAudio = () => {
     if (!audioCtxRef.current) {
@@ -104,14 +124,14 @@ export default function LoginSequence({ onLoginSuccess }) {
   };
 
   const handleUsernameSubmit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     if (!username.trim()) return;
     playBeep(880, 0.1, 0.08);
     setStep(2);
   };
 
   const handlePasswordSubmit = (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     if (username.trim().toLowerCase() === 'admin' && password === 'admin') {
       playBeep(1000, 0.15, 0.1);
       setStep(3);
@@ -128,6 +148,65 @@ export default function LoginSequence({ onLoginSuccess }) {
       setTimeout(() => setErrorMsg(''), 2000);
     }
   };
+
+  // Auto-login animation effect
+  useEffect(() => {
+    if (!autoLogin) return;
+
+    autoLoginCancelled.current = false;
+    const targetUser = 'admin';
+    const targetPass = 'admin';
+
+    let cumulativeDelay = 700;
+    const charDelay = 140;
+
+    // Type username
+    for (let i = 1; i <= targetUser.length; i++) {
+      const partialUser = targetUser.slice(0, i);
+      addTimeout(() => {
+        setUsername(partialUser);
+        playBeep(600 + Math.random() * 200, 0.03);
+      }, cumulativeDelay);
+      cumulativeDelay += charDelay;
+    }
+
+    // Submit username
+    cumulativeDelay += 400;
+    addTimeout(() => {
+      playBeep(880, 0.1, 0.08);
+      setStep(2);
+    }, cumulativeDelay);
+
+    // Wait after step 2 prompt appears, then type password
+    cumulativeDelay += 600;
+    for (let i = 1; i <= targetPass.length; i++) {
+      const partialPass = targetPass.slice(0, i);
+      addTimeout(() => {
+        setPassword(partialPass);
+        playBeep(500 + Math.random() * 150, 0.03);
+      }, cumulativeDelay);
+      cumulativeDelay += charDelay;
+    }
+
+    // Submit password
+    cumulativeDelay += 450;
+    addTimeout(() => {
+      playBeep(1000, 0.15, 0.1);
+      setStep(3);
+      addTimeout(() => {
+        playBeep(1200, 0.2, 0.1);
+      }, 100);
+      addTimeout(() => {
+        setStep(4);
+        playBeep(900, 0.3, 0.08);
+      }, 2000);
+    }, cumulativeDelay);
+
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+    };
+  }, [autoLogin]);
 
   const passwordDots = password ? '●'.repeat(password.length) : '';
 
@@ -151,8 +230,9 @@ export default function LoginSequence({ onLoginSuccess }) {
                     type="text"
                     className="ls-hidden-input"
                     value={username}
+                    onInput={cancelAutoLogin}
                     onChange={(e) => { setUsername(e.target.value); playBeep(600 + Math.random() * 200, 0.03); }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleUsernameSubmit(e); }}
+                    onKeyDown={(e) => { if (e.key !== 'Tab') cancelAutoLogin(); if (e.key === 'Enter') handleUsernameSubmit(e); }}
                     autoFocus
                   />
                 </div>
@@ -180,8 +260,9 @@ export default function LoginSequence({ onLoginSuccess }) {
                     type="password"
                     className="ls-hidden-input"
                     value={password}
+                    onInput={cancelAutoLogin}
                     onChange={(e) => { setPassword(e.target.value); playBeep(500 + Math.random() * 150, 0.03); }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handlePasswordSubmit(e); }}
+                    onKeyDown={(e) => { if (e.key !== 'Tab') cancelAutoLogin(); if (e.key === 'Enter') handlePasswordSubmit(e); }}
                     autoFocus
                   />
                 </div>

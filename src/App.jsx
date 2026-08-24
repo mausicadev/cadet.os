@@ -221,6 +221,7 @@ function App() {
   const [dashboardBlur, setDashboardBlur] = useState(() => saved?.dashboardBlur ?? 4);
   const [windowBlur, setWindowBlur] = useState(() => saved?.windowBlur ?? 12);
   const [soundActive, setSoundActive] = useState(() => saved?.soundActive ?? true);
+  const [autoLogin, setAutoLogin] = useState(() => saved?.autoLogin ?? true);
   const [sensorApiUrl, setSensorApiUrl] = useState(() => saved?.sensorApiUrl || 'https://data.uradmonitor.com/api/v1/devices');
   const [sensorHeadersText, setSensorHeadersText] = useState(() => saved?.sensorHeadersText || '{}');
   const [windowLayouts, setWindowLayouts] = useState(() => saved?.windowLayouts || getDefaultWindowLayouts());
@@ -443,6 +444,7 @@ function App() {
       dashboardBlur,
       windowBlur,
       soundActive,
+      autoLogin,
       sensorApiUrl,
       sensorHeadersText,
       sensorRefreshIntervalSeconds,
@@ -451,7 +453,7 @@ function App() {
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-  }, [themePreset, scanlineOpacity, dashboardBlur, windowBlur, soundActive, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
+  }, [themePreset, scanlineOpacity, dashboardBlur, windowBlur, soundActive, autoLogin, sensorApiUrl, sensorHeadersText, windowLayouts, weatherApiUrl]);
 
   const loadSensorData = useCallback(async () => {
     if (!sensorApiUrl) {
@@ -759,7 +761,16 @@ function App() {
   };
 
   if (!isAuthenticated) {
-    return <LoginSequence onLoginSuccess={(name) => { setIsAuthenticated(true); sessionStorage.setItem('cadet_auth', 'true'); window.location.hash = '#/bunker'; }} />;
+    return (
+      <LoginSequence 
+        autoLogin={autoLogin}
+        onLoginSuccess={(name) => { 
+          setIsAuthenticated(true); 
+          sessionStorage.setItem('cadet_auth', 'true'); 
+          window.location.hash = '#/bunker'; 
+        }} 
+      />
+    );
   }
 
   if (currentRoute === 'launch') {
@@ -837,6 +848,8 @@ function App() {
                   setWindowBlur={setWindowBlur}
                   soundActive={soundActive}
                   setSoundActive={setSoundActive}
+                  autoLogin={autoLogin}
+                  setAutoLogin={setAutoLogin}
                   sensorApiUrl={sensorApiUrl}
                   setSensorApiUrl={setSensorApiUrl}
                   sensorHeadersText={sensorHeadersText}
@@ -897,6 +910,8 @@ function App() {
             setWindowBlur={setWindowBlur}
             soundActive={soundActive}
             setSoundActive={setSoundActive}
+            autoLogin={autoLogin}
+            setAutoLogin={setAutoLogin}
             sensorApiUrl={sensorApiUrl}
             setSensorApiUrl={setSensorApiUrl}
             sensorHeadersText={sensorHeadersText}
