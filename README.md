@@ -26,7 +26,7 @@ I'm a 12th-grade student at a military school in Romania. I started this project
 
 P.S.
 user: admin
-password: admin
+password: admin ( I work now on autologin for demo purposes )
 
 ## A short story
 
