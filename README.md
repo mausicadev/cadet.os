@@ -24,6 +24,10 @@ I'm a 12th-grade student at a military school in Romania. I started this project
 
 ---
 
+P.S.
+user: admin
+password: admin
+
 ## A short story
 
 The project started with just HTML and CSS. I later discovered D3 (and similar libraries) and got inspired by a Jarvis-style Windows theme and a YouTube video showing a futuristic HUD. As a funny note, I wasn't great at the math for centering circles, so I aligned a lot of things by eye and guesswork (that's why there are 20 circles). For one circle I used the value 1.57 and only later realized it was $\frac{\pi}{2}$ :)))
